@@ -37,7 +37,7 @@ Contribuições para a aplicação são bem-vindas. Para contribuir, envie uma p
 A aplicação está licenciada sob a licença MIT.
 
 # Autores
-Gonçalo Costa nº
+Gonçalo Costa nº48243
 
 Leonardo Santos nº48990
 
