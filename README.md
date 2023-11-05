@@ -50,6 +50,8 @@ Tiago Valente nº
 
 # Alterações:
 
+É mentira isto tudo
+
 Adicionei uma imagem de capa para o README.
 Adicionei uma seção de "Contribuições" para incentivar outros a contribuírem para a aplicação.
 Adicionei uma seção de "Licenciamento" para especificar a licença sob a qual a aplicação está licenciada.
