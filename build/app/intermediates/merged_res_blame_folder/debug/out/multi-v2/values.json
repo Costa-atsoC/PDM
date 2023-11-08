@@ -76,6 +76,25 @@
                     }
                 },
                 {
+                    "source": "/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/android/app/src/main/res/values/styles.xml",
+                    "from": {
+                        "startLines": "3,14",
+                        "startColumns": "4,4",
+                        "startOffsets": "176,832",
+                        "endLines": "7,16",
+                        "endColumns": "12,12",
+                        "endOffsets": "483,998"
+                    },
+                    "to": {
+                        "startLines": "1418,1422",
+                        "startColumns": "4,4",
+                        "startOffsets": "91111,91292",
+                        "endLines": "1421,1424",
+                        "endColumns": "12,12",
+                        "endOffsets": "91287,91456"
+                    }
+                },
+                {
                     "source": "/Users/rdsilva/.gradle/caches/transforms-3/3b2282dd4ebeb2aac334ff296433f76a/transformed/jetified-savedstate-1.1.0/res/values/values.xml",
                     "from": {
                         "startLines": "2",
@@ -162,25 +181,6 @@
                         "startOffsets": "2314,2372,2438,2501,11149,11220,20983,21051,21118,21197",
                         "endColumns": "57,65,62,61,70,71,67,66,78,68",
                         "endOffsets": "2367,2433,2496,2558,11215,11287,21046,21113,21192,21261"
-                    }
-                },
-                {
-                    "source": "/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/VERSION-0.1/ridewme/android/app/src/main/res/values/styles.xml",
-                    "from": {
-                        "startLines": "3,14",
-                        "startColumns": "4,4",
-                        "startOffsets": "176,832",
-                        "endLines": "7,16",
-                        "endColumns": "12,12",
-                        "endOffsets": "483,998"
-                    },
-                    "to": {
-                        "startLines": "1418,1422",
-                        "startColumns": "4,4",
-                        "startOffsets": "91111,91292",
-                        "endLines": "1421,1424",
-                        "endColumns": "12,12",
-                        "endOffsets": "91287,91456"
                     }
                 },
                 {

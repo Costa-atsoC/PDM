@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
     appManagement.Load();
     return MaterialApp(
       title: 'RideWME',
+
       theme: ThemeData(
         // This is the theme of your application.
         //
