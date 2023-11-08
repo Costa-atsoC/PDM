@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ubi/windowSettings.dart';
 import 'database_help.dart';
 import 'windowListView.dart';
 import 'windowListViewLinks.dart';
@@ -327,6 +328,12 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
+  Future NavigateTo_Window_Settings(context) async {
+    windowSettings win = new windowSettings(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
   //--------------
   GetID() async {
     final String userID;
@@ -353,8 +360,8 @@ class State_windowHome extends State<windowHome> {
             "TITULO_BTN_SHARED_PREFERENCE", "Accao-BTN_SHARED_PREFERENCE ??"));
 
         int CLICKS_SP =
-            await Ref_Window.Ref_Management.Get_SharedPreferences_INT(
-                "CLICKS_SP") as int;
+        await Ref_Window.Ref_Management.Get_SharedPreferences_INT(
+            "CLICKS_SP") as int;
         UtilsFlutter.MSG("CLICKS_SP = $CLICKS_SP");
         Ref_Window.Ref_Management.Save_Shared_Preferences_INT(
             "CLICKS_SP", CLICKS_SP + 1);
@@ -399,7 +406,7 @@ class State_windowHome extends State<windowHome> {
                 ListTile(
                   leading: Icon(Icons.settings),
                   title: Text('Settings'),
-                  onTap: () => {Navigator.of(context).pop},
+                  onTap: () => {NavigateTo_Window_Settings(context)},
                 ),
                 ListTile(
                   leading: Icon(Icons.border_color),
@@ -423,50 +430,50 @@ class State_windowHome extends State<windowHome> {
           body: Container(
             child: _isLoading
                 ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+              child: CircularProgressIndicator(),
+            )
                 : myData.isEmpty
-                    ? const Center(child: Text("No Data Available!!!"))
-                    : ListView.builder(
-                        itemCount: myData.length,
-                        itemBuilder: (context, index) => Card(
-                          color:
-                              index % 2 == 0 ? Colors.blue : Colors.blue[200],
-                          margin: const EdgeInsets.all(15),
-                          child: ListTile(
-                              title: Text(myData[index]['title']),
-                              subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(myData[index]['date']),
-                                    Text(myData[index]['description']),
-                                  ]),
-                              trailing: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () =>
-                                          showMyForm(myData[index]['id']),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () =>
-                                          deleteItem(myData[index]['id']),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ),
+                ? const Center(child: Text("No Data Available!!!"))
+                : ListView.builder(
+              itemCount: myData.length,
+              itemBuilder: (context, index) => Card(
+                color:
+                index % 2 == 0 ? Colors.blue : Colors.blue[200],
+                margin: const EdgeInsets.all(15),
+                child: ListTile(
+                    title: Text(myData[index]['title']),
+                    subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(myData[index]['date']),
+                          Text(myData[index]['description']),
+                        ]),
+                    trailing: SizedBox(
+                      width: 100,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () =>
+                                showMyForm(myData[index]['id']),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () =>
+                                deleteItem(myData[index]['id']),
+                          ),
+                        ],
                       ),
+                    )),
+              ),
+            ),
           ),
           floatingActionButton: _showFab
               ? FloatingActionButton(
-                  onPressed: () => showMyForm(null),
-                  tooltip: 'Create',
-                  child: const Icon(Icons.add),
-                )
+            onPressed: () => showMyForm(null),
+            tooltip: 'Create',
+            child: const Icon(Icons.add),
+          )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
@@ -474,7 +481,7 @@ class State_windowHome extends State<windowHome> {
             color: Colors.blue,
             child: IconTheme(
               data:
-                  IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+              IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
               child: Row(
                 children: <Widget>[
                   IconButton(
