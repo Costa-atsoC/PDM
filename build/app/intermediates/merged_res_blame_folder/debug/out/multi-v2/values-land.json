@@ -4,7 +4,7 @@
             "outputFile": "com.example.semana2.app-mergeDebugResources-19:/values-land/values-land.xml",
             "map": [
                 {
-                    "source": "/Users/rdsilva/.gradle/caches/transforms-3/1f2c91ee3774b6a68005c142e0983470/transformed/appcompat-1.3.0/res/values-land/values-land.xml",
+                    "source": "C:\\Users\\leona\\.gradle\\caches\\transforms-3\\1f2c91ee3774b6a68005c142e0983470\\transformed\\appcompat-1.3.0\\res\\values-land\\values-land.xml",
                     "from": {
                         "startLines": "2,3,4",
                         "startColumns": "4,4,4",

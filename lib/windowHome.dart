@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ubi/windowSettings.dart';
 import 'database_help.dart';
 import 'windowListView.dart';
 import 'windowListViewLinks.dart';
@@ -327,6 +328,12 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
+  Future NavigateTo_Window_Settings(context) async {
+    windowSettings win = new windowSettings(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
   //--------------
   GetID() async {
     final String userID;
@@ -399,7 +406,7 @@ class State_windowHome extends State<windowHome> {
                 ListTile(
                   leading: Icon(Icons.settings),
                   title: Text('Settings'),
-                  onTap: () => {Navigator.of(context).pop},
+                  onTap: () => {NavigateTo_Window_Settings(context)},
                 ),
                 ListTile(
                   leading: Icon(Icons.border_color),
