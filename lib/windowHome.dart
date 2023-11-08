@@ -478,7 +478,7 @@ class State_windowHome extends State<windowHome> {
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
-            color: Colors.blue,
+            color: const Color.fromARGB(230, 10, 130, 255),
             child: IconTheme(
               data:
               IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
