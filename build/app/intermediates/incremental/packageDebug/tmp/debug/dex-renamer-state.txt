@@ -1,4 +1,4 @@
-#Wed Nov 08 16:45:34 WET 2023
+#Fri Nov 10 15:38:16 WET 2023
 base.0=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeExtDexDebug/classes.dex
 base.1=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
 base.2=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
