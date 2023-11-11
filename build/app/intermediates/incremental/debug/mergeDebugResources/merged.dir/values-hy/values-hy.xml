@@ -34,6 +34,7 @@
     <string msgid="6107532579223922871" name="call_notification_incoming_text">"Մուտքային զանգ"</string>
     <string msgid="8623827134497363134" name="call_notification_ongoing_text">"Ընթացիկ զանգ"</string>
     <string msgid="59049573811482460" name="call_notification_screening_text">"Մուտքային զանգի զտում"</string>
+    <string name="common_google_play_services_unknown_issue">%1$s հավելվածը Google Play ծառայությունների հետ կապված խնդիր ունի: Փորձեք նորից:</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Հղումը պատճենվեց սեղմատախտակին"</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Պատճենել հղումը"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Բացել դիտարկիչում"</string>

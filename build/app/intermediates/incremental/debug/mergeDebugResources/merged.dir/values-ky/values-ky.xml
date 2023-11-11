@@ -34,6 +34,7 @@
     <string msgid="6107532579223922871" name="call_notification_incoming_text">"Кирүүчү чалуу"</string>
     <string msgid="8623827134497363134" name="call_notification_ongoing_text">"Учурдагы чалуу"</string>
     <string msgid="59049573811482460" name="call_notification_screening_text">"Кирүүчү чалууну иргөө"</string>
+    <string name="common_google_play_services_unknown_issue">%1$s колдонмосунун Google Play кызматтары менен иштөөдө көйгөй чыкты. Кайталап көрүңүз.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Шилтеме буферге көчүрүлдү"</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Шилтемени көчүрүү"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Серепчиден ачуу"</string>

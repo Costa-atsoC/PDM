@@ -88,7 +88,10 @@ class State_windowSearch extends State<windowSearch> {
   //------ Start of Database
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _beginningDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _placeController = TextEditingController();
+
 
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when you want to update an item
@@ -99,11 +102,15 @@ class State_windowSearch extends State<windowSearch> {
       final existingData = myData.firstWhere((element) => element['id'] == id);
       _titleController.text = existingData['title'];
       _descriptionController.text = existingData['description'];
-      _dateController.text = existingData['date'];
+      _beginningDateController.text = existingData['date'];
+      _endDateController.text = existingData['endDate'];
+      _placeController.text = existingData['place'];
     } else {
       _titleController.text = "";
       _descriptionController.text = "";
-      _dateController.text = '';
+      _beginningDateController.text = '';
+      _endDateController.text = '';
+      _placeController.text = '';
     }
 
     showModalBottomSheet(
@@ -149,10 +156,23 @@ class State_windowSearch extends State<windowSearch> {
                   ),
                   TextFormField(
                     validator: formValidator,
-                    controller: _dateController,
+                    controller: _placeController,
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.place), //icon of text field
+                        labelText: "Place" //label text of field
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  // new approach - Notion
+                  // Beginning Date
+                  TextFormField(
+                    validator: formValidator,
+                    controller: _beginningDateController,
                     decoration: InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
-                        labelText: "Enter Date" //label text of field
+                        labelText: "Start Date" //label text of field
                     ),
                     readOnly: true,  //set it true, so that user will not able to edit text
                     onTap: () async {
@@ -169,7 +189,7 @@ class State_windowSearch extends State<windowSearch> {
                         //you can implement different kind of Date Format here according to your requirement
 
                         setState(() {
-                          _dateController.text = formattedDate; //set output date to TextField value.
+                          _beginningDateController.text = formattedDate; //set output date to TextField value.
                         });
                       }else{
                         print("Date is not selected");
@@ -179,6 +199,37 @@ class State_windowSearch extends State<windowSearch> {
                   const SizedBox(
                     height: 20,
                   ),
+                  // End Date
+                  TextFormField(
+                    validator: formValidator,
+                    controller: _endDateController,
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today), //icon of text field
+                        labelText: "End Date" //label text of field
+                    ),
+                    readOnly: true,  //set it true, so that user will not able to edit text
+                    onTap: () async {
+                      DateTime? pickedDate = await showDatePicker(
+                          context: context, initialDate: DateTime.now(),
+                          firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2101)
+                      );
+
+                      if(pickedDate != null ){
+                        print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                        //you can implement different kind of Date Format here according to your requirement
+
+                        setState(() {
+                          _endDateController.text = formattedDate; //set output date to TextField value.
+                        });
+                      }else{
+                        print("Date is not selected");
+                      }
+                    },
+                  ),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -206,7 +257,8 @@ class State_windowSearch extends State<windowSearch> {
                             setState(() {
                               _titleController.text = '';
                               _descriptionController.text = '';
-                              _dateController.text = '';
+                              _beginningDateController.text = '';
+                              _endDateController.text = '';
                             });
 
                             // Close the bottom sheet
@@ -249,7 +301,8 @@ class State_windowSearch extends State<windowSearch> {
       home: Scaffold(
           appBar: AppBar(
             //automaticallyImplyLeading: false,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            backgroundColor: Color.fromARGB(255, 54, 61, 70),
+            //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             title: Text(Ref_Window.Ref_Management.SETTINGS
                 .Get("JNL_SEARCH_TITLE_1", "Search")), // adicionar ao management!
           ),

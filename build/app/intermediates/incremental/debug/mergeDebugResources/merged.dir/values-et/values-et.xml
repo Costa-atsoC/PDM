@@ -34,6 +34,7 @@
     <string msgid="6107532579223922871" name="call_notification_incoming_text">"Sissetulev kõne"</string>
     <string msgid="8623827134497363134" name="call_notification_ongoing_text">"Käimasolev kõne"</string>
     <string msgid="59049573811482460" name="call_notification_screening_text">"Sissetuleva kõne filtreerimine"</string>
+    <string name="common_google_play_services_unknown_issue">Rakendusel %1$s on probleeme Google Play teenustega. Proovige uuesti.</string>
     <string msgid="3260749812566568062" name="copy_toast_msg">"Link kopeeriti lõikelauale"</string>
     <string msgid="4566929209979330987" name="fallback_menu_item_copy_link">"Kopeeri link"</string>
     <string msgid="3413186855122069269" name="fallback_menu_item_open_in_browser">"Ava brauseris"</string>
