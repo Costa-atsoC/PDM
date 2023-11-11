@@ -846,6 +846,7 @@ integer abc_config_activityDefaultDur
 integer abc_config_activityShortDur
 integer cancel_button_image_alpha
 integer config_tooltipAnimTime
+integer google_play_services_version
 integer status_bar_notification_info_maxnum
 interpolator btn_checkbox_checked_mtrl_animation_interpolator_0
 interpolator btn_checkbox_checked_mtrl_animation_interpolator_1
@@ -897,6 +898,7 @@ layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
 layout toast_custom
 mipmap ic_launcher
+raw firebase_common_keep
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description
@@ -934,6 +936,7 @@ string call_notification_ongoing_text
 string call_notification_screening_text
 string com_auth0_webauth_permission_missing_description
 string com_auth0_webauth_permission_missing_title
+string common_google_play_services_unknown_issue
 string copy_toast_msg
 string fallback_menu_item_copy_link
 string fallback_menu_item_open_in_browser
@@ -1346,4 +1349,5 @@ styleable Toolbar android_gravity android_minHeight buttonGravity collapseConten
 styleable View android_theme android_focusable paddingEnd paddingStart theme
 styleable ViewBackgroundHelper android_background backgroundTint backgroundTintMode
 styleable ViewStubCompat android_id android_layout android_inflatedId
+xml ga_ad_services_config
 xml image_share_filepaths
