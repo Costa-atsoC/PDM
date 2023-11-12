@@ -81,7 +81,10 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        scaffoldBackgroundColor: Color.fromARGB(255, 69, 78, 89),
+        primaryColor: Color.fromARGB(255, 54, 61, 70),
+        secondaryHeaderColor: Color.fromARGB(230, 100, 130, 255),
         useMaterial3: true,
       ),
       home: MyHomePage(appManagement,
@@ -201,8 +204,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text(widget.title),
         ),
         body: Container(
@@ -235,8 +239,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     TextFormField(
                       decoration: InputDecoration(
                         icon: Icon(Icons.alternate_email),
+                        iconColor: Colors.white,
                         labelText: Ref_Management.SETTINGS
                             .Get("JNL_LOGIN_HINT_1", "JNL_LOGIN_HINT_1 ??"),
+                        labelStyle: TextStyle(color: Colors.white),
                       ),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
@@ -248,8 +254,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     TextFormField(
                       decoration: InputDecoration(
                         icon: Icon(Icons.password_outlined),
+                        iconColor: Colors.white,
                         labelText: Ref_Management.SETTINGS
                             .Get("JNL_LOGIN_HINT_2", "JNL_LOGIN_HINT_2 ??"),
+                        labelStyle: TextStyle(color: Colors.white),
                       ),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
@@ -262,8 +270,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).secondaryHeaderColor,
+                        ),
                         onPressed: () {
-                          UtilsFlutter.MSG('TESTE');
+                          UtilsFlutter.MSG('LOGIN');
                           Navegar_Janela_Home(context);
                           // Validate will return true if the form is valid, or false if
                           // the form is invalid.
@@ -272,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           }
                         },
                         child: Text(Ref_Management.SETTINGS
-                            .Get("JNL_LOGIN_BTN_1", "JNL_LOGIN_BTN_1 ??")),
+                            .Get("JNL_LOGIN_BTN_1", "JNL_LOGIN_BTN_1 ??")),// adicionar aqui isto Theme.of(context).secondaryHeaderColor,
                       ),
                     ),
                     // CriarButton_New_Window_Login(),

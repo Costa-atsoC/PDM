@@ -114,6 +114,7 @@ class State_windowSearch extends State<windowSearch> {
     }
 
     showModalBottomSheet(
+      backgroundColor: Color.fromARGB(255, 69, 78, 89),
         context: context,
         elevation: 5,
         isDismissible: false,
@@ -133,11 +134,16 @@ class State_windowSearch extends State<windowSearch> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextFormField(
+                    style: TextStyle(color: Colors.white),
                     controller: _titleController,
                     validator: formValidator,
                     decoration: InputDecoration(
                         icon: Icon(Icons.title), //icon of text field
-                        labelText: "Title" //label text of field
+                        iconColor: Colors.white,
+                        labelText: "Title", //label text of field
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        )
                     ),
                   ),
                   const SizedBox(
@@ -148,7 +154,11 @@ class State_windowSearch extends State<windowSearch> {
                     controller: _descriptionController,
                     decoration: InputDecoration(
                         icon: Icon(Icons.description), //icon of text field
-                        labelText: "Description" //label text of field
+                        labelText: "Description", //label text of field
+                        iconColor: Colors.white,
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        )
                     ),
                   ),
                   const SizedBox(
@@ -159,7 +169,11 @@ class State_windowSearch extends State<windowSearch> {
                     controller: _placeController,
                     decoration: InputDecoration(
                         icon: Icon(Icons.place), //icon of text field
-                        labelText: "Place" //label text of field
+                        labelText: "Place", //label text of field
+                        iconColor: Colors.white,
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        )
                     ),
                   ),
                   const SizedBox(
@@ -172,7 +186,11 @@ class State_windowSearch extends State<windowSearch> {
                     controller: _beginningDateController,
                     decoration: InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
-                        labelText: "Start Date" //label text of field
+                        labelText: "Start Date", //label text of field
+                        iconColor: Colors.white,
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        )
                     ),
                     readOnly: true,  //set it true, so that user will not able to edit text
                     onTap: () async {
@@ -205,7 +223,11 @@ class State_windowSearch extends State<windowSearch> {
                     controller: _endDateController,
                     decoration: InputDecoration(
                         icon: Icon(Icons.calendar_today), //icon of text field
-                        labelText: "End Date" //label text of field
+                        labelText: "End Date", //label text of field
+                        iconColor: Colors.white,
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                        )
                     ),
                     readOnly: true,  //set it true, so that user will not able to edit text
                     onTap: () async {
@@ -298,7 +320,9 @@ class State_windowSearch extends State<windowSearch> {
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
     return MaterialApp(
-      home: Scaffold(
+      home:
+      Scaffold(
+        backgroundColor: Color.fromARGB(255, 69, 78, 89),
           appBar: AppBar(
             //automaticallyImplyLeading: false,
             backgroundColor: Color.fromARGB(255, 54, 61, 70),
@@ -357,8 +381,8 @@ class State_windowSearch extends State<windowSearch> {
               ),
           floatingActionButton: _showFab
               ? FloatingActionButton(
-            backgroundColor:  const Color.fromARGB(230, 10, 130, 255),
-            splashColor: Colors.purple,
+            backgroundColor:  const Color.fromARGB(230, 100, 130, 255),
+            splashColor: Colors.blue,
             onPressed: () => showMyForm(null),
             tooltip: 'Create',
             child: const Icon(Icons.search),
@@ -367,7 +391,7 @@ class State_windowSearch extends State<windowSearch> {
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
-            color: const Color.fromARGB(230, 10, 130, 255),
+            color: const Color.fromARGB(255, 54, 61, 70),
             child: IconTheme(
               data:
               IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
