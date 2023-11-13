@@ -1,20 +1,13 @@
-import 'dart:io';
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:ubi/windowSettings.dart';
-import 'database_help.dart';
-import 'windowListView.dart';
-import 'windowListViewLinks.dart';
-import 'windowNews.dart';
-import 'windowUserProfile.dart';
-import 'windowSearch.dart';
 import 'package:intl/intl.dart';
+import 'package:ubi/windowSettings.dart';
 
 import 'Management.dart';
 import 'Utils.dart';
+import 'database_help.dart';
+import 'windowNews.dart';
+import 'windowSearch.dart';
+import 'windowUserProfile.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -134,6 +127,7 @@ class State_windowHome extends State<windowHome> {
     }
 
     showModalBottomSheet(
+        backgroundColor: Color.fromARGB(255, 69, 78, 89),
         context: context,
         elevation: 5,
         isDismissible: false,
@@ -144,7 +138,7 @@ class State_windowHome extends State<windowHome> {
               left: 15,
               right: 15,
               // prevent the soft keyboard from covering the text fields
-              bottom: MediaQuery.of(context).viewInsets.bottom + 120,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 60,
             ),
             child: Form(
               key: formKey,
@@ -156,8 +150,10 @@ class State_windowHome extends State<windowHome> {
                     controller: _titleController,
                     validator: formValidator,
                     decoration: InputDecoration(
-                        icon: Icon(Icons.title), //icon of text field
-                        labelText: "Title" //label text of field
+                      icon: Icon(Icons.title), //icon of text field
+                      iconColor: Colors.white,
+                      labelText: "Title", //label text of field
+                      labelStyle: TextStyle(color: Colors.white),
                     ),
                   ),
                   const SizedBox(
@@ -167,8 +163,10 @@ class State_windowHome extends State<windowHome> {
                     validator: formValidator,
                     controller: _descriptionController,
                     decoration: InputDecoration(
-                        icon: Icon(Icons.description), //icon of text field
-                        labelText: "Description" //label text of field
+                      icon: Icon(Icons.description), //icon of text field
+                      iconColor: Colors.white,
+                      labelText: "Description", //label text of field
+                      labelStyle: TextStyle(color: Colors.white),
                     ),
                   ),
                   const SizedBox(
@@ -178,27 +176,35 @@ class State_windowHome extends State<windowHome> {
                     validator: formValidator,
                     controller: _dateController,
                     decoration: InputDecoration(
-                        icon: Icon(Icons.calendar_today), //icon of text field
-                        labelText: "Enter Date" //label text of field
+                      icon: Icon(Icons.calendar_today), //icon of text field
+                      iconColor: Colors.white,
+                      labelText: "Enter Date", //label text of field
+                      labelStyle: TextStyle(color: Colors.white),
                     ),
-                    readOnly: true,  //set it true, so that user will not able to edit text
+                    readOnly: true,
+                    //set it true, so that user will not able to edit text
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
-                          context: context, initialDate: DateTime.now(),
-                          firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101)
-                      );
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2101));
 
-                      if(pickedDate != null ){
-                        print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2021-03-16
                         //you can implement different kind of Date Format here according to your requirement
 
                         setState(() {
-                          _dateController.text = formattedDate; //set output date to TextField value.
+                          _dateController.text =
+                              formattedDate; //set output date to TextField value.
                         });
-                      }else{
+                      } else {
                         print("Date is not selected");
                       }
                     },
@@ -360,15 +366,14 @@ class State_windowHome extends State<windowHome> {
             "TITULO_BTN_SHARED_PREFERENCE", "Accao-BTN_SHARED_PREFERENCE ??"));
 
         int CLICKS_SP =
-        await Ref_Window.Ref_Management.Get_SharedPreferences_INT(
-            "CLICKS_SP") as int;
+            await Ref_Window.Ref_Management.Get_SharedPreferences_INT(
+                "CLICKS_SP") as int;
         UtilsFlutter.MSG("CLICKS_SP = $CLICKS_SP");
         Ref_Window.Ref_Management.Save_Shared_Preferences_INT(
             "CLICKS_SP", CLICKS_SP + 1);
       },
     );
   }
-
 
   //--------------
   @override
@@ -377,45 +382,80 @@ class State_windowHome extends State<windowHome> {
 
     return MaterialApp(
       home: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           drawer: Drawer(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: Theme.of(context).primaryColor,
                       image: DecorationImage(
                           fit: BoxFit.fill,
                           image: AssetImage('assets/images/cover.jpg'))),
                   child: Text(
                     Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_DRAWER_TITLE_1", "TEST"), // nao esquecer de adicionar isto ao Management
+                        .Get("JNL_HOME_DRAWER_TITLE_1", "RideWME"),
+                    // nao esquecer de adicionar isto ao Management
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),
                 ListTile(
                   leading: Icon(Icons.input),
-                  title: Text('Welcome'),
+                  // meter o logo da app
+                  iconColor: Colors.white,
+                  title: Text(
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
+                  ),
+                  // adicionar ao management
+                  textColor: Colors.white,
+                  titleTextStyle: TextStyle(fontSize: 25),
                   onTap: () => {},
                 ),
                 ListTile(
-                  leading: Icon(Icons.verified_user),
-                  title: Text('Profile'),
+                  leading: Icon(Icons.person),
+                  iconColor: Colors.white,
+                  title: Text(
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
+                  ),
+                  textColor: Colors.white,
+                  titleTextStyle: TextStyle(fontSize: 25),
                   onTap: () => {NavigateTo_Window_User_Profile(context)},
                 ),
                 ListTile(
                   leading: Icon(Icons.settings),
-                  title: Text('Settings'),
+                  iconColor: Colors.white,
+                  title: Text(
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
+                  ),
+                  textColor: Colors.white,
+                  titleTextStyle: TextStyle(fontSize: 25),
                   onTap: () => {NavigateTo_Window_Settings(context)},
                 ),
                 ListTile(
                   leading: Icon(Icons.border_color),
-                  title: Text('Feedback'),
+                  iconColor: Colors.white,
+                  title: Text(
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
+                  ),
+                  textColor: Colors.white,
+                  titleTextStyle: TextStyle(fontSize: 25),
                   onTap: () => {Navigator.of(context).pop()},
                 ),
                 ListTile(
                   leading: Icon(Icons.exit_to_app),
-                  title: Text('Logout'),
+                  iconColor: Colors.white,
+                  title: Text(
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
+                  ),
+                  textColor: Colors.white,
+                  titleTextStyle: TextStyle(fontSize: 25),
                   onTap: () => {Navigator.of(context).pop()},
                 ),
               ],
@@ -423,65 +463,70 @@ class State_windowHome extends State<windowHome> {
           ),
           appBar: AppBar(
             //automaticallyImplyLeading: false,
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            backgroundColor: Theme.of(context).primaryColor,
             title: Text(Ref_Window.Ref_Management.SETTINGS
                 .Get("JNL_HOME_TITLE_1", "Home Page 1")),
           ),
           body: Container(
             child: _isLoading
                 ? const Center(
-              child: CircularProgressIndicator(),
-            )
+                    child: CircularProgressIndicator(),
+                  )
                 : myData.isEmpty
-                ? const Center(child: Text("No Data Available!!!"))
-                : ListView.builder(
-              itemCount: myData.length,
-              itemBuilder: (context, index) => Card(
-                color:
-                index % 2 == 0 ? Colors.blue : Colors.blue[200],
-                margin: const EdgeInsets.all(15),
-                child: ListTile(
-                    title: Text(myData[index]['title']),
-                    subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(myData[index]['date']),
-                          Text(myData[index]['description']),
-                        ]),
-                    trailing: SizedBox(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () =>
-                                showMyForm(myData[index]['id']),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () =>
-                                deleteItem(myData[index]['id']),
-                          ),
-                        ],
+                    ? const Center(child: Text("No Data Available!!!"))
+                    : ListView.builder(
+                        itemCount: myData.length,
+                        itemBuilder: (context, index) => Card(
+                          color:
+                              index % 2 == 0 ? const Color.fromARGB(230, 100, 130, 255) : const Color.fromARGB(230, 100, 130, 255),
+                          margin: const EdgeInsets.all(15),
+                          child: ListTile(
+                              title: Text(myData[index]['title']),
+                              subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(myData[index]['date']),
+                                    Text(myData[index]['description']),
+                                  ]),
+                              trailing: SizedBox(
+                                width: 100,
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      color: Colors.white,
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () =>
+                                          showMyForm(myData[index]['id']),
+                                    ),
+                                    IconButton(
+                                      color: Colors.white,
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () =>
+                                          deleteItem(myData[index]['id']),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        ),
                       ),
-                    )),
-              ),
-            ),
           ),
           floatingActionButton: _showFab
               ? FloatingActionButton(
-            onPressed: () => showMyForm(null),
-            tooltip: 'Create',
-            child: const Icon(Icons.add),
-          )
+                  onPressed: () => showMyForm(null),
+                  backgroundColor: const Color.fromARGB(230, 100, 130, 255),
+                  // mudar para Theme
+                  splashColor: Colors.white,
+                  tooltip: 'Create',
+                  child: const Icon(Icons.add),
+                )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
-            color: const Color.fromARGB(230, 10, 130, 255),
+            color: const Color.fromARGB(255, 54, 61, 70), // mudar para Theme
             child: IconTheme(
               data:
-              IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+                  IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
               child: Row(
                 children: <Widget>[
                   IconButton(
