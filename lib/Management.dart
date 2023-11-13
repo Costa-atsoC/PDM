@@ -41,19 +41,24 @@ class Management {
 
   //--------------------------------------
   Future<void> Load() async {
-    //--------- MAIN
+    //------------------------------------------------------//
+    //------------------ WINDOW MAIN -----------------------//
+    //------------------------------------------------------//
 
     //--------- TOP
     //DEFINICOES.Add("TITULO_APP", "REVS & ROASTS");
     SETTINGS.Add("TITULO_APP", "rideWM");
 
     //--------- CENTER
-    SETTINGS.Add("TEXTO_1", "Carregou tantas vezes no botãooooo!");
-    SETTINGS.Add("TITULO_BTN_1", "Botao 1 Experiência");
-    SETTINGS.Add("TITULO_BTN_2", "Botao 2");
-    SETTINGS.Add("ACCAO_BTN_3", "Exemplo de uma mensagem");
-    SETTINGS.Add("TITULO_BTN_3", "Mensagem.NOVA DO BTN_3..");
-    SETTINGS.Add("TEXT_OF_BUTTON_NEW", "Message of NEW BUTTON");
+    SETTINGS.Add("WND_LOGIN_TITLE_1", "Login Window");
+
+    SETTINGS.Add("WND_LOGIN_HINT_1", "Username");
+    SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_USERNAME", "20");
+
+    SETTINGS.Add("WND_LOGIN_HINT_2", "Password");
+    SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD", "20");
+
+    SETTINGS.Add("WND_LOGIN_BTN_1", "Login");
 
     //DEFINICOES.Add("TEXT_NEW_WINDOW_LOGIN", "Login");
     //DEFINICOES.Add("TAMANHO_TEXTO_BTN_NEW_LOGIN", "20");
@@ -65,43 +70,64 @@ class Management {
     //--------- BOTTOM
     //---------- FIM DA MAIN
 
-    //--------- JANELA LOGIN
-    SETTINGS.Add("JNL_LOGIN_TITLE_1", "Login Window");
+    //------------------------------------------------------//
+    //--------------- WINDOW REGISTER ----------------------//
+    //------------------------------------------------------//
+    SETTINGS.Add("WND_REGISTER_TITLE_1", "Register Window");
 
-    SETTINGS.Add("JNL_LOGIN_HINT_1", "Username");
-    SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_USERNAME", "20");
+    SETTINGS.Add("WND_REGISTER_OBSTEXT_1", "false");
+    SETTINGS.Add("WND_REGISTER_OBSTEXT_2", "false");
 
-    SETTINGS.Add("JNL_LOGIN_HINT_2", "Password");
-    SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD", "20");
-
-    SETTINGS.Add("JNL_LOGIN_BTN_1", "Login");
-    //--------- FIM DA JANELA LOGIN
-
-    //---------JANELA REGISTER
-    SETTINGS.Add("JNL_REGISTER_TITLE_1", "Register Window");
-
-    SETTINGS.Add("JNL_REGISTER_OBSTEXT_1", "false");
-    SETTINGS.Add("JNL_REGISTER_OBSTEXT_2", "false");
-
-    SETTINGS.Add("JNL_REGISTER_HINT_1", "Email");
+    SETTINGS.Add("WND_REGISTER_HINT_1", "Email");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_EMAIL_REGISTER", "20");
 
-    SETTINGS.Add("JNL_REGISTER_HINT_2", "Username");
+    SETTINGS.Add("WND_REGISTER_HINT_2", "Username");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_USERNAME_REGISTER", "20");
 
-    SETTINGS.Add("JNL_REGISTER_HINT_3", "Password");
+    SETTINGS.Add("WND_REGISTER_HINT_3", "Password");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD_REGISTER", "20");
 
-    SETTINGS.Add("JNL_REGISTER_HINT_4", "Confirm the password");
+    SETTINGS.Add("WND_REGISTER_HINT_4", "Confirm the password");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_RPPASSWORD_REGISTER", "20");
 
-    SETTINGS.Add("JNL_REGISTER_BTN_1", "Submit ");
+    SETTINGS.Add("WND_REGISTER_BTN_1", "Submit ");
     //--------- FIM DA JANELA REGISTER
 
-    //--------- JANELA HOME
-    SETTINGS.Add("JNL_HOME_TITLE_1", "HomePage");
-    SETTINGS.Add("JNL_DRAWER_TITLE_1", "RideWME");
+    //------------------------------------------------------//
+    //----------------- WINDOW HOME ------------------------//
+    //------------------------------------------------------//
 
+    //--------- TEXT
+    SETTINGS.Add("WND_HOME_TITLE_1", "Home Window");
+    SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
+
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", "RideWME");
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
+
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "WELCOME");
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "RideWME");
+
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2", "PROFILE");
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2_SIZE", "15");
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_2_ICON", "RideWME");
+
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3", "SETTINGS");
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3_SIZE", "15");
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4", "FEEDBACK");
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4_SIZE", "15");
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT");
+    SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+    //--------- ICONS
+
+
+    //------- FUNCTIONS HOME
     int? JNL_HOME_NUMERO_ACESSOS =
         await Get_SharedPreferences_INT('JNL_HOME_NUMERO_ACESSOS');
     if (JNL_HOME_NUMERO_ACESSOS != null) {
@@ -111,28 +137,13 @@ class Management {
       Utils.MSG_Debug("JNL_HOME_NUMERO_ACESSOS = $JNL_HOME_NUMERO_ACESSOS");
     }
 
-    SETTINGS.Add("TITULO_BTN_SHARED_PREFERENCE", "Nº de cliques");
-    SETTINGS.Add("TITULO_BTN_LISTVIEW", "ListView");
-    SETTINGS.Add("TITULO_BTN_PEDIDO_SERVIDOR", "Pedido ao Servidor 18/10/2023");
-    SETTINGS.Add("TITULO_BTN_LINKS_UTEIS", "Links Uteis para a Disciplina!");
-
-    SETTINGS.Add("NOTICIAS_TITULO", "Notícias + Dia de Hoje");
-
     //--------- FIM DA JANELA HOME
 
-    //--------- JANELA LISTVIEW COM LINKS
-    //--------- FIM DA JANELA LISTVIEW COM LINKS
+    //------------------------------------------------------//
+    //----------------- WINDOW HOME ------------------------//
+    //------------------------------------------------------//
+    SETTINGS.Add("WND_PROFILE_TITLE_1", "User Profile");
 
-    //--------- JANELA NOTICIAS
-    SETTINGS.Add("JANELA_NOTICIAS_NOTITLE", "Sem título");
-    SETTINGS.Add("JANELA_NOTICIAS_NOPUBDATE", "Sem data de publicação");
-    SETTINGS.Add("JANELA_NOTICIAS_NODESCRIPTION", "Sem descrição");
-
-    SETTINGS.Add("JANELA_NOTICIAS_TITLE", "title");
-    SETTINGS.Add("JANELA_NOTICIAS_PUBDATE", "pubDate");
-    SETTINGS.Add("JANELA_NOTICIAS_DESCRIPTION", "description");
-
-    //--------- FIM DA JANELA NOTICIAS
 
     //--------- FUNÇÕES
     int? NUMERO_ACESSOS = await Get_SharedPreferences_INT('NUMERO_ACESSOS');
