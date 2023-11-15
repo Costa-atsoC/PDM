@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "981674322484",
-    "project_id": "final-project-pdm-85a4a",
-    "storage_bucket": "final-project-pdm-85a4a.appspot.com"
+    "project_number": "441324030473",
+    "project_id": "pdm-final-project-2bd94",
+    "storage_bucket": "pdm-final-project-2bd94.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:981674322484:android:4584b9e9d4f4dd54097861",
+        "mobilesdk_app_id": "1:441324030473:android:0b0758517b1c67ada506d8",
         "android_client_info": {
           "package_name": "com.example.semana2"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCisw8-cI9rOTIeM-uY5e9iYWNnvnOb5fU"
+          "current_key": "AIzaSyDMxjogSE856_J2Hm-6-s0d8aGYXIdzIF8"
         }
       ],
       "services": {

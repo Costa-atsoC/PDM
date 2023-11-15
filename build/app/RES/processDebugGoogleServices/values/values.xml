@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="gcm_defaultSenderId" translatable="false">981674322484</string>
-    <string name="google_api_key" translatable="false">AIzaSyCisw8-cI9rOTIeM-uY5e9iYWNnvnOb5fU</string>
-    <string name="google_app_id" translatable="false">1:981674322484:android:4584b9e9d4f4dd54097861</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCisw8-cI9rOTIeM-uY5e9iYWNnvnOb5fU</string>
-    <string name="google_storage_bucket" translatable="false">final-project-pdm-85a4a.appspot.com</string>
-    <string name="project_id" translatable="false">final-project-pdm-85a4a</string>
+    <string name="gcm_defaultSenderId" translatable="false">441324030473</string>
+    <string name="google_api_key" translatable="false">AIzaSyDMxjogSE856_J2Hm-6-s0d8aGYXIdzIF8</string>
+    <string name="google_app_id" translatable="false">1:441324030473:android:0b0758517b1c67ada506d8</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDMxjogSE856_J2Hm-6-s0d8aGYXIdzIF8</string>
+    <string name="google_storage_bucket" translatable="false">pdm-final-project-2bd94.appspot.com</string>
+    <string name="project_id" translatable="false">pdm-final-project-2bd94</string>
 </resources>

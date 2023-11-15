@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:ubi/windowSettings.dart';
 
 import 'Management.dart';
@@ -456,7 +458,10 @@ class State_windowHome extends State<windowHome> {
                   ),
                   textColor: Colors.white,
                   titleTextStyle: TextStyle(fontSize: 25),
-                  onTap: () => {Navigator.of(context).pop()},
+                  onTap: () => {
+                    FirebaseAuth.instance.signOut(),
+                    Navigator.of(context).pop()
+                  },
                 ),
               ],
             ),
