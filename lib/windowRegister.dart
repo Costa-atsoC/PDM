@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
 import 'windowHome.dart';
 
 import 'Management.dart';
@@ -45,6 +48,8 @@ class Estado_windowRegister extends State<windowRegister> {
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
 
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   final windowRegister Ref_Window;
 
   String Nome_Classe = "";
@@ -52,7 +57,7 @@ class Estado_windowRegister extends State<windowRegister> {
   //--------------
   Estado_windowRegister(this.Ref_Window) : super() {
     Nome_Classe = Ref_Window.Ref_Management.SETTINGS
-        .Get("JNL_REGISTER_TITLE_1", "JNL_REGISTER_HINT_1 ??");
+        .Get("WND_REGISTER_TITLE_1", "WND_REGISTER_HINT_1 ??");
     Utils.MSG_Debug("$Nome_Classe: createState");
   }
 
@@ -99,8 +104,9 @@ class Estado_windowRegister extends State<windowRegister> {
 
     return MaterialApp(
         home: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(Nome_Classe),
       ),
       body: Container(
@@ -114,7 +120,7 @@ class Estado_windowRegister extends State<windowRegister> {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(130),
+                    borderRadius: BorderRadius.circular(140),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
@@ -124,21 +130,26 @@ class Estado_windowRegister extends State<windowRegister> {
                       ),
                     ],
                   ),
-                  child: const CircleAvatar(
-                    radius: 90,
-                    backgroundImage: AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
+                  child: CircleAvatar(
+                    radius: 100,
+                    backgroundImage: AssetImage('assets/LOGO.png'),
                   ),
                 ),
+                SizedBox(
+                  height: 40,
+                ),
                 TextFormField(
-                  controller: _username,
+                  controller: _email,
                   keyboardType: TextInputType.text,
                   obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
-                      .Get("JNL_REGISTER_OBSTEXT_1", "true")),
+                      .Get("WND_REGISTER_OBSTEXT_1", "true")),
                   style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     icon: Icon(Icons.email), //icon of text field
+                    iconColor: Colors.white,
                     labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_REGISTER_HINT_1", "JNL_REGISTER_HINT_1 ??"),
+                        .Get("WND_REGISTER_HINT_1", "WND_REGISTER_HINT_1 ??"),
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -147,15 +158,17 @@ class Estado_windowRegister extends State<windowRegister> {
                   },
                 ),
                 TextFormField(
-                  controller: _email,
+                  controller: _username,
                   keyboardType: TextInputType.text,
                   obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
-                      .Get("JNL_REGISTER_OBSTEXT_2", "true")),
+                      .Get("WND_REGISTER_OBSTEXT_2", "true")),
                   style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     icon: Icon(Icons.alternate_email), //icon of text field
+                    iconColor: Colors.white,
                     labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_REGISTER_HINT_2", "JNL_REGISTER_HINT_2 ??"),
+                        .Get("WND_REGISTER_HINT_2", "WND_REGISTER_HINT_2 ??"),
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -165,10 +178,14 @@ class Estado_windowRegister extends State<windowRegister> {
                 ),
                 TextFormField(
                   controller: _pass,
+                  obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
+                      .Get("WND_REGISTER_OBSTEXT_3", "true")),
                   decoration: InputDecoration(
                     icon: Icon(Icons.password), //icon of text field
+                    iconColor: Colors.white,
                     labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_REGISTER_HINT_3", "JNL_REGISTER_HINT_3 ??"),
+                        .Get("WND_REGISTER_HINT_3", "WND_REGISTER_HINT_3 ??"),
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -179,11 +196,15 @@ class Estado_windowRegister extends State<windowRegister> {
                 ),
                 TextFormField(
                   controller: _confirmPass,
+                  obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
+                      .Get("WND_REGISTER_OBSTEXT_3", "true")),
                   decoration: InputDecoration(
                     icon: Icon(Icons.password_outlined),
+                    iconColor: Colors.white,
                     //icon of text field
                     labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_REGISTER_HINT_4", "JNL_REGISTER_HINT_4 ??"),
+                        .Get("WND_REGISTER_HINT_4", "WND_REGISTER_HINT_4 ??"),
+                    labelStyle: TextStyle(color: Colors.white),
                   ),
                   validator: (String? value) {
                     if (value == null || value.isEmpty) {
@@ -198,19 +219,24 @@ class Estado_windowRegister extends State<windowRegister> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).secondaryHeaderColor,
+                    ),
                     onPressed: () {
                       UtilsFlutter.MSG('HOME');
-                      NavigateTo_Window_Home(context);
+                      //NavigateTo_Window_Home(context);
                       // Validate will return true if the form is valid, or false if
                       // the form is invalid.
-                      if (_formKey.currentState!.validate()) {
+                      /*if (_formKey.currentState!.validate()) {
                         int userId = Authentication.createUser(
                             _username.text, _email.text, _pass.text) as int;
-                        Utils.MSG_Debug((userId) as String);
-                      }
+                        Utils.MSG_Debug((userId) as String); }*/ // old method
+                      Utils.MSG_Debug(_formKey.currentState!.validate() as String);
+                      _signUp();
+
                     },
                     child: Text(Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_REGISTER_BTN_1", "JNL_REGISTER_BTN_1 ??")),
+                        .Get("WND_REGISTER_BTN_1", "WND_REGISTER_BTN_1 ??")),
                   ),
                 )
               ],
@@ -221,6 +247,21 @@ class Estado_windowRegister extends State<windowRegister> {
     ));
   }
 //--------------
+void _signUp() async {
+    String username = _username.text;
+    String email = _email.text;
+    String password = _pass.text;
+
+    User? user = await _auth.signUpWithEmailAndPassword(email, password);
+
+    if(user!=null){
+      Utils.MSG_Debug("User is succesfully created");
+      NavigateTo_Window_Home(context);
+    }
+    else {
+      Utils.MSG_Debug("ERROR");
+    }
+}
 //--------------
 //--------------
 }

@@ -1,16 +1,26 @@
-import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'firebase_auth_implementation/firebase_auth_services.dart';
 import 'windowGeneral.dart';
 import 'windowRegister.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+import 'firebase_options.dart';
 import 'Management.dart';
 import 'windowHome.dart';
 import 'Utils.dart';
 import 'database_help.dart';
 
 
-void main() {
+void main() async{
   DatabaseHelper.db();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -96,6 +106,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   Management Ref_Management;
 
+
   MyHomePage(this.Ref_Management, this.title);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -123,6 +134,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   bool selected = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // _formKey
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _pass = TextEditingController();
+  final TextEditingController _confirmPass = TextEditingController();
+
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+
   int _counter = 0;
   Management Ref_Management;
 
@@ -176,6 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Text(
         Ref_Management.GetDefinicao(
             "TEXT_OF_BUTTON_REGISTER", "TEXT_NEW_WINDOW_REGISTER ??"),
+        style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
       ),
     );
 
@@ -192,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   //--------- Janela Home
-  Future Navegar_Janela_Home(context) async {
+  Future NavigateTo_Window_Home(context) async {
     windowHome Jan = new windowHome(Ref_Management);
     await Jan.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => Jan));
@@ -236,12 +256,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         backgroundImage: AssetImage('assets/PORSCHE_MAIN.JPEG'),
                       ),
                     ),
+                    SizedBox(
+                        height: 40, // meter isto responsivo e meter no management
+                    ),
                     TextFormField(
+                      controller: _email,
                       decoration: InputDecoration(
                         icon: Icon(Icons.alternate_email),
                         iconColor: Colors.white,
                         labelText: Ref_Management.SETTINGS
-                            .Get("JNL_LOGIN_HINT_1", "JNL_LOGIN_HINT_1 ??"),
+                            .Get("WND_LOGIN_HINT_1", "WND_LOGIN_HINT_1 ??"),
                         labelStyle: TextStyle(color: Colors.white),
                       ),
                       validator: (String? value) {
@@ -252,11 +276,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                     TextFormField(
+                      controller: _pass,
                       decoration: InputDecoration(
                         icon: Icon(Icons.password_outlined),
                         iconColor: Colors.white,
                         labelText: Ref_Management.SETTINGS
-                            .Get("JNL_LOGIN_HINT_2", "JNL_LOGIN_HINT_2 ??"),
+                            .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
                         labelStyle: TextStyle(color: Colors.white),
                       ),
                       validator: (String? value) {
@@ -275,15 +300,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onPressed: () {
                           UtilsFlutter.MSG('LOGIN');
-                          Navegar_Janela_Home(context);
+                          //NavigateTo_Window_Home(context);
                           // Validate will return true if the form is valid, or false if
                           // the form is invalid.
+                          _signIn();
                           if (_formKey.currentState!.validate()) {
 
                           }
+                          else{
+                            Utils.MSG_Debug("ERROR");
+                          }
                         },
                         child: Text(Ref_Management.SETTINGS
-                            .Get("JNL_LOGIN_BTN_1", "JNL_LOGIN_BTN_1 ??")),// adicionar aqui isto Theme.of(context).secondaryHeaderColor,
+                            .Get("WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??")),// adicionar aqui isto Theme.of(context).secondaryHeaderColor,
                       ),
                     ),
                     // CriarButton_New_Window_Login(),
@@ -296,5 +325,22 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  //--------------
+  void _signIn() async {
+    String username = _username.text;
+    String email = _email.text;
+    String password = _pass.text;
+
+    User? user = await _auth.signInWithEmailAndPassword(email, password);
+
+    if(user!=null){
+      Utils.MSG_Debug("User is signed");
+      NavigateTo_Window_Home(context);
+    }
+    else {
+      Utils.MSG_Debug("ERROR");
+    }
   }
 }

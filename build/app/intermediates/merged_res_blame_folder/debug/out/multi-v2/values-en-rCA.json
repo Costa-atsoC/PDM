@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.semana2.app-mergeDebugResources-24:/values-en-rCA/values-en-rCA.xml",
+            "outputFile": "com.example.semana2.app-mergeDebugResources-25:/values-en-rCA/values-en-rCA.xml",
             "map": [
                 {
                     "source": "/Users/rdsilva/.gradle/caches/transforms-3/171be797438c3834d241d5cb43b5aa58/transformed/browser-1.5.0/res/values-en-rCA/values-en-rCA.xml",
