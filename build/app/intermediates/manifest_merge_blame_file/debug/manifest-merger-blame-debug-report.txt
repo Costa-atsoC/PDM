@@ -120,274 +120,292 @@
 86                android:value="com.google.firebase.components.ComponentRegistrar" />
 86-->[:firebase_auth] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/firebase_auth/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
 87            <meta-data
-87-->[:firebase_core] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
-88                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
-88-->[:firebase_core] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-124
+87-->[:cloud_firestore] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
+88                android:name="com.google.firebase.components:io.flutter.plugins.firebase.firestore.FlutterFirebaseFirestoreRegistrar"
+88-->[:cloud_firestore] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-134
 89                android:value="com.google.firebase.components.ComponentRegistrar" />
-89-->[:firebase_core] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
+89-->[:cloud_firestore] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/cloud_firestore/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
 90            <meta-data
-90-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:37:13-39:85
-91                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
-91-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:38:17-139
+90-->[:firebase_core] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-13:85
+91                android:name="com.google.firebase.components:io.flutter.plugins.firebase.core.FlutterFirebaseCoreRegistrar"
+91-->[:firebase_core] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:12:17-124
 92                android:value="com.google.firebase.components.ComponentRegistrar" />
-92-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:39:17-82
+92-->[:firebase_core] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/firebase_core/intermediates/merged_manifest/debug/AndroidManifest.xml:13:17-82
 93            <meta-data
-93-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:69:13-71:85
-94                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
-94-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:70:17-109
+93-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:37:13-39:85
+94                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+94-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:38:17-139
 95                android:value="com.google.firebase.components.ComponentRegistrar" />
-95-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:71:17-82
+95-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:39:17-82
 96            <meta-data
-96-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:15:13-17:85
-97                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
-97-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:16:17-130
+96-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:69:13-71:85
+97                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+97-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:70:17-109
 98                android:value="com.google.firebase.components.ComponentRegistrar" />
-98-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:17:17-82
+98-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:71:17-82
 99            <meta-data
-99-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:18:13-20:85
-100                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
-100-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:19:17-127
+99-->[com.google.firebase:firebase-firestore:24.9.1] /Users/rdsilva/.gradle/caches/transforms-3/c8eca5ef5b91a396a3bfc2fed63dd11f/transformed/jetified-firebase-firestore-24.9.1/AndroidManifest.xml:17:13-19:85
+100                android:name="com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar"
+100-->[com.google.firebase:firebase-firestore:24.9.1] /Users/rdsilva/.gradle/caches/transforms-3/c8eca5ef5b91a396a3bfc2fed63dd11f/transformed/jetified-firebase-firestore-24.9.1/AndroidManifest.xml:18:17-122
 101                android:value="com.google.firebase.components.ComponentRegistrar" />
-101-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:20:17-82
+101-->[com.google.firebase:firebase-firestore:24.9.1] /Users/rdsilva/.gradle/caches/transforms-3/c8eca5ef5b91a396a3bfc2fed63dd11f/transformed/jetified-firebase-firestore-24.9.1/AndroidManifest.xml:19:17-82
 102            <meta-data
-102-->[com.google.firebase:firebase-common-ktx:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/0c7436d826b072862d3480e256eacc82/transformed/jetified-firebase-common-ktx-20.4.2/AndroidManifest.xml:12:13-14:85
-103                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
-103-->[com.google.firebase:firebase-common-ktx:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/0c7436d826b072862d3480e256eacc82/transformed/jetified-firebase-common-ktx-20.4.2/AndroidManifest.xml:13:17-116
+102-->[com.google.firebase:firebase-firestore:24.9.1] /Users/rdsilva/.gradle/caches/transforms-3/c8eca5ef5b91a396a3bfc2fed63dd11f/transformed/jetified-firebase-firestore-24.9.1/AndroidManifest.xml:20:13-22:85
+103                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+103-->[com.google.firebase:firebase-firestore:24.9.1] /Users/rdsilva/.gradle/caches/transforms-3/c8eca5ef5b91a396a3bfc2fed63dd11f/transformed/jetified-firebase-firestore-24.9.1/AndroidManifest.xml:21:17-111
 104                android:value="com.google.firebase.components.ComponentRegistrar" />
-104-->[com.google.firebase:firebase-common-ktx:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/0c7436d826b072862d3480e256eacc82/transformed/jetified-firebase-common-ktx-20.4.2/AndroidManifest.xml:14:17-82
+104-->[com.google.firebase:firebase-firestore:24.9.1] /Users/rdsilva/.gradle/caches/transforms-3/c8eca5ef5b91a396a3bfc2fed63dd11f/transformed/jetified-firebase-firestore-24.9.1/AndroidManifest.xml:22:17-82
 105            <meta-data
-105-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:35:13-37:85
-106                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
-106-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:36:17-109
+105-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:15:13-17:85
+106                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+106-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:16:17-130
 107                android:value="com.google.firebase.components.ComponentRegistrar" />
-107-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:37:17-82
-108        </service>
-109
-110        <activity
-110-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
-111            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-111-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
-112            android:exported="false"
-112-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
-113            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-113-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
-114        <activity
-114-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:13:9-27:20
-115            android:name="com.auth0.android.provider.RedirectActivity"
-115-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-71
-116            android:exported="true" >
-116-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-36
-117            <intent-filter>
-117-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-26:29
-118                <action android:name="android.intent.action.VIEW" />
-118-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
-118-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
-119
-120                <category android:name="android.intent.category.DEFAULT" />
-120-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
-120-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
-121                <category android:name="android.intent.category.BROWSABLE" />
-121-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
-121-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
-122
-123                <data
-123-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
-124                    android:host="test-domain"
-124-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
-125                    android:pathPrefix="/android/com.example.semana2/callback"
-125-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:24:21-76
-126                    android:scheme="test" />
-126-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
-127            </intent-filter>
-128            <intent-filter android:autoVerify="true" >
-128-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:34:13-46:29
-128-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:35:17-42
-129                <action android:name="android.intent.action.VIEW" />
-129-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
-129-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
-130
-131                <category android:name="android.intent.category.DEFAULT" />
-131-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
-131-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
-132                <category android:name="android.intent.category.BROWSABLE" />
-132-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
-132-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
-133
-134                <data
-134-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
-135                    android:host="dev-fttgkk0bii8xw7ch.us.auth0.com    "
-135-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
-136                    android:pathPrefix="/android/com.example.semana2/callback"
-136-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:24:21-76
-137                    android:scheme="flutterdemo" />
-137-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
-138            </intent-filter>
-139        </activity>
-140
-141        <property
-141-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:30:9-32:61
-142            android:name="android.adservices.AD_SERVICES_CONFIG"
-142-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:31:13-65
-143            android:resource="@xml/ga_ad_services_config" />
-143-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:32:13-58
-144
-145        <activity
-145-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:25:9-30:75
-146            android:name="com.auth0.android.provider.AuthenticationActivity"
-146-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:26:13-77
-147            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden"
-147-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:27:13-115
-148            android:exported="false"
-148-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:28:13-37
-149            android:launchMode="singleTask"
-149-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:29:13-44
-150            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-150-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:30:13-72
-151        <activity
-151-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:29:9-46:20
-152            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
-152-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:30:13-80
-153            android:excludeFromRecents="true"
-153-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:31:13-46
-154            android:exported="true"
-154-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:32:13-36
-155            android:launchMode="singleTask"
-155-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:33:13-44
-156            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-156-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:34:13-72
-157            <intent-filter>
-157-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:35:13-45:29
-158                <action android:name="android.intent.action.VIEW" />
-158-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
-158-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
-159
-160                <category android:name="android.intent.category.DEFAULT" />
-160-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
-160-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
-161                <category android:name="android.intent.category.BROWSABLE" />
-161-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
-161-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
-162
-163                <data
-163-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
-164                    android:host="firebase.auth"
-164-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
-165                    android:path="/"
-166                    android:scheme="genericidp" />
-166-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
-167            </intent-filter>
-168        </activity>
-169        <activity
-169-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:47:9-64:20
-170            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
-170-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:48:13-79
-171            android:excludeFromRecents="true"
-171-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:49:13-46
-172            android:exported="true"
-172-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:50:13-36
-173            android:launchMode="singleTask"
-173-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:51:13-44
-174            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-174-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:52:13-72
-175            <intent-filter>
-175-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:53:13-63:29
-176                <action android:name="android.intent.action.VIEW" />
-176-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
-176-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
-177
-178                <category android:name="android.intent.category.DEFAULT" />
-178-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
-178-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
-179                <category android:name="android.intent.category.BROWSABLE" />
-179-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
-179-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
-180
-181                <data
-181-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
-182                    android:host="firebase.auth"
-182-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
-183                    android:path="/"
-184                    android:scheme="recaptcha" />
-184-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
-185            </intent-filter>
-186        </activity>
-187
-188        <receiver
-188-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:29:9-33:20
-189            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
-189-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:30:13-85
-190            android:enabled="true"
-190-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:31:13-35
-191            android:exported="false" >
-191-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:32:13-37
-192        </receiver>
-193
-194        <service
-194-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:35:9-38:40
-195            android:name="com.google.android.gms.measurement.AppMeasurementService"
-195-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:36:13-84
-196            android:enabled="true"
-196-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:37:13-35
-197            android:exported="false" />
-197-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:38:13-37
-198        <service
-198-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:39:9-43:72
-199            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
-199-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:40:13-87
-200            android:enabled="true"
-200-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:41:13-35
-201            android:exported="false"
-201-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:42:13-37
-202            android:permission="android.permission.BIND_JOB_SERVICE" />
-202-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:43:13-69
-203
-204        <uses-library
-204-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /Users/rdsilva/.gradle/caches/transforms-3/1329505d05506946a9213185b0511f74/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:23:9-25:40
-205            android:name="android.ext.adservices"
-205-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /Users/rdsilva/.gradle/caches/transforms-3/1329505d05506946a9213185b0511f74/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:24:13-50
-206            android:required="false" />
-206-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /Users/rdsilva/.gradle/caches/transforms-3/1329505d05506946a9213185b0511f74/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:25:13-37
-207        <uses-library
-207-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
-208            android:name="androidx.window.extensions"
-208-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
-209            android:required="false" />
-209-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
-210        <uses-library
-210-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
-211            android:name="androidx.window.sidecar"
-211-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
-212            android:required="false" />
-212-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
-213
-214        <provider
-214-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:23:9-28:39
-215            android:name="com.google.firebase.provider.FirebaseInitProvider"
-215-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:24:13-77
-216            android:authorities="com.example.semana2.firebaseinitprovider"
-216-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:25:13-72
-217            android:directBootAware="true"
-217-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:26:13-43
-218            android:exported="false"
-218-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:27:13-37
-219            android:initOrder="100" />
-219-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:28:13-36
-220
-221        <activity
-221-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
-222            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-222-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
-223            android:exported="false"
-223-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
-224            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-224-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
-225
-226        <meta-data
-226-->[com.google.android.gms:play-services-basement:18.1.0] /Users/rdsilva/.gradle/caches/transforms-3/edcbee7bfc6abdae9450995c0eea9f43/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
-227            android:name="com.google.android.gms.version"
-227-->[com.google.android.gms:play-services-basement:18.1.0] /Users/rdsilva/.gradle/caches/transforms-3/edcbee7bfc6abdae9450995c0eea9f43/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
-228            android:value="@integer/google_play_services_version" />
-228-->[com.google.android.gms:play-services-basement:18.1.0] /Users/rdsilva/.gradle/caches/transforms-3/edcbee7bfc6abdae9450995c0eea9f43/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
-229    </application>
-230
-231</manifest>
+107-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:17:17-82
+108            <meta-data
+108-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:18:13-20:85
+109                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+109-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:19:17-127
+110                android:value="com.google.firebase.components.ComponentRegistrar" />
+110-->[com.google.firebase:firebase-installations:17.2.0] /Users/rdsilva/.gradle/caches/transforms-3/48c89805de9caad95e001928973ae58b/transformed/jetified-firebase-installations-17.2.0/AndroidManifest.xml:20:17-82
+111            <meta-data
+111-->[com.google.firebase:firebase-common-ktx:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/0c7436d826b072862d3480e256eacc82/transformed/jetified-firebase-common-ktx-20.4.2/AndroidManifest.xml:12:13-14:85
+112                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+112-->[com.google.firebase:firebase-common-ktx:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/0c7436d826b072862d3480e256eacc82/transformed/jetified-firebase-common-ktx-20.4.2/AndroidManifest.xml:13:17-116
+113                android:value="com.google.firebase.components.ComponentRegistrar" />
+113-->[com.google.firebase:firebase-common-ktx:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/0c7436d826b072862d3480e256eacc82/transformed/jetified-firebase-common-ktx-20.4.2/AndroidManifest.xml:14:17-82
+114            <meta-data
+114-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:35:13-37:85
+115                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+115-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:36:17-109
+116                android:value="com.google.firebase.components.ComponentRegistrar" />
+116-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:37:17-82
+117        </service>
+118
+119        <activity
+119-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-13:74
+120            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+120-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-74
+121            android:exported="false"
+121-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-37
+122            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+122-->[:url_launcher_android] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/url_launcher_android/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-71
+123        <activity
+123-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:13:9-27:20
+124            android:name="com.auth0.android.provider.RedirectActivity"
+124-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-71
+125            android:exported="true" >
+125-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-36
+126            <intent-filter>
+126-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-26:29
+127                <action android:name="android.intent.action.VIEW" />
+127-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
+127-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
+128
+129                <category android:name="android.intent.category.DEFAULT" />
+129-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
+129-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
+130                <category android:name="android.intent.category.BROWSABLE" />
+130-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
+130-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
+131
+132                <data
+132-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
+133                    android:host="test-domain"
+133-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
+134                    android:pathPrefix="/android/com.example.semana2/callback"
+134-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:24:21-76
+135                    android:scheme="test" />
+135-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
+136            </intent-filter>
+137            <intent-filter android:autoVerify="true" >
+137-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:34:13-46:29
+137-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:35:17-42
+138                <action android:name="android.intent.action.VIEW" />
+138-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
+138-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
+139
+140                <category android:name="android.intent.category.DEFAULT" />
+140-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
+140-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
+141                <category android:name="android.intent.category.BROWSABLE" />
+141-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
+141-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
+142
+143                <data
+143-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
+144                    android:host="dev-fttgkk0bii8xw7ch.us.auth0.com    "
+144-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
+145                    android:pathPrefix="/android/com.example.semana2/callback"
+145-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:24:21-76
+146                    android:scheme="flutterdemo" />
+146-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
+147            </intent-filter>
+148        </activity>
+149
+150        <property
+150-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:30:9-32:61
+151            android:name="android.adservices.AD_SERVICES_CONFIG"
+151-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:31:13-65
+152            android:resource="@xml/ga_ad_services_config" />
+152-->[com.google.android.gms:play-services-measurement-api:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/6171ed7b002f805f681d8626dc414006/transformed/jetified-play-services-measurement-api-21.5.0/AndroidManifest.xml:32:13-58
+153
+154        <activity
+154-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:25:9-30:75
+155            android:name="com.auth0.android.provider.AuthenticationActivity"
+155-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:26:13-77
+156            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|keyboard|keyboardHidden"
+156-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:27:13-115
+157            android:exported="false"
+157-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:28:13-37
+158            android:launchMode="singleTask"
+158-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:29:13-44
+159            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+159-->[com.auth0.android:auth0:2.10.2] /Users/rdsilva/.gradle/caches/transforms-3/5701151979e7c6830aa2f99a373028eb/transformed/jetified-auth0-2.10.2/AndroidManifest.xml:30:13-72
+160        <activity
+160-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:29:9-46:20
+161            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+161-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:30:13-80
+162            android:excludeFromRecents="true"
+162-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:31:13-46
+163            android:exported="true"
+163-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:32:13-36
+164            android:launchMode="singleTask"
+164-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:33:13-44
+165            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+165-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:34:13-72
+166            <intent-filter>
+166-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:35:13-45:29
+167                <action android:name="android.intent.action.VIEW" />
+167-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
+167-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
+168
+169                <category android:name="android.intent.category.DEFAULT" />
+169-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
+169-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
+170                <category android:name="android.intent.category.BROWSABLE" />
+170-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
+170-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
+171
+172                <data
+172-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
+173                    android:host="firebase.auth"
+173-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
+174                    android:path="/"
+175                    android:scheme="genericidp" />
+175-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
+176            </intent-filter>
+177        </activity>
+178        <activity
+178-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:47:9-64:20
+179            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+179-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:48:13-79
+180            android:excludeFromRecents="true"
+180-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:49:13-46
+181            android:exported="true"
+181-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:50:13-36
+182            android:launchMode="singleTask"
+182-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:51:13-44
+183            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+183-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:52:13-72
+184            <intent-filter>
+184-->[com.google.firebase:firebase-auth:22.2.0] /Users/rdsilva/.gradle/caches/transforms-3/78d903cc3bb8c370836beba6da958505/transformed/jetified-firebase-auth-22.2.0/AndroidManifest.xml:53:13-63:29
+185                <action android:name="android.intent.action.VIEW" />
+185-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-69
+185-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:17:25-66
+186
+187                <category android:name="android.intent.category.DEFAULT" />
+187-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:17-76
+187-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:19:27-73
+188                <category android:name="android.intent.category.BROWSABLE" />
+188-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:17-78
+188-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:20:27-75
+189
+190                <data
+190-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-25:45
+191                    android:host="firebase.auth"
+191-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:23:21-47
+192                    android:path="/"
+193                    android:scheme="recaptcha" />
+193-->[:auth0_flutter] /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/auth0_flutter/intermediates/merged_manifest/debug/AndroidManifest.xml:25:21-42
+194            </intent-filter>
+195        </activity>
+196
+197        <receiver
+197-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:29:9-33:20
+198            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+198-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:30:13-85
+199            android:enabled="true"
+199-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:31:13-35
+200            android:exported="false" >
+200-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:32:13-37
+201        </receiver>
+202
+203        <service
+203-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:35:9-38:40
+204            android:name="com.google.android.gms.measurement.AppMeasurementService"
+204-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:36:13-84
+205            android:enabled="true"
+205-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:37:13-35
+206            android:exported="false" />
+206-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:38:13-37
+207        <service
+207-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:39:9-43:72
+208            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+208-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:40:13-87
+209            android:enabled="true"
+209-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:41:13-35
+210            android:exported="false"
+210-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:42:13-37
+211            android:permission="android.permission.BIND_JOB_SERVICE" />
+211-->[com.google.android.gms:play-services-measurement:21.5.0] /Users/rdsilva/.gradle/caches/transforms-3/f05f7dec6d4aeb620034b01755510747/transformed/jetified-play-services-measurement-21.5.0/AndroidManifest.xml:43:13-69
+212
+213        <uses-library
+213-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /Users/rdsilva/.gradle/caches/transforms-3/1329505d05506946a9213185b0511f74/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:23:9-25:40
+214            android:name="android.ext.adservices"
+214-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /Users/rdsilva/.gradle/caches/transforms-3/1329505d05506946a9213185b0511f74/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:24:13-50
+215            android:required="false" />
+215-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] /Users/rdsilva/.gradle/caches/transforms-3/1329505d05506946a9213185b0511f74/transformed/jetified-ads-adservices-1.0.0-beta05/AndroidManifest.xml:25:13-37
+216        <uses-library
+216-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:25:9-27:40
+217            android:name="androidx.window.extensions"
+217-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:26:13-54
+218            android:required="false" />
+218-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:27:13-37
+219        <uses-library
+219-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:28:9-30:40
+220            android:name="androidx.window.sidecar"
+220-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:29:13-51
+221            android:required="false" />
+221-->[androidx.window:window:1.0.0-beta04] /Users/rdsilva/.gradle/caches/transforms-3/93f2b85fac8004c46b9451e0d6e9fa2d/transformed/jetified-window-1.0.0-beta04/AndroidManifest.xml:30:13-37
+222
+223        <provider
+223-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:23:9-28:39
+224            android:name="com.google.firebase.provider.FirebaseInitProvider"
+224-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:24:13-77
+225            android:authorities="com.example.semana2.firebaseinitprovider"
+225-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:25:13-72
+226            android:directBootAware="true"
+226-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:26:13-43
+227            android:exported="false"
+227-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:27:13-37
+228            android:initOrder="100" />
+228-->[com.google.firebase:firebase-common:20.4.2] /Users/rdsilva/.gradle/caches/transforms-3/8f4436ed3872c34ae7e8f385922cbe9a/transformed/jetified-firebase-common-20.4.2/AndroidManifest.xml:28:13-36
+229
+230        <activity
+230-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:9-22:45
+231            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+231-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:20:19-85
+232            android:exported="false"
+232-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:22:19-43
+233            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+233-->[com.google.android.gms:play-services-base:18.0.1] /Users/rdsilva/.gradle/caches/transforms-3/1a1df5eadf617d8b164d8cfbe0cff39f/transformed/jetified-play-services-base-18.0.1/AndroidManifest.xml:21:19-78
+234
+235        <meta-data
+235-->[com.google.android.gms:play-services-basement:18.1.0] /Users/rdsilva/.gradle/caches/transforms-3/edcbee7bfc6abdae9450995c0eea9f43/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+236            android:name="com.google.android.gms.version"
+236-->[com.google.android.gms:play-services-basement:18.1.0] /Users/rdsilva/.gradle/caches/transforms-3/edcbee7bfc6abdae9450995c0eea9f43/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+237            android:value="@integer/google_play_services_version" />
+237-->[com.google.android.gms:play-services-basement:18.1.0] /Users/rdsilva/.gradle/caches/transforms-3/edcbee7bfc6abdae9450995c0eea9f43/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+238    </application>
+239
+240</manifest>

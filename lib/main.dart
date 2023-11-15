@@ -92,9 +92,17 @@ class MyApp extends StatelessWidget {
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        // old
+        /*
         scaffoldBackgroundColor: Color.fromARGB(255, 69, 78, 89),
         primaryColor: Color.fromARGB(255, 54, 61, 70),
         secondaryHeaderColor: Color.fromARGB(230, 100, 130, 255),
+        // new
+        */
+
+        scaffoldBackgroundColor: Color.fromARGB(255, 20, 39, 61), // body background
+        primaryColor: Color.fromARGB(130, 9, 21, 27), // appbar top
+        secondaryHeaderColor: Color.fromARGB(255, 201, 128, 94), // details, like buttons
         useMaterial3: true,
       ),
       home: MyHomePage(appManagement,
@@ -244,8 +252,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         borderRadius: BorderRadius.circular(140),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 10,
+                            color: Colors.black,
+                            spreadRadius: 2,
                             blurRadius: 5,
                             offset: Offset(0, 3),
                           ),
@@ -253,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                       child: CircleAvatar(
                         radius: 100,
-                        backgroundImage: AssetImage('assets/PORSCHE_MAIN.JPEG'),
+                        backgroundImage: AssetImage('assets/LOGO.png'),
                       ),
                     ),
                     SizedBox(
@@ -294,9 +302,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
                           backgroundColor: Theme.of(context).secondaryHeaderColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 50.0)
                         ),
                         onPressed: () {
                           UtilsFlutter.MSG('LOGIN');

@@ -483,7 +483,7 @@ class State_windowHome extends State<windowHome> {
                         itemCount: myData.length,
                         itemBuilder: (context, index) => Card(
                           color:
-                              index % 2 == 0 ? const Color.fromARGB(230, 100, 130, 255) : const Color.fromARGB(230, 100, 130, 255),
+                              index % 2 == 0 ? const Color.fromARGB(255, 201, 128, 94) : Color.fromARGB(255, 201, 108, 94),
                           margin: const EdgeInsets.all(15),
                           child: ListTile(
                               title: Text(myData[index]['title']),
@@ -528,7 +528,7 @@ class State_windowHome extends State<windowHome> {
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
-            color: const Color.fromARGB(255, 54, 61, 70), // mudar para Theme
+            color: Theme.of(context).primaryColor, // mudar para Theme
             child: IconTheme(
               data:
                   IconThemeData(color: Theme.of(context).colorScheme.onPrimary),

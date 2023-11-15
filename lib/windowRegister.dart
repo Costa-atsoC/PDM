@@ -231,7 +231,7 @@ class Estado_windowRegister extends State<windowRegister> {
                         int userId = Authentication.createUser(
                             _username.text, _email.text, _pass.text) as int;
                         Utils.MSG_Debug((userId) as String); }*/ // old method
-                      Utils.MSG_Debug(_formKey.currentState!.validate() as String);
+                      //Utils.MSG_Debug(_formKey.currentState!.validate() as String);
                       _signUp();
 
                     },
