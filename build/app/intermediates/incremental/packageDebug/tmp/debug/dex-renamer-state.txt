@@ -1,10 +1,10 @@
-#Mon Nov 13 11:45:53 WET 2023
-base.0=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeExtDexDebug/classes.dex
-base.1=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeLibDexDebug/0/classes.dex
-base.2=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeProjectDexDebug/0/classes.dex
-base.3=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeProjectDexDebug/1/classes.dex
-base.4=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeProjectDexDebug/6/classes.dex
-base.5=/Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/build/app/intermediates/dex/debug/mergeExtDexDebug/classes2.dex
+#Wed Nov 15 16:48:37 WET 2023
+base.0=C\:\\Users\\leona\\Documents\\UBI\\3\\PDM\\PDM\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=C\:\\Users\\leona\\Documents\\UBI\\3\\PDM\\PDM\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
+base.2=C\:\\Users\\leona\\Documents\\UBI\\3\\PDM\\PDM\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.3=C\:\\Users\\leona\\Documents\\UBI\\3\\PDM\\PDM\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\1\\classes.dex
+base.4=C\:\\Users\\leona\\Documents\\UBI\\3\\PDM\\PDM\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\6\\classes.dex
+base.5=C\:\\Users\\leona\\Documents\\UBI\\3\\PDM\\PDM\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes2.dex
 path.0=classes.dex
 path.1=0/classes.dex
 path.2=0/classes.dex
