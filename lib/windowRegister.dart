@@ -104,164 +104,169 @@ class Estado_windowRegister extends State<windowRegister> {
 
     return MaterialApp(
         home: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(Nome_Classe),
       ),
-      body: Container(
-        //  height: 40.0,
-        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-        child: Center(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(140),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 10,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
+      body:Center(
+      child: SingleChildScrollView(
+          child: Container(
+            //  height: 40.0,
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Center(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(140),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black,
+                            spreadRadius: 3,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage('assets/LOGO.png'),
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                TextFormField(
-                  controller: _email,
-                  keyboardType: TextInputType.text,
-                  obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
-                      .Get("WND_REGISTER_OBSTEXT_1", "true")),
-                  style: const TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.email), //icon of text field
-                    iconColor: Colors.white,
-                    labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("WND_REGISTER_HINT_1", "WND_REGISTER_HINT_1 ??"),
-                    labelStyle: TextStyle(color: Colors.white),
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                  },
-                ),
-                TextFormField(
-                  controller: _username,
-                  keyboardType: TextInputType.text,
-                  obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
-                      .Get("WND_REGISTER_OBSTEXT_2", "true")),
-                  style: const TextStyle(color: Colors.black),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.alternate_email), //icon of text field
-                    iconColor: Colors.white,
-                    labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("WND_REGISTER_HINT_2", "WND_REGISTER_HINT_2 ??"),
-                    labelStyle: TextStyle(color: Colors.white),
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                  },
-                ),
-                TextFormField(
-                  controller: _pass,
-                  obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
-                      .Get("WND_REGISTER_OBSTEXT_3", "true")),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.password), //icon of text field
-                    iconColor: Colors.white,
-                    labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("WND_REGISTER_HINT_3", "WND_REGISTER_HINT_3 ??"),
-                    labelStyle: TextStyle(color: Colors.white),
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _confirmPass,
-                  obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
-                      .Get("WND_REGISTER_OBSTEXT_3", "true")),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.password_outlined),
-                    iconColor: Colors.white,
-                    //icon of text field
-                    labelText: Ref_Window.Ref_Management.SETTINGS
-                        .Get("WND_REGISTER_HINT_4", "WND_REGISTER_HINT_4 ??"),
-                    labelStyle: TextStyle(color: Colors.white),
-                  ),
-                  validator: (String? value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter some text';
-                    }
-                    if (value != _pass.text) {
-                      return 'Not Match';
-                    }
-                    return null;
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).secondaryHeaderColor,
+                      child: CircleAvatar(
+                        radius: 100,
+                        backgroundImage: AssetImage('assets/LOGO.png'),
+                      ),
                     ),
-                    onPressed: () {
-                      UtilsFlutter.MSG('HOME');
-                      //NavigateTo_Window_Home(context);
-                      // Validate will return true if the form is valid, or false if
-                      // the form is invalid.
-                      /*if (_formKey.currentState!.validate()) {
+                    SizedBox(
+                      height: 40,
+                    ),
+                    TextFormField(
+                      controller: _email,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.email), //icon of text field
+                        iconColor: Colors.white,
+                        labelText: Ref_Window.Ref_Management.SETTINGS.Get(
+                            "WND_REGISTER_HINT_1", "WND_REGISTER_HINT_1 ??"),
+                        labelStyle: TextStyle(color: Colors.white),
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: _username,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.alternate_email),
+                        //icon of text field
+                        iconColor: Colors.white,
+                        labelText: Ref_Window.Ref_Management.SETTINGS.Get(
+                            "WND_REGISTER_HINT_2", "WND_REGISTER_HINT_2 ??"),
+                        labelStyle: TextStyle(color: Colors.white),
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: _pass,
+                      obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
+                          .Get("WND_REGISTER_OBSTEXT_3", "true")),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.password), //icon of text field
+                        iconColor: Colors.white,
+                        labelText: Ref_Window.Ref_Management.SETTINGS.Get(
+                            "WND_REGISTER_HINT_3", "WND_REGISTER_HINT_3 ??"),
+                        labelStyle: TextStyle(color: Colors.white),
+                      ),
+                      style: TextStyle(color: Colors.white),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _confirmPass,
+                      obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
+                          .Get("WND_REGISTER_OBSTEXT_3", "true")),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.password_outlined),
+                        iconColor: Colors.white,
+                        //icon of text field
+                        labelText: Ref_Window.Ref_Management.SETTINGS.Get(
+                            "WND_REGISTER_HINT_4", "WND_REGISTER_HINT_4 ??"),
+                        labelStyle: TextStyle(color: Colors.white),
+                      ),
+                      style: TextStyle(color: Colors.white),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        if (value != _pass.text) {
+                          return 'Not Match';
+                        }
+                        return null;
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).secondaryHeaderColor,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 80.0)
+                        ),
+                        onPressed: () {
+                          UtilsFlutter.MSG('HOME');
+                          //NavigateTo_Window_Home(context);
+                          // Validate will return true if the form is valid, or false if
+                          // the form is invalid.
+                          /*if (_formKey.currentState!.validate()) {
                         int userId = Authentication.createUser(
                             _username.text, _email.text, _pass.text) as int;
                         Utils.MSG_Debug((userId) as String); }*/ // old method
-                      //Utils.MSG_Debug(_formKey.currentState!.validate() as String);
-                      _signUp();
-
-                    },
-                    child: Text(Ref_Window.Ref_Management.SETTINGS
-                        .Get("WND_REGISTER_BTN_1", "WND_REGISTER_BTN_1 ??")),
-                  ),
-                )
-              ],
+                          //Utils.MSG_Debug(_formKey.currentState!.validate() as String);
+                          _signUp();
+                        },
+                        child: Text(Ref_Window.Ref_Management.SETTINGS.Get(
+                            "WND_REGISTER_BTN_1", "WND_REGISTER_BTN_1 ??")),
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
           ),
         ),
       ),
     ));
   }
+
 //--------------
-void _signUp() async {
+  void _signUp() async {
     String username = _username.text;
     String email = _email.text;
     String password = _pass.text;
 
     User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-    if(user!=null){
+    if (user != null) {
       Utils.MSG_Debug("User is succesfully created");
       NavigateTo_Window_Home(context);
-    }
-    else {
+    } else {
       Utils.MSG_Debug("ERROR");
     }
-}
+  }
 //--------------
 //--------------
 }

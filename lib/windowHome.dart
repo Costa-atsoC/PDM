@@ -516,14 +516,21 @@ class State_windowHome extends State<windowHome> {
                       ),
           ),
           floatingActionButton: _showFab
-              ? FloatingActionButton(
-                  onPressed: () => showMyForm(null),
-                  backgroundColor: const Color.fromARGB(230, 100, 130, 255),
-                  // mudar para Theme
-                  splashColor: Colors.white,
-                  tooltip: 'Create',
-                  child: const Icon(Icons.add),
-                )
+              ? Container(
+            width: 70.0, // Set the width
+            height: 70.0, // Set the height
+            child: FloatingActionButton(
+              onPressed: () => showMyForm(null),
+              backgroundColor: const Color.fromARGB(230, 44, 71, 131),
+              splashColor: Colors.white,
+              tooltip: 'Create',
+              child: Icon(
+                Icons.add,
+                size: 33.0, // Adjust the size to increase the icon size
+              ),
+
+            ),
+          )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
