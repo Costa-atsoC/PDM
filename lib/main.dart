@@ -11,8 +11,7 @@ import 'windowHome.dart';
 import 'Utils.dart';
 import 'database_help.dart';
 
-
-void main() async{
+void main() async {
   DatabaseHelper.db();
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +49,6 @@ class _SelectableButtonState extends State<SelectableButton> {
     super.initState();
     statesController = MaterialStatesController(
         <MaterialState>{if (widget.selected) MaterialState.selected});
-
   }
 
   @override
@@ -74,35 +72,15 @@ class MyApp extends StatelessWidget {
     appManagement.Load();
     return MaterialApp(
       title: 'RideWME',
-
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        // old
-        /*
-        scaffoldBackgroundColor: Color.fromARGB(255, 69, 78, 89),
-        primaryColor: Color.fromARGB(255, 54, 61, 70),
-        secondaryHeaderColor: Color.fromARGB(230, 100, 130, 255),
-        // new
-        */
-
-        scaffoldBackgroundColor: Color.fromARGB(255, 20, 39, 61), // body background
-        primaryColor: Color.fromARGB(130, 9, 21, 27), // appbar top
-        secondaryHeaderColor: Color.fromARGB(255, 201, 128, 94), // details, like buttons
+        scaffoldBackgroundColor: Color.fromARGB(255, 20, 39, 61),
+        // body background
+        primaryColor: Color.fromARGB(130, 9, 21, 27),
+        // appbar top
+         secondaryHeaderColor: Color.fromARGB(255, 201, 128, 94),
+        //secondaryHeaderColor: Color.fromARGB(255,85, 126, 167),
+        //secondaryHeaderColor: Color.fromARGB(230, 199, 60, 18),
+        // details, like buttons
         useMaterial3: true,
       ),
       home: MyHomePage(appManagement,
@@ -113,7 +91,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   Management Ref_Management;
-
 
   MyHomePage(this.Ref_Management, this.title);
 
@@ -133,11 +110,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   void initState() {
     super.initState();
     DatabaseHelper.db();
+  }
+
+  @override
+  void dispose() {
+    _email.dispose();
+    _username.dispose();
+    _pass.dispose();
+
+    super.dispose();
   }
 
   bool selected = false;
@@ -145,10 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _pass = TextEditingController();
-  final TextEditingController _confirmPass = TextEditingController();
 
   final FirebaseAuthService _auth = FirebaseAuthService();
-
 
   int _counter = 0;
   Management Ref_Management;
@@ -157,11 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
@@ -170,43 +148,45 @@ class _MyHomePageState extends State<MyHomePage> {
     double TAM = double.parse(
         Ref_Management.GetDefinicao("TAMANHO_TEXTO_BTN_NEW_REGISTER", "10"));
     return SelectableButton(
-      selected: selected,
-      style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected)) {
-              return Colors.white;
-            }
-            return null; // defer to the defaults
-          },
+        selected: selected,
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return Colors.white;
+              }
+              return null; // defer to the defaults
+            },
+          ),
+          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return Colors.white;
+              }
+              return null; // defer to the defaults
+            },
+          ),
         ),
-        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected)) {
-              return Colors.indigo;
-            }
-            return null; // defer to the defaults
-          },
-        ),
-      ),
-      onPressed: () {
-        setState(
-          () {
-            selected = !selected;
-            UtilsFlutter.MSG(Ref_Management.GetDefinicao(
-                "TEXT_NEW_WINDOW_REGISTER",
-                "Accao-TEXT_NEW_WINDOW_REGISTER ??"));
-            NavigateTo_Window_Register(context);
-          },
-        );
-      },
-      child: Text(
-        Ref_Management.GetDefinicao(
-            "TEXT_OF_BUTTON_REGISTER", "TEXT_NEW_WINDOW_REGISTER ??"),
-        style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
-      ),
-    );
-
+        onPressed: () {
+          setState(
+            () {
+              selected = !selected;
+              UtilsFlutter.MSG(Ref_Management.GetDefinicao(
+                  "TEXT_NEW_WINDOW_REGISTER",
+                  "Accao-TEXT_NEW_WINDOW_REGISTER ??"));
+              NavigateTo_Window_Register(context);
+            },
+          );
+        },
+        child: Text(
+          Ref_Management.GetDefinicao(
+              "TEXT_OF_BUTTON_REGISTER", "TEXT_NEW_WINDOW_REGISTER ??"),
+          style: TextStyle(
+              fontFamily: 'Lato',
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(240, 85, 126, 167)),
+        ));
   }
 
   /// -----------------------------------
@@ -226,8 +206,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Jan));
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -235,98 +213,146 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
-          title: Text(widget.title),
+          title: Text(
+            widget.title,
+            style: TextStyle(
+                fontFamily: 'Lato', fontSize: 25, fontWeight: FontWeight.bold),
+          ),
         ),
-        body: Container(
-          margin: const EdgeInsets.only(left: 0.0, right: 0.0),
-          child: Center(
+        body: Center(
+          child: SingleChildScrollView(
             child: Container(
-              margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(140),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black,
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
+              margin: const EdgeInsets.only(left: 0.0, right: 0.0),
+              child: Center(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(140),
+                            /*boxShadow: [
+                              BoxShadow(
+                                color: Colors.black,
+                                spreadRadius: 0,
+                                blurRadius: 1,
+                                offset: Offset(0, 2),
+                              ),
+                            ],*/
                           ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        radius: 100,
-                        backgroundImage: AssetImage('assets/LOGO.png'),
-                      ),
-                    ),
-                    SizedBox(
-                        height: 40, // meter isto responsivo e meter no management
-                    ),
-                    TextFormField(
-                      controller: _email,
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.alternate_email),
-                        iconColor: Colors.white,
-                        labelText: Ref_Management.SETTINGS
-                            .Get("WND_LOGIN_HINT_1", "WND_LOGIN_HINT_1 ??"),
-                        labelStyle: TextStyle(color: Colors.white),
-                      ),
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your username';
-                        }
-                        return value;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _pass,
-                      decoration: InputDecoration(
-                        icon: Icon(Icons.password_outlined),
-                        iconColor: Colors.white,
-                        labelText: Ref_Management.SETTINGS
-                            .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
-                        labelStyle: TextStyle(color: Colors.white),
-                      ),
-                      validator: (String? value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Theme.of(context).secondaryHeaderColor,
-                          padding: const EdgeInsets.symmetric(horizontal: 50.0)
+                          child: CircleAvatar(
+                            radius: 100,
+                            backgroundColor: Color.fromARGB(0, 0, 0, 0),
+                            backgroundImage: AssetImage('assets/LOGO.png'),
+                          ),
                         ),
-                        onPressed: () {
-                          UtilsFlutter.MSG('LOGIN');
-                          //NavigateTo_Window_Home(context);
-                          // Validate will return true if the form is valid, or false if
-                          // the form is invalid.
-                          _signIn();
-                          if (_formKey.currentState!.validate()) {
+                        SizedBox(
+                          height:
+                              40, // meter isto responsivo e meter no management
+                        ),
+                        TextFormField(
+                          controller: _email,
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.alternate_email),
+                            iconColor: Colors.white,
+                            labelText: Ref_Management.SETTINGS
+                                .Get("WND_LOGIN_HINT_1", "WND_LOGIN_HINT_1 ??"),
+                            labelStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Lato',
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 3.0), // Set the border color here
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueAccent, width: 3.0), // Set the border color here
+                            ),
+                          ),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Lato',
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your username';
+                            }
+                            return value;
+                          },
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          controller: _pass,
+                          obscureText: bool.parse(Ref_Management.SETTINGS
+                              .Get("WND_REGISTER_OBSTEXT_3", "true")),
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.password_outlined),
+                            iconColor: Colors.white,
+                            labelText: Ref_Management.SETTINGS
+                                .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
+                            labelStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Lato',
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 3.0), // Set the border color here
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blueAccent, width: 3.0), // Set the border color here
+                            ),
+                          ),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Lato',
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold),
+                          validator: (String? value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          },
+                        ),
 
-                          }
-                          else{
-                            Utils.MSG_Debug("ERROR");
-                          }
-                        },
-                        child: Text(Ref_Management.SETTINGS
-                            .Get("WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??")),// adicionar aqui isto Theme.of(context).secondaryHeaderColor,
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).secondaryHeaderColor,
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
+                              minimumSize: Size(double.infinity, 0),
+                            ),
+                            onPressed: () {
+                              _signIn();
+                              if (_formKey.currentState!.validate()) {
+                              } else {
+                                Utils.MSG_Debug("ERROR");
+                              }
+                            },
+                            child: Text(
+                              Ref_Management.SETTINGS
+                                  .Get("WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
+                              style: TextStyle(
+                                  fontFamily: 'Lato',
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold),
+                            ), // adicionar aqui isto Theme.of(context).secondaryHeaderColor,
+                          ),
+                        ),
+                        // CriarButton_New_Window_Login(),
+                        Create_Button_New_Window_Register(),
+                      ],
                     ),
-                    // CriarButton_New_Window_Login(),
-                    Create_Button_New_Window_Register(),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -344,11 +370,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     User? user = await _auth.signInWithEmailAndPassword(email, password);
 
-    if(user!=null){
+    if (user != null) {
       Utils.MSG_Debug("User is signed");
       NavigateTo_Window_Home(context);
-    }
-    else {
+      _email.clear();
+      _username.clear();
+      _pass.clear();
+    } else {
       Utils.MSG_Debug("ERROR");
     }
   }

@@ -47,7 +47,7 @@ class Management {
 
     //--------- TOP
     //DEFINICOES.Add("TITULO_APP", "REVS & ROASTS");
-    SETTINGS.Add("TITULO_APP", "rideWM");
+    SETTINGS.Add("TITULO_APP", "rideWME");
 
     //--------- CENTER
     SETTINGS.Add("WND_LOGIN_TITLE_1", "Login Window");
@@ -58,7 +58,7 @@ class Management {
     SETTINGS.Add("WND_LOGIN_HINT_2", "Password");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD", "20");
 
-    SETTINGS.Add("WND_LOGIN_BTN_1", "Login");
+    SETTINGS.Add("WND_LOGIN_BTN_1", "LOGIN");
 
     //DEFINICOES.Add("TEXT_NEW_WINDOW_LOGIN", "Login");
     //DEFINICOES.Add("TAMANHO_TEXTO_BTN_NEW_LOGIN", "20");
@@ -75,8 +75,8 @@ class Management {
     //------------------------------------------------------//
     SETTINGS.Add("WND_REGISTER_TITLE_1", "Register Window");
 
-    SETTINGS.Add("WND_REGISTER_OBSTEXT_1", "false");
-    SETTINGS.Add("WND_REGISTER_OBSTEXT_2", "false");
+    SETTINGS.Add("WND_REGISTER_OBSTEXT_1", "true");
+    SETTINGS.Add("WND_REGISTER_OBSTEXT_2", "true");
 
     SETTINGS.Add("WND_REGISTER_HINT_1", "Email");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_EMAIL_REGISTER", "20");
@@ -89,6 +89,9 @@ class Management {
 
     SETTINGS.Add("WND_REGISTER_HINT_4", "Confirm the password");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_RPPASSWORD_REGISTER", "20");
+
+    SETTINGS.Add("WND_REGISTER_HINT_5", "Full Name");
+    SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_FULLNAME", "20");
 
     SETTINGS.Add("WND_REGISTER_BTN_1", "Submit ");
     //--------- FIM DA JANELA REGISTER
