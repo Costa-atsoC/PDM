@@ -73,30 +73,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'RideWME',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        // old
-        /*
-        scaffoldBackgroundColor: Color.fromARGB(255, 69, 78, 89),
-        primaryColor: Color.fromARGB(255, 54, 61, 70),
-        secondaryHeaderColor: Color.fromARGB(230, 100, 130, 255),
-        // new
-        */
-
         scaffoldBackgroundColor: Color.fromARGB(255, 20, 39, 61),
         // body background
         primaryColor: Color.fromARGB(130, 9, 21, 27),
@@ -140,12 +116,20 @@ class _MyHomePageState extends State<MyHomePage> {
     DatabaseHelper.db();
   }
 
+  @override
+  void dispose() {
+    _email.dispose();
+    _username.dispose();
+    _pass.dispose();
+
+    super.dispose();
+  }
+
   bool selected = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // _formKey
   final TextEditingController _email = TextEditingController();
   final TextEditingController _username = TextEditingController();
   final TextEditingController _pass = TextEditingController();
-  final TextEditingController _confirmPass = TextEditingController();
 
   final FirebaseAuthService _auth = FirebaseAuthService();
 
@@ -156,11 +140,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
@@ -182,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
             (Set<MaterialState> states) {
               if (states.contains(MaterialState.selected)) {
-                return Colors.indigo;
+                return Colors.white;
               }
               return null; // defer to the defaults
             },
@@ -286,15 +265,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 fontFamily: 'Lato',
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold),
-                            //filled: true,
-                            // Add this line to enable filling
-                            //fillColor: Color.fromARGB(255, 47, 92, 136),
-                            // Set the background color
-                            /*border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              // Set the border radius
-                              borderSide: BorderSide.none, // No border side
-                            ),*/
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 3.0), // Set the border color here
                             ),
@@ -331,15 +301,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 fontFamily: 'Lato',
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold),
-                            //filled: true,
-                            // Add this line to enable filling
-                            //fillColor: Color.fromARGB(255, 47, 92, 136),
-                            // Set the background color
-                            /*border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              // Set the border radius
-                              borderSide: BorderSide.none, // No border side
-                            ),*/
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 3.0), // Set the border color here
                             ),
@@ -371,10 +332,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               minimumSize: Size(double.infinity, 0),
                             ),
                             onPressed: () {
-                              //UtilsFlutter.MSG('LOGIN');
-                              //NavigateTo_Window_Home(context);
-                              // Validate will return true if the form is valid, or false if
-                              // the form is invalid.
                               _signIn();
                               if (_formKey.currentState!.validate()) {
                               } else {
@@ -416,6 +373,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (user != null) {
       Utils.MSG_Debug("User is signed");
       NavigateTo_Window_Home(context);
+      _email.clear();
+      _username.clear();
+      _pass.clear();
     } else {
       Utils.MSG_Debug("ERROR");
     }

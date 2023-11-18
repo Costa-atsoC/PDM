@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
-import 'windowHome.dart';
 
+import '../firestore/user_firestore.dart';
+import 'firebase_auth_implementation/models/user_model.dart';
+import 'windowHome.dart';
 import 'Management.dart';
 import 'Utils.dart';
 import 'authenticationManager.dart';
@@ -47,6 +49,7 @@ class Estado_windowRegister extends State<windowRegister> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _pass = TextEditingController();
   final TextEditingController _confirmPass = TextEditingController();
+  final TextEditingController _fullname = TextEditingController();
 
   final FirebaseAuthService _auth = FirebaseAuthService();
 
@@ -109,8 +112,8 @@ class Estado_windowRegister extends State<windowRegister> {
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(Nome_Classe),
       ),
-      body:Center(
-      child: SingleChildScrollView(
+      body: Center(
+        child: SingleChildScrollView(
           child: Container(
             //  height: 40.0,
             margin: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -121,19 +124,9 @@ class Estado_windowRegister extends State<windowRegister> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(140),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black,
-                            spreadRadius: 3,
-                            blurRadius: 5,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
                       child: CircleAvatar(
                         radius: 100,
+                        backgroundColor: Color.fromARGB(255, 20, 39, 61),
                         backgroundImage: AssetImage('assets/LOGO.png'),
                       ),
                     ),
@@ -149,6 +142,23 @@ class Estado_windowRegister extends State<windowRegister> {
                         iconColor: Colors.white,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_1", "WND_REGISTER_HINT_1 ??"),
+                        labelStyle: TextStyle(color: Colors.white),
+                      ),
+                      validator: (String? value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                      },
+                    ),
+                    TextFormField(
+                      controller: _fullname,
+                      keyboardType: TextInputType.text,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.drive_file_rename_outline), //icon of text field
+                        iconColor: Colors.white,
+                        labelText: Ref_Window.Ref_Management.SETTINGS.Get(
+                            "WND_REGISTER_HINT_5", "WND_REGISTER_HINT_5 ??"),
                         labelStyle: TextStyle(color: Colors.white),
                       ),
                       validator: (String? value) {
@@ -221,22 +231,16 @@ class Estado_windowRegister extends State<windowRegister> {
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: FilledButton(
                         style: FilledButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).secondaryHeaderColor,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 80.0)
-                        ),
+                            backgroundColor:
+                                Theme.of(context).secondaryHeaderColor,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 80.0)),
                         onPressed: () {
                           UtilsFlutter.MSG('HOME');
-                          //NavigateTo_Window_Home(context);
-                          // Validate will return true if the form is valid, or false if
-                          // the form is invalid.
-                          /*if (_formKey.currentState!.validate()) {
-                        int userId = Authentication.createUser(
-                            _username.text, _email.text, _pass.text) as int;
-                        Utils.MSG_Debug((userId) as String); }*/ // old method
-                          //Utils.MSG_Debug(_formKey.currentState!.validate() as String);
-                          _signUp();
+                          if (_formKey.currentState!.validate()) {
+                            Utils.MSG_Debug("SIGNEDUP");
+                            _signUp();
+                          } // old method
                         },
                         child: Text(Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_BTN_1", "WND_REGISTER_BTN_1 ??")),
@@ -254,19 +258,29 @@ class Estado_windowRegister extends State<windowRegister> {
 
 //--------------
   void _signUp() async {
+    UserFirestore userFirestore = UserFirestore();
+
     String username = _username.text;
     String email = _email.text;
     String password = _pass.text;
+    String fullname = _fullname.text;
 
-    User? user = await _auth.signUpWithEmailAndPassword(email, password);
+    try {
+      User? user = await _auth.signUpWithEmailAndPassword(email, password);
+      String uid = user?.uid ?? ''; // Get the user ID
 
-    if (user != null) {
-      Utils.MSG_Debug("User is succesfully created");
+      // Now you can use the user ID as needed
+      UserModel currentUser =
+          UserModel(uid: uid, email: email, username: username, fullname: fullname);
+      await userFirestore.saveUserData(currentUser);
+
+      Utils.MSG_Debug("User is successfully created with ID: $uid");
       NavigateTo_Window_Home(context);
-    } else {
-      Utils.MSG_Debug("ERROR");
+    } catch (e) {
+      Utils.MSG_Debug("Error creating user: $e");
     }
   }
+
 //--------------
 //--------------
 }

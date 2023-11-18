@@ -90,6 +90,9 @@ class Management {
     SETTINGS.Add("WND_REGISTER_HINT_4", "Confirm the password");
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_RPPASSWORD_REGISTER", "20");
 
+    SETTINGS.Add("WND_REGISTER_HINT_5", "Full Name");
+    SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_FULLNAME", "20");
+
     SETTINGS.Add("WND_REGISTER_BTN_1", "Submit ");
     //--------- FIM DA JANELA REGISTER
 
