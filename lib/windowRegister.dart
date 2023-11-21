@@ -106,8 +106,11 @@ class Estado_windowRegister extends State<windowRegister> {
         home: Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.secondary),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text(Nome_Classe),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -123,7 +126,7 @@ class Estado_windowRegister extends State<windowRegister> {
                     Container(
                       child: CircleAvatar(
                         radius: 100,
-                        backgroundColor: Color.fromARGB(255, 20, 39, 61),
+                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                         backgroundImage: AssetImage('assets/LOGO.png'),
                       ),
                     ),
@@ -136,10 +139,10 @@ class Estado_windowRegister extends State<windowRegister> {
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         icon: Icon(Icons.email), //icon of text field
-                        iconColor: Colors.white,
+                        iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_1", "WND_REGISTER_HINT_1 ??"),
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: Theme.of(context).textTheme.titleSmall,
                       ),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
@@ -152,11 +155,12 @@ class Estado_windowRegister extends State<windowRegister> {
                       keyboardType: TextInputType.text,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
-                        icon: Icon(Icons.drive_file_rename_outline), //icon of text field
-                        iconColor: Colors.white,
+                        icon: Icon(Icons.drive_file_rename_outline),
+                        //icon of text field
+                        iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_5", "WND_REGISTER_HINT_5 ??"),
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: Theme.of(context).textTheme.titleSmall,
                       ),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
@@ -171,10 +175,10 @@ class Estado_windowRegister extends State<windowRegister> {
                       decoration: InputDecoration(
                         icon: Icon(Icons.alternate_email),
                         //icon of text field
-                        iconColor: Colors.white,
+                        iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_2", "WND_REGISTER_HINT_2 ??"),
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: Theme.of(context).textTheme.titleSmall,
                       ),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
@@ -188,12 +192,11 @@ class Estado_windowRegister extends State<windowRegister> {
                           .Get("WND_REGISTER_OBSTEXT_3", "true")),
                       decoration: InputDecoration(
                         icon: Icon(Icons.password), //icon of text field
-                        iconColor: Colors.white,
+                        iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_3", "WND_REGISTER_HINT_3 ??"),
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: Theme.of(context).textTheme.titleSmall,
                       ),
-                      style: TextStyle(color: Colors.white),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
@@ -207,13 +210,12 @@ class Estado_windowRegister extends State<windowRegister> {
                           .Get("WND_REGISTER_OBSTEXT_3", "true")),
                       decoration: InputDecoration(
                         icon: Icon(Icons.password_outlined),
-                        iconColor: Colors.white,
+                        iconColor: Theme.of(context).iconTheme.color,
                         //icon of text field
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_4", "WND_REGISTER_HINT_4 ??"),
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: Theme.of(context).textTheme.titleSmall,
                       ),
-                      style: TextStyle(color: Colors.white),
                       validator: (String? value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter some text';
@@ -226,12 +228,8 @@ class Estado_windowRegister extends State<windowRegister> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                            backgroundColor:
-                                Theme.of(context).secondaryHeaderColor,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 80.0)),
+                      child: ElevatedButton(
+                        style: Theme.of(context).elevatedButtonTheme.style,
                         onPressed: () {
                           UtilsFlutter.MSG('HOME');
                           if (_formKey.currentState!.validate()) {
@@ -239,8 +237,13 @@ class Estado_windowRegister extends State<windowRegister> {
                             _signUp();
                           } // old method
                         },
-                        child: Text(Ref_Window.Ref_Management.SETTINGS.Get(
-                            "WND_REGISTER_BTN_1", "WND_REGISTER_BTN_1 ??")),
+                        child: Text(
+                            Ref_Window.Ref_Management.SETTINGS.Get(
+                                "WND_REGISTER_BTN_1", "WND_REGISTER_BTN_1 ??"),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge // adicionar aqui isto Theme.of(context).secondaryHeaderColor,
+                            ),
                       ),
                     )
                   ],
@@ -267,8 +270,8 @@ class Estado_windowRegister extends State<windowRegister> {
       String uid = user?.uid ?? ''; // Get the user ID
 
       // Now you can use the user ID as needed
-      UserModel currentUser =
-          UserModel(uid: uid, email: email, username: username, fullname: fullname);
+      UserModel currentUser = UserModel(
+          uid: uid, email: email, username: username, fullname: fullname);
       await userFirestore.saveUserData(currentUser);
 
       Utils.MSG_Debug("User is successfully created with ID: $uid");

@@ -325,8 +325,8 @@ class State_windowHome extends State<windowHome> {
             builder: (context) => windowHome(Ref_Window.Ref_Management)));
   }
 
-  Future NavigateTo_Window_News(context) async {
-    windowNews win = new windowNews(Ref_Window.Ref_Management);
+  Future NavigateTo_Window_Home(context) async {
+    windowHome win = new windowHome(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -399,75 +399,83 @@ class State_windowHome extends State<windowHome> {
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      image: DecorationImage(
-                          fit: BoxFit.fill,
-                          image: AssetImage('assets/images/cover.jpg'))),
-                  child: Text(
-                    Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_HOME_DRAWER_TITLE_1", "RideWME"),
-                    // nao esquecer de adicionar isto ao Management
-                    style: TextStyle(color: Colors.white, fontSize: 25),
+                    color: Theme.of(context).primaryColor,
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage('assets/images/cover.jpg'),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 30, // Tamanho do círculo
+                        backgroundImage: AssetImage('caminho/para/foto_de_perfil.jpg'),
+                        // Adicione o caminho da foto de perfil ou deixe como está se não houver uma foto
+                      ),
+                      SizedBox(height: 10), // Espaço entre a foto e o texto
+                      Text(
+                        "Name",
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ],
                   ),
                 ),
                 ListTile(
                   leading: Icon(Icons.input),
                   // meter o logo da app
-                  iconColor: Colors.white,
+                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
                   ),
                   // adicionar ao management
-                  textColor: Colors.white,
-                  titleTextStyle: TextStyle(fontSize: 25),
+                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
                   onTap: () => {},
                 ),
                 ListTile(
                   leading: Icon(Icons.person),
-                  iconColor: Colors.white,
+                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
                   ),
-                  textColor: Colors.white,
-                  titleTextStyle: TextStyle(fontSize: 25),
+                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
                   onTap: () => {NavigateTo_Window_User_Profile(context)},
                 ),
                 ListTile(
                   leading: Icon(Icons.settings),
-                  iconColor: Colors.white,
+                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
                   ),
-                  textColor: Colors.white,
-                  titleTextStyle: TextStyle(fontSize: 25),
+                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
                   onTap: () => {NavigateTo_Window_Settings(context)},
                 ),
                 ListTile(
                   leading: Icon(Icons.border_color),
-                  iconColor: Colors.white,
+                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
                   ),
-                  textColor: Colors.white,
-                  titleTextStyle: TextStyle(fontSize: 25),
+                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
                   onTap: () => {Navigator.of(context).pop()},
                 ),
                 ListTile(
                   leading: Icon(Icons.exit_to_app),
-                  iconColor: Colors.white,
+                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
                   ),
-                  textColor: Colors.white,
-                  titleTextStyle: TextStyle(fontSize: 25),
+                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
                   onTap: () => {
                     FirebaseAuth.instance.signOut(),
-                    Navigator.of(context).pop()
+                    Navigator.of(context).pop(),
+                    NavigateTo_Window_Home(context)
                   },
                 ),
               ],

@@ -199,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
+        /*appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
           title: Text(
             widget.title,
@@ -207,7 +207,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontFamily: 'Lato', fontSize: 25, fontWeight: FontWeight.bold),
           ),
         ),
-        body: Center(
+
+         */
+        body:
+        Center(
           child: SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.only(left: 0.0, right: 0.0),
@@ -245,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           controller: _email,
                           decoration: InputDecoration(
                             icon: Icon(Icons.alternate_email),
-                            iconColor: Theme.of(context).colorScheme.onPrimary,
+                            iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_1", "WND_LOGIN_HINT_1 ??"),
                             labelStyle: Theme.of(context).textTheme.titleSmall,
@@ -277,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               .Get("WND_REGISTER_OBSTEXT_3", "true")),
                           decoration: InputDecoration(
                             icon: Icon(Icons.password_outlined),
-                            iconColor: Theme.of(context).colorScheme.onPrimary,
+                            iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
                             labelStyle: Theme.of(context).textTheme.titleSmall,
@@ -302,8 +305,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: FilledButton(
-                            style: Theme.of(context).filledButtonTheme.style,
+                          child: ElevatedButton(
+                            style: Theme.of(context).elevatedButtonTheme.style,
                             onPressed: () {
                               _signIn();
                               if (_formKey.currentState!.validate()) {
@@ -316,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     "WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .titleLarge // adicionar aqui isto Theme.of(context).secondaryHeaderColor,
+                                    .titleLarge
                                 ),
                           ),
                         ),

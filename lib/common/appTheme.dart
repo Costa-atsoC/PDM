@@ -18,7 +18,7 @@ class AppTheme {
     colorScheme: ColorScheme.light(
       primary: Color.fromARGB(255, 20, 39, 61),
       onPrimary: Color.fromARGB(255, 20, 39, 61),
-      secondary: Colors.red,
+      secondary: Colors.white,
     ),
     cardTheme: CardTheme(
       color: Colors.teal,
@@ -29,14 +29,14 @@ class AppTheme {
     textTheme: TextTheme(
       titleLarge: TextStyle(
         fontFamily: 'Lato',
-        color: Color.fromARGB(255, 20, 39, 61),
+        color: Colors.white,
         fontSize: 25.0,
         fontWeight: FontWeight.bold,
       ),
       titleMedium: TextStyle(
         fontFamily: 'Lato',
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: Color.fromARGB(255, 20, 39, 61),
         fontSize: 20.0,
       ),
       titleSmall: TextStyle(
@@ -46,10 +46,10 @@ class AppTheme {
           fontWeight: FontWeight.bold),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          Color.fromARGB(255, 201, 128, 94),
-        ),
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 10.0),
+        minimumSize: Size(double.infinity, 0),
+        backgroundColor: Color.fromARGB(255, 208, 166, 144),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
@@ -83,18 +83,18 @@ class AppTheme {
     colorScheme: ColorScheme.light(
       primary: Color.fromARGB(130, 9, 21, 27),
       onPrimary: Colors.white,
-      secondary: Colors.red,
+      secondary: Colors.white,
     ),
     cardTheme: CardTheme(
       color: Colors.black,
     ),
     iconTheme: IconThemeData(
-      color: Colors.white54,
+      color: Colors.white,
     ),
     textTheme: TextTheme(
       titleLarge: TextStyle(
         fontFamily: 'Lato',
-        color: Colors.white,
+        color: Color.fromARGB(255, 255, 255, 255),
         fontSize: 25.0,
         fontWeight: FontWeight.bold,
       ),
@@ -110,10 +110,10 @@ class AppTheme {
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-          Color.fromARGB(255, 201, 128, 94),
-        ),
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 10.0),
+        minimumSize: Size(double.infinity, 0),
+        backgroundColor: Color.fromARGB(255, 201, 128, 94),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
