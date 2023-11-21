@@ -10,8 +10,6 @@ import 'firebase_auth_implementation/models/user_model.dart';
 import 'windowHome.dart';
 import 'Management.dart';
 import 'Utils.dart';
-import 'authenticationManager.dart';
-import 'database_help.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -27,7 +25,6 @@ class windowRegister extends StatefulWidget {
 
   //--------------
   Future<void> Load() async {
-    DatabaseHelper.db();
     Utils.MSG_Debug(Titulo_Janela + ":Load");
   }
 
