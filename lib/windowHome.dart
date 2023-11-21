@@ -1,12 +1,15 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
-import 'package:ubi/windowSettings.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
+import 'package:ubi/windowSettings.dart';
 import 'Management.dart';
 import 'Utils.dart';
-import 'database_help.dart';
 import 'windowNews.dart';
 import 'windowSearch.dart';
 import 'windowUserProfile.dart';
@@ -16,6 +19,7 @@ import 'windowUserProfile.dart';
 class windowHome extends StatefulWidget {
   String windowTitle = "";
   final Management Ref_Management;
+  final storage = FirebaseStorage.instance; // firestore
   int? ACCESS_WINDOW_HOME;
 
   //--------------
@@ -50,8 +54,19 @@ class windowHome extends StatefulWidget {
 //----------------------------------------------------------------
 // ignore: camel_case_types
 class State_windowHome extends State<windowHome> {
+  PlatformFile? pickedFile;
+
   final windowHome Ref_Window;
   String className = "";
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result == null) return;
+
+    setState(() {
+      pickedFile = result.files.first;
+    });
+  }
 
   //--- database constants
   // All data
@@ -59,15 +74,6 @@ class State_windowHome extends State<windowHome> {
   final formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
-
-  // This function is used to fetch all data from the database
-  void _refreshData() async {
-    final data = await DatabaseHelper.getItems();
-    setState(() {
-      myData = data;
-      _isLoading = false;
-    });
-  }
 
   //------ end of database constants
 
@@ -104,7 +110,6 @@ class State_windowHome extends State<windowHome> {
   void initState() {
     Utils.MSG_Debug("$className: initState");
     super.initState();
-    _refreshData();
   }
 
   //------ Start of Database
@@ -215,8 +220,36 @@ class State_windowHome extends State<windowHome> {
                     height: 20,
                   ),
                   Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                            ),
+                            onPressed: () {
+                              selectFile();
+                            },
+                            child: const Text("Photo")),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ]),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      //if (pickedFile != null)
+                        Expanded(child: Container(
+                          color: Colors.blue[100],
+                          child: Image.file(
+                            File(pickedFile!.path!),
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red,
@@ -229,13 +262,9 @@ class State_windowHome extends State<windowHome> {
                       ElevatedButton(
                         onPressed: () async {
                           if (formKey.currentState!.validate()) {
-                            if (id == null) {
-                              await addItem();
-                            }
+                            if (id == null) {}
 
-                            if (id != null) {
-                              await updateItem(id);
-                            }
+                            if (id != null) {}
 
                             // Clear the text fields
                             setState(() {
@@ -262,28 +291,6 @@ class State_windowHome extends State<windowHome> {
   String? formValidator(String? value) {
     if (value!.isEmpty) return 'Field is Required';
     return null;
-  }
-
-// Insert a new data to the database
-  Future<void> addItem() async {
-    await DatabaseHelper.createItem(1, _titleController.text,
-        _descriptionController.text, _dateController.text);
-    _refreshData();
-  }
-
-  // Update an existing data
-  Future<void> updateItem(int id) async {
-    await DatabaseHelper.updateItem(id, _titleController.text,
-        _descriptionController.text, _dateController.text);
-    _refreshData();
-  }
-
-  // Delete an item
-  void deleteItem(int id) async {
-    await DatabaseHelper.deleteItem(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Successfully deleted!'), backgroundColor: Colors.green));
-    _refreshData();
   }
 
   //------ END OF DATABASE
@@ -482,8 +489,9 @@ class State_windowHome extends State<windowHome> {
                     : ListView.builder(
                         itemCount: myData.length,
                         itemBuilder: (context, index) => Card(
-                          color:
-                              index % 2 == 0 ? const Color.fromARGB(255, 201, 128, 94) : Color.fromARGB(255, 201, 108, 94),
+                          color: index % 2 == 0
+                              ? const Color.fromARGB(255, 201, 128, 94)
+                              : Color.fromARGB(255, 201, 108, 94),
                           margin: const EdgeInsets.all(15),
                           child: ListTile(
                               title: Text(myData[index]['title']),
@@ -506,8 +514,7 @@ class State_windowHome extends State<windowHome> {
                                     IconButton(
                                       color: Colors.white,
                                       icon: const Icon(Icons.delete),
-                                      onPressed: () =>
-                                          deleteItem(myData[index]['id']),
+                                      onPressed: () => {},
                                     ),
                                   ],
                                 ),
@@ -517,20 +524,19 @@ class State_windowHome extends State<windowHome> {
           ),
           floatingActionButton: _showFab
               ? Container(
-            width: 70.0, // Set the width
-            height: 70.0, // Set the height
-            child: FloatingActionButton(
-              onPressed: () => showMyForm(null),
-              backgroundColor: const Color.fromARGB(230, 44, 71, 131),
-              splashColor: Colors.white,
-              tooltip: 'Create',
-              child: Icon(
-                Icons.add,
-                size: 33.0, // Adjust the size to increase the icon size
-              ),
-
-            ),
-          )
+                  width: 70.0, // Set the width
+                  height: 70.0, // Set the height
+                  child: FloatingActionButton(
+                    onPressed: () => showMyForm(null),
+                    backgroundColor: const Color.fromARGB(230, 44, 71, 131),
+                    splashColor: Colors.white,
+                    tooltip: 'Create',
+                    child: Icon(
+                      Icons.add,
+                      size: 33.0, // Adjust the size to increase the icon size
+                    ),
+                  ),
+                )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(

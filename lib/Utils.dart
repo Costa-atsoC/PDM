@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   //--------- Uteis.Factorial(12);
@@ -27,6 +28,13 @@ class Utils {
     String str = "";
     for (int i = 0; i < N; i++) str += car;
     return str;
+  }
+
+  static String currentTime(){
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
+
+    return formattedDate;
   }
 
 //--------------------------------------

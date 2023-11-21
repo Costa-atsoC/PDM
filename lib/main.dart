@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ubi/common/appTheme.dart';
 import 'firebase_auth_implementation/firebase_auth_services.dart';
 import 'windowGeneral.dart';
 import 'windowRegister.dart';
@@ -9,11 +10,8 @@ import 'firebase_options.dart';
 import 'Management.dart';
 import 'windowHome.dart';
 import 'Utils.dart';
-import 'database_help.dart';
 
 void main() async {
-  DatabaseHelper.db();
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -72,17 +70,8 @@ class MyApp extends StatelessWidget {
     appManagement.Load();
     return MaterialApp(
       title: 'RideWME',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Color.fromARGB(255, 20, 39, 61),
-        // body background
-        primaryColor: Color.fromARGB(130, 9, 21, 27),
-        // appbar top
-         secondaryHeaderColor: Color.fromARGB(255, 201, 128, 94),
-        //secondaryHeaderColor: Color.fromARGB(255,85, 126, 167),
-        //secondaryHeaderColor: Color.fromARGB(230, 199, 60, 18),
-        // details, like buttons
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       home: MyHomePage(appManagement,
           appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??")),
     );
@@ -113,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    DatabaseHelper.db();
   }
 
   @override
@@ -257,26 +245,22 @@ class _MyHomePageState extends State<MyHomePage> {
                           controller: _email,
                           decoration: InputDecoration(
                             icon: Icon(Icons.alternate_email),
-                            iconColor: Colors.white,
+                            iconColor: Theme.of(context).colorScheme.onPrimary,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_1", "WND_LOGIN_HINT_1 ??"),
-                            labelStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Lato',
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold),
+                            labelStyle: Theme.of(context).textTheme.titleSmall,
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 3.0), // Set the border color here
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 3.0), // Set the border color here
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blueAccent, width: 3.0), // Set the border color here
+                              borderSide: BorderSide(
+                                  color: Colors.blueAccent,
+                                  width: 3.0), // Set the border color here
                             ),
                           ),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Lato',
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleSmall,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your username';
@@ -293,26 +277,22 @@ class _MyHomePageState extends State<MyHomePage> {
                               .Get("WND_REGISTER_OBSTEXT_3", "true")),
                           decoration: InputDecoration(
                             icon: Icon(Icons.password_outlined),
-                            iconColor: Colors.white,
+                            iconColor: Theme.of(context).colorScheme.onPrimary,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
-                            labelStyle: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Lato',
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold),
+                            labelStyle: Theme.of(context).textTheme.titleSmall,
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 3.0), // Set the border color here
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 3.0), // Set the border color here
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blueAccent, width: 3.0), // Set the border color here
+                              borderSide: BorderSide(
+                                  color: Colors.blueAccent,
+                                  width: 3.0), // Set the border color here
                             ),
                           ),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Lato',
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold),
+                          style: Theme.of(context).textTheme.titleSmall,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password';
@@ -320,17 +300,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             return null;
                           },
                         ),
-
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: FilledButton(
-                            style: FilledButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).secondaryHeaderColor,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 10.0),
-                              minimumSize: Size(double.infinity, 0),
-                            ),
+                            style: Theme.of(context).filledButtonTheme.style,
                             onPressed: () {
                               _signIn();
                               if (_formKey.currentState!.validate()) {
@@ -339,16 +312,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               }
                             },
                             child: Text(
-                              Ref_Management.SETTINGS
-                                  .Get("WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
-                              style: TextStyle(
-                                  fontFamily: 'Lato',
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold),
-                            ), // adicionar aqui isto Theme.of(context).secondaryHeaderColor,
+                                Ref_Management.SETTINGS.Get(
+                                    "WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge // adicionar aqui isto Theme.of(context).secondaryHeaderColor,
+                                ),
                           ),
                         ),
-                        // CriarButton_New_Window_Login(),
                         Create_Button_New_Window_Register(),
                       ],
                     ),

@@ -28,6 +28,9 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_auth_web-5.8.7" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore-4.13.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.8.5" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_storage_web-3.6.13" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_storage-11.5.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/file_picker-6.1.1" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
