@@ -4,15 +4,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:ubi/windowSettings.dart';
 import 'Management.dart';
 import 'Utils.dart';
-import 'windowNews.dart';
 import 'windowSearch.dart';
-import 'windowUserProfile.dart';
+import 'screens/windowUserProfile.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -384,6 +382,7 @@ class State_windowHome extends State<windowHome> {
     );
   }
 
+
   //--------------
   @override
   Widget build(BuildContext context) {
@@ -416,7 +415,8 @@ class State_windowHome extends State<windowHome> {
                       ),
                       SizedBox(height: 10), // Espaço entre a foto e o texto
                       Text(
-                        "Name",
+                        Ref_Window.Ref_Management.SETTINGS
+                            .Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ],
@@ -475,7 +475,6 @@ class State_windowHome extends State<windowHome> {
                   onTap: () => {
                     FirebaseAuth.instance.signOut(),
                     Navigator.of(context).pop(),
-                    NavigateTo_Window_Home(context)
                   },
                 ),
               ],

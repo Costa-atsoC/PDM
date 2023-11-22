@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import 'Management.dart';
-import 'Utils.dart';
-import 'database_help.dart';
+import '../Management.dart';
+import '../Utils.dart';
+import '../database_help.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------

@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ubi/firestore/user_firestore.dart';
 
 import '../Management.dart';
 import '../Utils.dart';
 import '../common/widgets/RWMButtons.dart';
 import '../firebase_auth_implementation/firebase_auth_services.dart';
-import '../main.dart';
+import '../firebase_auth_implementation/models/user_model.dart';
 import '../windowHome.dart';
 import '../windowRegister.dart';
 
@@ -33,12 +34,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
+    _initializeData();
     super.initState();
   }
 
   @override
   void dispose() {
-    _email.dispose();
     _username.dispose();
     _pass.dispose();
 
@@ -126,21 +127,20 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Jan));
   }
 
+  Future<void> _initializeData() async {
+   // Ref_Management.Save_Shared_Preferences_STRING("EMAIL", "email");
+    //print("_initializeData.......................................................");
+    String? email = await Ref_Management.Get_SharedPreferences_STRING("EMAIL");
+    String? uid = await Ref_Management.Get_SharedPreferences_STRING("UID");
+    print(uid);
+    _email.text = email!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        /*appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text(
-            widget.title,
-            style: TextStyle(
-                fontFamily: 'Lato', fontSize: 25, fontWeight: FontWeight.bold),
-          ),
-        ),
-
-         */
         body:
         Center(
           child: SingleChildScrollView(
@@ -157,14 +157,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(140),
-                            /*boxShadow: [
-                              BoxShadow(
-                                color: Colors.black,
-                                spreadRadius: 0,
-                                blurRadius: 1,
-                                offset: Offset(0, 2),
-                              ),
-                            ],*/
                           ),
                           child: CircleAvatar(
                             radius: 100,
@@ -182,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             icon: Icon(Icons.alternate_email),
                             iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
-                                .Get("WND_LOGIN_HINT_1", "WND_LOGIN_HINT_1 ??"),
+                                .Get("WND_LOGIN_HINT_10", "Email"),
                             labelStyle: Theme.of(context).textTheme.titleSmall,
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
@@ -270,14 +262,32 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //--------------
   void _signIn() async {
-    String username = _username.text;
+    UserFirestore userFirestore = UserFirestore();
+    
+    // String username = _username.text;
     String email = _email.text;
     String password = _pass.text;
+    String currentTime = Utils.currentTime();
 
     User? user = await _auth.signInWithEmailAndPassword(email, password);
+    Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
+
+    UserModel? userData = await userFirestore.getUserData(user!.uid);
+    Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullname);
+    Utils.MSG_Debug("###### FULL NAME ######");
+    Utils.MSG_Debug(userData!.fullname);
+    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData!.email);
+    Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData!.username);
 
     if (user != null) {
       Utils.MSG_Debug("User is signed");
+      // saving the email! in the shared_preferences
+      if(Ref_Management.Get_SharedPreferences_STRING("EMAIL") == "??"){
+        Ref_Management.Save_Shared_Preferences_STRING("TIME_EMAIL", currentTime);
+      }
+      Ref_Management.Save_Shared_Preferences_STRING("EMAIL", email);
+
+      //else if(Ref_Management.Get_SharedPreferences_STRING("TIME_EMAIL") == "??") aqui implementar a logica para comparar as datas do login
       NavigateTo_Window_Home(context);
       _email.clear();
       _username.clear();

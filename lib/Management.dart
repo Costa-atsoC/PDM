@@ -5,7 +5,7 @@ import 'package:http/http.dart' as HTTP;
 import 'General.dart';
 import 'Utils.dart';
 
-import 'windowUserProfile.dart';
+import 'screens/windowUserProfile.dart';
 
 class Management {
   final String appName;
@@ -101,10 +101,10 @@ class Management {
     //------------------------------------------------------//
 
     //--------- TEXT
-    SETTINGS.Add("WND_HOME_TITLE_1", "Home Window");
+    SETTINGS.Add("WND_HOME_TITLE_1", "HOME PAGE 1");
     SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
 
-    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", "RideWME");
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", "teste");
     SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
 
     SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "WELCOME");
@@ -138,6 +138,13 @@ class Management {
       Save_Shared_Preferences_INT(
           'JNL_HOME_NUMERO_ACESSOS', JNL_HOME_NUMERO_ACESSOS + 1);
       Utils.MSG_Debug("JNL_HOME_NUMERO_ACESSOS = $JNL_HOME_NUMERO_ACESSOS");
+    }
+
+    //------- FUNCTIONS HOME
+    String? USER_NAME =
+    await Get_SharedPreferences_STRING('NAME');
+    if (USER_NAME != null) {
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
     }
 
     //--------- FIM DA JANELA HOME
