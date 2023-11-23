@@ -15,41 +15,56 @@ class UserFirestore {
           'uid': user.uid,
           'email': user.email,
           'username': user.username,
-          'fullname': user.fullname,
-          'register_date' : currTime,
-          'last_changed_date' : currTime,
-          //'password': user.password,
+          'fullName': user.fullName,
+          'registerDate' : user.registerDate,
+          'lastChangedDate' : user.lastChangedDate,
         })
         .then((value) => Utils.MSG_Debug("User $id Added"))
         .catchError((error) => Utils.MSG_Debug("Failed to add user: $error"));
   }
 
-  Future<UserModel?> loadAllUserData(String uid) async {
+  Future<UserModel?> getUserData(String uid) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
-    String currTime = Utils.currentTime();
-    Utils.MSG_Debug(currTime);
 
     try {
-      DocumentSnapshot userSnapshot = await users.doc(uid).get();
-      if (userSnapshot.exists) {
-        Map<String, dynamic> userData =
-            userSnapshot.data() as Map<String, dynamic>;
-        return UserModel(
-          uid: userData['uid'],
-          email: userData['email'],
-          username: userData['username'],
-          fullname: userData['fullname'],
-         /* register_date : userData['register_date'],
-          last_changed_date : userData['last_changed_date'],*/
+      DocumentSnapshot userDoc = await users.doc(uid).get();
 
-          //  password: userData['password'],
+      if (userDoc.exists) {
+        return UserModel(
+          uid: userDoc['uid'],
+          email: userDoc['email'],
+          username: userDoc['username'],
+          fullName: userDoc['fullName'],
+          registerDate: userDoc['registerDate'],
+          lastChangedDate: userDoc['lastChangedDate']
         );
       } else {
-        return null; // User with the specified UID not found
+        Utils.MSG_Debug("User with UID $uid not found");
+        return null;
       }
-    } catch (e) {
-      Utils.MSG_Debug("Error loading user data: $e");
+    } catch (error) {
+      Utils.MSG_Debug("Error getting user data: $error");
       return null;
+    }
+  }
+
+  Future<String> getUserAttribute(String uid, String attribute) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    try {
+      DocumentSnapshot userDoc = await users.doc(uid).get();
+
+      if (userDoc.exists) {
+        String attributeFinal = userDoc[attribute];
+        Utils.MSG_Debug("########################### $attributeFinal");
+        return attributeFinal;
+      } else {
+        Utils.MSG_Debug("User with UID $uid not found");
+        return "??";
+      }
+    } catch (error) {
+      Utils.MSG_Debug("Error getting user data: $error");
+      return "??";
     }
   }
 }

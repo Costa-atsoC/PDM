@@ -5,10 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:ubi/firestore/user_firestore.dart';
+import 'package:ubi/screens/windowInitial.dart';
+import 'package:ubi/screens/windowPostForm.dart';
 
 import 'package:ubi/windowSettings.dart';
+import 'package:uuid/uuid.dart';
 import 'Management.dart';
 import 'Utils.dart';
+import 'firebase_auth_implementation/models/post_model.dart';
+import 'firestore/post_firestore.dart';
 import 'windowSearch.dart';
 import 'screens/windowUserProfile.dart';
 
@@ -66,9 +72,33 @@ class State_windowHome extends State<windowHome> {
     });
   }
 
-  //--- database constants
-  // All data
-  List<Map<String, dynamic>> myData = [];
+  List<PostModel> loadedPosts = [];
+  bool _dataLoaded = false;
+
+  // Updated getData method
+  Future getData() async {
+    if (_dataLoaded) {
+      return; // Skip fetching data if it's already loaded
+    }
+
+    String? uid =
+        await Ref_Window.Ref_Management.Get_SharedPreferences_STRING("UID");
+    try {
+      List<PostModel> newPosts = await PostFirestore().getAllPosts();
+      setState(() {
+        loadedPosts.clear(); // Clear the list before adding new data
+        loadedPosts.addAll(newPosts);
+        _isLoading = false; // Data has been loaded
+        _dataLoaded = true; // Set the flag to true after loading data
+      });
+    } catch (e) {
+      print("Error fetching data: $e");
+      setState(() {
+        _isLoading = false; // Set isLoading to false even in case of an error
+      });
+    }
+  }
+
   final formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
@@ -107,221 +137,23 @@ class State_windowHome extends State<windowHome> {
   @override
   void initState() {
     Utils.MSG_Debug("$className: initState");
+    getData();
     super.initState();
   }
 
-  //------ Start of Database
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-
-  // This function will be triggered when the floating button is pressed
-  // It will also be triggered when you want to update an item
   void showMyForm(int? id) async {
-    // id == null -> create new item
-    // id != null -> update an existing item
-    if (id != null) {
-      final existingData = myData.firstWhere((element) => element['id'] == id);
-      _titleController.text = existingData['title'];
-      _descriptionController.text = existingData['description'];
-      _dateController.text = existingData['date'];
-    } else {
-      _titleController.text = "";
-      _descriptionController.text = "";
-      _dateController.text = '';
-    }
-
-    showModalBottomSheet(
-        backgroundColor: Color.fromARGB(255, 69, 78, 89),
-        context: context,
-        elevation: 5,
-        isDismissible: false,
-        isScrollControlled: true,
-        builder: (_) => Container(
-            padding: EdgeInsets.only(
-              top: 15,
-              left: 15,
-              right: 15,
-              // prevent the soft keyboard from covering the text fields
-              bottom: MediaQuery.of(context).viewInsets.bottom + 60,
-            ),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextFormField(
-                    controller: _titleController,
-                    validator: formValidator,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.title), //icon of text field
-                      iconColor: Colors.white,
-                      labelText: "Title", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.description), //icon of text field
-                      iconColor: Colors.white,
-                      labelText: "Description", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _dateController,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.calendar_today), //icon of text field
-                      iconColor: Colors.white,
-                      labelText: "Enter Date", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
-                    readOnly: true,
-                    //set it true, so that user will not able to edit text
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101));
-
-                      if (pickedDate != null) {
-                        print(
-                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(
-                            formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
-
-                        setState(() {
-                          _dateController.text =
-                              formattedDate; //set output date to TextField value.
-                        });
-                      } else {
-                        print("Date is not selected");
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              foregroundColor: Colors.black,
-                            ),
-                            onPressed: () {
-                              selectFile();
-                            },
-                            child: const Text("Photo")),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                      ]),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //if (pickedFile != null)
-                        Expanded(child: Container(
-                          color: Colors.blue[100],
-                          child: Image.file(
-                            File(pickedFile!.path!),
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Cancel")),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            if (id == null) {}
-
-                            if (id != null) {}
-
-                            // Clear the text fields
-                            setState(() {
-                              _titleController.text = '';
-                              _descriptionController.text = '';
-                              _dateController.text = '';
-                            });
-
-                            // Close the bottom sheet
-                            Navigator.pop(context);
-                            //_refreshData();
-                          }
-                          // Save new data
-                        },
-                        child: Text(id == null ? 'Add' : 'Update'),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )));
-  }
-
-  String? formValidator(String? value) {
-    if (value!.isEmpty) return 'Field is Required';
-    return null;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PostForm(Ref_Window.Ref_Management)),
+    );
   }
 
   //------ END OF DATABASE
 
   bool _showFab = true;
-  bool _showNotch = true;
   FloatingActionButtonLocation _fabLocation =
       FloatingActionButtonLocation.endDocked;
-
-  void _onShowNotchChanged(bool value) {
-    setState(() {
-      _showNotch = value;
-    });
-  }
-
-  void _onShowFabChanged(bool value) {
-    setState(() {
-      _showFab = value;
-    });
-  }
-
-  void _onFabLocationChanged(FloatingActionButtonLocation? value) {
-    setState(() {
-      _fabLocation = value ?? FloatingActionButtonLocation.endDocked;
-    });
-  }
-
-  void Navegar_Nova_Janela(context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => windowHome(Ref_Window.Ref_Management)));
-  }
 
   Future NavigateTo_Window_Home(context) async {
     windowHome win = new windowHome(Ref_Window.Ref_Management);
@@ -382,11 +214,11 @@ class State_windowHome extends State<windowHome> {
     );
   }
 
-
   //--------------
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
+    UserFirestore userFirestore = UserFirestore();
 
     return MaterialApp(
       home: Scaffold(
@@ -410,8 +242,8 @@ class State_windowHome extends State<windowHome> {
                     children: [
                       CircleAvatar(
                         radius: 30, // Tamanho do círculo
-                        backgroundImage: AssetImage('caminho/para/foto_de_perfil.jpg'),
-                        // Adicione o caminho da foto de perfil ou deixe como está se não houver uma foto
+                        backgroundImage:
+                            AssetImage('caminho/para/foto_de_perfil.jpg'),
                       ),
                       SizedBox(height: 10), // Espaço entre a foto e o texto
                       Text(
@@ -473,6 +305,9 @@ class State_windowHome extends State<windowHome> {
                   ),
                   titleTextStyle: Theme.of(context).textTheme.titleMedium,
                   onTap: () => {
+                    Ref_Window.Ref_Management.Delete_Shared_Preferences(
+                        "EMAIL"),
+                    Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME"),
                     FirebaseAuth.instance.signOut(),
                     Navigator.of(context).pop(),
                   },
@@ -486,48 +321,151 @@ class State_windowHome extends State<windowHome> {
             title: Text(Ref_Window.Ref_Management.SETTINGS
                 .Get("JNL_HOME_TITLE_1", "Home Page 1")),
           ),
-          body: Container(
-            child: _isLoading
-                ? const Center(
+          body: RefreshIndicator(
+            onRefresh: () async {
+              await getData();
+              setState(() {});
+            },
+            child: FutureBuilder(
+              future: getData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
                     child: CircularProgressIndicator(),
-                  )
-                : myData.isEmpty
-                    ? const Center(child: Text("No Data Available!!!"))
-                    : ListView.builder(
-                        itemCount: myData.length,
-                        itemBuilder: (context, index) => Card(
-                          color: index % 2 == 0
-                              ? const Color.fromARGB(255, 201, 128, 94)
-                              : Color.fromARGB(255, 201, 108, 94),
-                          margin: const EdgeInsets.all(15),
-                          child: ListTile(
-                              title: Text(myData[index]['title']),
-                              subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(myData[index]['date']),
-                                    Text(myData[index]['description']),
-                                  ]),
-                              trailing: SizedBox(
-                                width: 100,
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      color: Colors.white,
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () =>
-                                          showMyForm(myData[index]['id']),
+                  );
+                } else if (snapshot.hasError) {
+                  print("Error: ${snapshot.error}");
+                  return const Center(
+                    child: Text("Error loading data"),
+                  );
+                } else {
+                  String? currentUserUID =
+                      FirebaseAuth.instance.currentUser?.uid;
+
+                  return Container(
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : loadedPosts.isEmpty
+                              ? const Center(
+                                  child: Text("No Data Available!!!"))
+                              : ListView.builder(
+                                  itemCount: loadedPosts.length,
+                                  itemBuilder: (context, index) => Card(
+                                    color: index % 2 == 0
+                                        ? const Color.fromARGB(
+                                            255, 201, 128, 94)
+                                        : Color.fromARGB(255, 201, 108, 94),
+                                    margin: const EdgeInsets.all(15),
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          leading: CircleAvatar(
+                                            radius: 20, // Adjust the radius as needed
+                                            backgroundImage: NetworkImage('https://example.com/user_profile_image.jpg'), // Add the user's profile image URL
+                                          ),
+                                          title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                loadedPosts[index].title,
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                  "Date: ${loadedPosts[index].date}"),
+                                            ],
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              FutureBuilder<String>(
+                                                future: userFirestore.getUserAttribute(
+                                                    loadedPosts[index].uid, 'fullName'),
+                                                builder: (context, userSnapshot) {
+                                                  if (userSnapshot.connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return Text("User: Loading...");
+                                                  } else if (userSnapshot.hasError) {
+                                                    return Text("User: Error loading user data");
+                                                  } else {
+                                                    String fullName =
+                                                        userSnapshot.data ?? "Unknown";
+                                                    return Text("User: $fullName");
+                                                  }
+                                                },
+                                              ),
+                                              Text(
+                                                  "Description: ${loadedPosts[index].description}"),
+                                              Text(
+                                                  "Total Seats: ${loadedPosts[index].totalSeats}"),
+                                              Text(
+                                                  "Free Seats: ${loadedPosts[index].freeSeats}"),
+                                              Text(
+                                                  "UID: ${loadedPosts[index].uid}"),
+                                              Text(
+                                                  "Location: ${loadedPosts[index].location}"),
+                                              // Add more attributes as needed
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              if (currentUserUID ==
+                                                  loadedPosts[index].uid) ...[
+                                                IconButton(
+                                                  color: Colors.white,
+                                                  icon: const Icon(Icons.edit),
+                                                  onPressed: () => showMyForm(
+                                                    loadedPosts[index].pid
+                                                        as int?,
+                                                  ),
+                                                ),
+                                                IconButton(
+                                                  color: Colors.white,
+                                                  icon:
+                                                      const Icon(Icons.delete),
+                                                  onPressed: () {
+                                                    // Handle delete functionality
+                                                  },
+                                                ),
+                                              ] else ...[
+                                                IconButton(
+                                                  color: Colors.white,
+                                                  icon: const Icon(
+                                                      Icons.thumb_up),
+                                                  onPressed: () {
+                                                    // Handle like functionality
+                                                  },
+                                                ),
+                                                IconButton(
+                                                  color: Colors.white,
+                                                  icon:
+                                                      const Icon(Icons.message),
+                                                  onPressed: () {
+                                                    // Handle send message functionality
+                                                  },
+                                                ),
+                                              ],
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    IconButton(
-                                      color: Colors.white,
-                                      icon: const Icon(Icons.delete),
-                                      onPressed: () => {},
-                                    ),
-                                  ],
-                                ),
-                              )),
-                        ),
-                      ),
+                                  ),
+                                ));
+                }
+              },
+            ),
           ),
           floatingActionButton: _showFab
               ? Container(

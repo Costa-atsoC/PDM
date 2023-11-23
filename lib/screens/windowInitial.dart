@@ -133,7 +133,13 @@ class _MyHomePageState extends State<MyHomePage> {
     String? email = await Ref_Management.Get_SharedPreferences_STRING("EMAIL");
     String? uid = await Ref_Management.Get_SharedPreferences_STRING("UID");
     print(uid);
-    _email.text = email!;
+    if(email == "??"){
+      _email.text = "";
+    }
+    else{
+      _email.text = email!;
+    }
+
   }
 
   @override
@@ -273,19 +279,14 @@ class _MyHomePageState extends State<MyHomePage> {
     Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
 
     UserModel? userData = await userFirestore.getUserData(user!.uid);
-    Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullname);
-    Utils.MSG_Debug("###### FULL NAME ######");
-    Utils.MSG_Debug(userData!.fullname);
+    Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
     Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData!.email);
     Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData!.username);
 
     if (user != null) {
       Utils.MSG_Debug("User is signed");
       // saving the email! in the shared_preferences
-      if(Ref_Management.Get_SharedPreferences_STRING("EMAIL") == "??"){
-        Ref_Management.Save_Shared_Preferences_STRING("TIME_EMAIL", currentTime);
-      }
-      Ref_Management.Save_Shared_Preferences_STRING("EMAIL", email);
+      Ref_Management.Save_Shared_Preferences_STRING("TIME_EMAIL", currentTime);
 
       //else if(Ref_Management.Get_SharedPreferences_STRING("TIME_EMAIL") == "??") aqui implementar a logica para comparar as datas do login
       NavigateTo_Window_Home(context);

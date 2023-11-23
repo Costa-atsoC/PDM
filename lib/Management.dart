@@ -144,6 +144,7 @@ class Management {
     String? USER_NAME =
     await Get_SharedPreferences_STRING('NAME');
     if (USER_NAME != null) {
+      Utils.MSG_Debug(USER_NAME!);
       SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
     }
 
@@ -217,6 +218,23 @@ class Management {
     pfs.setString(TAG, Valor);
     Utils.MSG_Debug(TAG + "=" + Valor);
   }
+
+  //--------------------------------------
+  Future<Object?> Delete_Shared_Preferences(String TAG) async {
+    final SharedPreferences pfs = await prefs;
+    if (pfs == null) {
+      Utils.MSG_Debug("$TAG doens't exist");
+      return "$TAG doesn't exist";
+    }
+    if (pfs.containsKey(TAG)) {
+      await pfs.remove(TAG);
+      Utils.MSG_Debug("$TAG removed");
+      return "$TAG deleted";
+    }
+    Utils.MSG_Debug("$TAG not deleted, there was a error");
+    return "$TAG not deleted";
+  }
+
 
   Future<String> ExecutaServidor() async {
     Utils.MSG_Debug("INICIO: ExecutaServidor!");

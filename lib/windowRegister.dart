@@ -107,7 +107,8 @@ class Estado_windowRegister extends State<windowRegister> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Theme.of(context).colorScheme.secondary),
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.secondary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Theme.of(context).primaryColor,
@@ -126,7 +127,8 @@ class Estado_windowRegister extends State<windowRegister> {
                     Container(
                       child: CircleAvatar(
                         radius: 100,
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
                         backgroundImage: AssetImage('assets/LOGO.png'),
                       ),
                     ),
@@ -264,6 +266,7 @@ class Estado_windowRegister extends State<windowRegister> {
     String email = _email.text;
     String password = _pass.text;
     String fullname = _fullname.text;
+    String currentTime = Utils.currentTime();
 
     try {
       User? user = await _auth.signUpWithEmailAndPassword(email, password);
@@ -271,8 +274,20 @@ class Estado_windowRegister extends State<windowRegister> {
 
       // Now you can use the user ID as needed
       UserModel currentUser = UserModel(
-          uid: uid, email: email, username: username, fullname: fullname);
+          uid: uid,
+          email: email,
+          username: username,
+          fullName: fullname,
+          registerDate: currentTime,
+          lastChangedDate: currentTime);
       await userFirestore.saveUserData(currentUser);
+
+      Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL");
+      Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME");
+      Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
+          "NAME", currentUser.fullName);
+      Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
+          "EMAIL", currentUser.email);
 
       Utils.MSG_Debug("User is successfully created with ID: $uid");
       NavigateTo_Window_Home(context);

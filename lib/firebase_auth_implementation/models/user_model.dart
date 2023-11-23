@@ -2,7 +2,9 @@ class UserModel {
   final String? uid;
   final String username;
   final String email;
-  final String fullname;
+  final String fullName;
+  final String registerDate;
+  final String lastChangedDate;
   /*final String register_date;
   final String last_changed_date;
 
@@ -15,7 +17,9 @@ class UserModel {
     this.uid,
     required this.email,
     required this.username,
-    required this.fullname,
+    required this.fullName,
+    required this.registerDate,
+    required this.lastChangedDate,
     //required this.phoneNo,
   });
 /*
