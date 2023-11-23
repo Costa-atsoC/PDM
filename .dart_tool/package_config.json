@@ -68,6 +68,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "crypto",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/crypto-3.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "cupertino_icons",
       "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/cupertino_icons-1.0.6",
       "packageUri": "lib/",
@@ -356,6 +362,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "sprintf",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/sprintf-7.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sqflite",
       "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/sqflite-2.3.0",
       "packageUri": "lib/",
@@ -458,6 +470,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "uuid",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/uuid-4.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "vector_math",
       "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/vector_math-2.1.4",
       "packageUri": "lib/",
@@ -494,7 +512,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-11-20T17:54:19.501116Z",
+  "generated": "2023-11-23T17:15:15.202064Z",
   "generator": "pub",
   "generatorVersion": "3.1.2"
 }

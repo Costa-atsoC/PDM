@@ -1,16 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ubi/common/appTheme.dart';
 import 'package:ubi/screens/windowInitial.dart';
-import 'firebase_auth_implementation/firebase_auth_services.dart';
-import 'windowGeneral.dart';
-import 'windowRegister.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
 import 'Management.dart';
-import 'windowHome.dart';
-import 'Utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,11 +12,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
   runApp(const MyApp());
 }
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
