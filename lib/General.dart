@@ -53,7 +53,7 @@ class General {
   //----------------------------------------
   void Mostrar(int N) {
     String strEspacos = Utils.CriarEspacos(N, "--");
-    Utils.MSG_Debug("ObjectoGeral: " + NomeObjecto!);
+    Utils.MSG_Debug("ObjectoGeral: " + NomeObjecto);
     Iterable<String> listaKeys = Dados.keys;
 
     if (listaKeys.isNotEmpty) {
@@ -65,7 +65,7 @@ class General {
   //----------------------------------------
   String ToString(int N) {
     String strEspacos = Utils.CriarEspacos(N, "--");
-    String RES = strEspacos + "ObjectoGeral: " + NomeObjecto!;
+    String RES = strEspacos + "ObjectoGeral: " + NomeObjecto;
     Iterable<String> listaKeys = Dados.keys;
     for (String key in listaKeys)
       RES += strEspacos + "\tDados[" + key + "]=" + Dados[key]!;

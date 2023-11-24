@@ -164,20 +164,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(140),
                           ),
-                          child: CircleAvatar(
+                          child: const CircleAvatar(
                             radius: 100,
                             backgroundColor: Color.fromARGB(0, 0, 0, 0),
                             backgroundImage: AssetImage('assets/LOGO.png'),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height:
                           40, // meter isto responsivo e meter no management
                         ),
                         TextFormField(
                           controller: _email,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.alternate_email),
+                            icon: const Icon(Icons.alternate_email),
                             iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_10", "Email"),
@@ -187,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
-                            focusedBorder: UnderlineInputBorder(
+                            focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: Colors.blueAccent,
                                   width: 3.0), // Set the border color here
@@ -201,7 +201,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             return value;
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         TextFormField(
@@ -209,7 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           obscureText: bool.parse(Ref_Management.SETTINGS
                               .Get("WND_REGISTER_OBSTEXT_3", "true")),
                           decoration: InputDecoration(
-                            icon: Icon(Icons.password_outlined),
+                            icon: const Icon(Icons.password_outlined),
                             iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
@@ -219,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
-                            focusedBorder: UnderlineInputBorder(
+                            focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: Colors.blueAccent,
                                   width: 3.0), // Set the border color here
@@ -280,8 +280,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     UserModel? userData = await userFirestore.getUserData(user!.uid);
     Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
-    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData!.email);
-    Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData!.username);
+    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
+    Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
 
     if (user != null) {
       Utils.MSG_Debug("User is signed");

@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -124,21 +123,19 @@ class Estado_windowRegister extends State<windowRegister> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Container(
-                      child: CircleAvatar(
-                        radius: 100,
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        backgroundImage: AssetImage('assets/LOGO.png'),
-                      ),
+                    CircleAvatar(
+                      radius: 100,
+                      backgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      backgroundImage: AssetImage('assets/LOGO.png'),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     TextFormField(
                       controller: _email,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Icon(Icons.email), //icon of text field
                         iconColor: Theme.of(context).iconTheme.color,
@@ -155,7 +152,7 @@ class Estado_windowRegister extends State<windowRegister> {
                     TextFormField(
                       controller: _fullname,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Icon(Icons.drive_file_rename_outline),
                         //icon of text field
@@ -173,7 +170,7 @@ class Estado_windowRegister extends State<windowRegister> {
                     TextFormField(
                       controller: _username,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                         icon: Icon(Icons.alternate_email),
                         //icon of text field

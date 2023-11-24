@@ -200,19 +200,15 @@ class State_windowSearch extends State<windowSearch> {
                           lastDate: DateTime(2101)
                       );
 
-                      if(pickedDate != null ){
-                        print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
+                      print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate!);
+                      print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                      //you can implement different kind of Date Format here according to your requirement
 
-                        setState(() {
-                          _beginningDateController.text = formattedDate; //set output date to TextField value.
-                        });
-                      }else{
-                        print("Date is not selected");
-                      }
-                    },
+                      setState(() {
+                        _beginningDateController.text = formattedDate; //set output date to TextField value.
+                      });
+                                        },
                   ),
                   const SizedBox(
                     height: 20,
@@ -237,19 +233,15 @@ class State_windowSearch extends State<windowSearch> {
                           lastDate: DateTime(2101)
                       );
 
-                      if(pickedDate != null ){
-                        print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
+                      print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate!);
+                      print(formattedDate); //formatted date output using intl package =>  2021-03-16
+                      //you can implement different kind of Date Format here according to your requirement
 
-                        setState(() {
-                          _endDateController.text = formattedDate; //set output date to TextField value.
-                        });
-                      }else{
-                        print("Date is not selected");
-                      }
-                    },
+                      setState(() {
+                        _endDateController.text = formattedDate; //set output date to TextField value.
+                      });
+                                        },
                   ),
 
                   Row(

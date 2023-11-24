@@ -144,8 +144,8 @@ class Management {
     String? USER_NAME =
     await Get_SharedPreferences_STRING('NAME');
     if (USER_NAME != null) {
-      Utils.MSG_Debug(USER_NAME!);
-      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
+      Utils.MSG_Debug(USER_NAME);
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME);
     }
 
     //--------- FIM DA JANELA HOME

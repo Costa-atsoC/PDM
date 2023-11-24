@@ -129,7 +129,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
     }
 
     showModalBottomSheet(
-        backgroundColor: Color.fromARGB(255, 69, 78, 89),
+        backgroundColor: const Color.fromARGB(255, 69, 78, 89),
         context: context,
         elevation: 5,
         isDismissible: false,
@@ -151,7 +151,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     controller: _titleController,
                     validator: formValidator,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       icon: Icon(Icons.title), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Title", //label text of field
@@ -164,7 +164,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _descriptionController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       icon: Icon(Icons.description), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Description", //label text of field
@@ -193,23 +193,19 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           //DateTime.now() - not to allow to choose before today.
                           lastDate: DateTime(2101));
 
-                      if (pickedDate != null) {
-                        print(
-                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(
-                            formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
+                      print(
+                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pickedDate!);
+                      print(
+                          formattedDate); //formatted date output using intl package =>  2021-03-16
+                      //you can implement different kind of Date Format here according to your requirement
 
-                        setState(() {
-                          _dateController.text =
-                              formattedDate; //set output date to TextField value.
-                        });
-                      } else {
-                        print("Date is not selected");
-                      }
-                    },
+                      setState(() {
+                        _dateController.text =
+                            formattedDate; //set output date to TextField value.
+                      });
+                                        },
                   ),
                   const SizedBox(
                     height: 20,

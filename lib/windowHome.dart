@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ubi/firestore/user_firestore.dart';
-import 'package:ubi/screens/windowInitial.dart';
 import 'package:ubi/screens/windowPostForm.dart';
 
 import 'package:ubi/windowSettings.dart';
