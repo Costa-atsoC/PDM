@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as HTTP;
 
-import 'General.dart';
+import '../General.dart';
 import 'Utils.dart';
 
-import 'screens/windowUserProfile.dart';
+import '../screens/windowUserProfile.dart';
 
 class Management {
   final String appName;

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
-import '../Utils.dart';
+import '../common/Utils.dart';
 
 class UserFirestore {
   Future<void> saveUserData(UserModel user) async {

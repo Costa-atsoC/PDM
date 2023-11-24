@@ -5,8 +5,8 @@ import 'package:scrollable_text_indicator/scrollable_text_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xml/xml.dart' as xml;
 
-import 'Management.dart';
-import 'Utils.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------

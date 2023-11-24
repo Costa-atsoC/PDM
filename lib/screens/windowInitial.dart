@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 
-import '../Management.dart';
-import '../Utils.dart';
+import '../common/Management.dart';
+import '../common/Utils.dart';
 import '../common/widgets/RWMButtons.dart';
 import '../firebase_auth_implementation/firebase_auth_services.dart';
 import '../firebase_auth_implementation/models/user_model.dart';

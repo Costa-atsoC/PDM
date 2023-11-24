@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import '../Management.dart';
-import '../Utils.dart';
+import '../common/Management.dart';
+import '../common/Utils.dart';
 import '../database_help.dart';
 
 //----------------------------------------------------------------

@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'Management.dart';
-import 'Utils.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------

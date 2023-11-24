@@ -11,8 +11,8 @@ import 'package:ubi/screens/windowPostForm.dart';
 
 import 'package:ubi/windowSettings.dart';
 import 'package:uuid/uuid.dart';
-import 'Management.dart';
-import 'Utils.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
 import 'firebase_auth_implementation/models/post_model.dart';
 import 'firestore/post_firestore.dart';
 import 'windowSearch.dart';

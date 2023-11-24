@@ -1,5 +1,5 @@
 import 'dart:core';
-import 'Utils.dart';
+import 'common/Utils.dart';
 
 /*
 Geral X = Geral("PESSOA");

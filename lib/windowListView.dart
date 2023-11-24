@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'Management.dart';
+import 'common/Management.dart';
 import 'windowGeneral.dart';
-import 'Utils.dart';
+import 'common/Utils.dart';
 
 // APOIO EM : https://api.flutter.dev/flutter/widgets/ListView-class.html
 //----------------------------------------------------------------
