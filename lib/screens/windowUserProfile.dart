@@ -14,7 +14,7 @@ class windowUserProfile extends StatefulWidget {
   final Management Ref_Management;
 
   //--------------
-  windowUserProfile(this.Ref_Management) {
+  windowUserProfile(this.Ref_Management, {super.key}) {
     windowTitle = "General Window";
     Utils.MSG_Debug(windowTitle);
   }
@@ -177,7 +177,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _dateController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Enter Date", //label text of field
@@ -291,7 +291,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
               .Get("WND_PROFILE_TITLE_1", "User Profile")),
         ),
         body: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               const SizedBox(
@@ -306,13 +306,13 @@ class State_windowUserProfile extends State<windowUserProfile> {
                       color: Colors.black.withOpacity(0.3),
                       spreadRadius: 5,
                       blurRadius: 5,
-                      offset: Offset(0, 3),
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
-                child: CircleAvatar(
+                child: const CircleAvatar(
                   radius: 120,
-                  backgroundImage: AssetImage("assets/PORSCHE_MAIN.JPEG"),
+                  backgroundImage: AssetImage("assets/niko.jpg"),
                 ),
               ),
               const SizedBox(
@@ -394,7 +394,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             ),
                           ),
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(

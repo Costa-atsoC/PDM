@@ -7,6 +7,7 @@ import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
 import '../firestore/user_firestore.dart';
 import 'firebase_auth_implementation/models/user_model.dart';
 import 'windowHome.dart';
+import 'screens/windowInitial.dart';
 import 'Management.dart';
 import 'Utils.dart';
 
@@ -222,6 +223,9 @@ class Estado_windowRegister extends State<windowRegister> {
                         if (value != _pass.text) {
                           return 'Not Match';
                         }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters!';
+                        }
                         return null;
                       },
                     ),
@@ -287,6 +291,11 @@ class Estado_windowRegister extends State<windowRegister> {
           "EMAIL", currentUser.email);
 
       Utils.MSG_Debug("User is successfully created with ID: $uid");
+      _username.clear();
+      _email.clear();
+      _pass.clear();
+      _confirmPass.clear();
+      _fullname.clear();
       NavigateTo_Window_Home(context);
     } catch (e) {
       Utils.MSG_Debug("Error creating user: $e");
