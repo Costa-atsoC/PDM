@@ -101,7 +101,7 @@ class Management {
     //------------------------------------------------------//
 
     //--------- TEXT
-    SETTINGS.Add("WND_HOME_TITLE_1", "HOME PAGE 1");
+    SETTINGS.Add("WND_HOME_TITLE_1", "Feed");
     SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
 
     SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", "teste");
@@ -144,8 +144,8 @@ class Management {
     String? USER_NAME =
     await Get_SharedPreferences_STRING('NAME');
     if (USER_NAME != null) {
-      Utils.MSG_Debug(USER_NAME!);
-      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
+      Utils.MSG_Debug(USER_NAME);
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME);
     }
 
     //--------- FIM DA JANELA HOME
@@ -216,7 +216,7 @@ class Management {
   void Save_Shared_Preferences_STRING(String TAG, String Valor) async {
     final SharedPreferences pfs = await prefs;
     pfs.setString(TAG, Valor);
-    Utils.MSG_Debug(TAG + "=" + Valor);
+    Utils.MSG_Debug("$TAG=$Valor");
   }
 
   //--------------------------------------

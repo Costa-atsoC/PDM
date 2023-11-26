@@ -4,7 +4,7 @@
             "outputFile": "com.example.semana2.app-mergeDebugResources-25:/values-v24/values-v24.xml",
             "map": [
                 {
-                    "source": "/Users/rdsilva/.gradle/caches/transforms-3/0ef7a1334cebb222314960b59b27ec4e/transformed/appcompat-1.3.0/res/values-v24/values-v24.xml",
+                    "source": "C:\\Users\\gonca\\.gradle\\caches\\transforms-3\\0ef7a1334cebb222314960b59b27ec4e\\transformed\\appcompat-1.3.0\\res\\values-v24\\values-v24.xml",
                     "from": {
                         "startLines": "2,3",
                         "startColumns": "4,4",

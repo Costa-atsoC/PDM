@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ubi/firestore/user_firestore.dart';
-import 'package:ubi/screens/windowInitial.dart';
 import 'package:ubi/screens/windowPostForm.dart';
 
 import 'package:ubi/windowSettings.dart';
@@ -152,17 +150,17 @@ class State_windowHome extends State<windowHome> {
   //------ END OF DATABASE
 
   bool _showFab = true;
-  FloatingActionButtonLocation _fabLocation =
+  final FloatingActionButtonLocation _fabLocation =
       FloatingActionButtonLocation.endDocked;
 
   Future NavigateTo_Window_Home(context) async {
-    windowHome win = new windowHome(Ref_Window.Ref_Management);
+    windowHome win = windowHome(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
   Future NavigateTo_Window_User_Profile(context) async {
-    windowUserProfile win = new windowUserProfile(Ref_Window.Ref_Management);
+    windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -204,12 +202,12 @@ class State_windowHome extends State<windowHome> {
         UtilsFlutter.MSG(Ref_Window.Ref_Management.GetDefinicao(
             "TITULO_BTN_SHARED_PREFERENCE", "Accao-BTN_SHARED_PREFERENCE ??"));
 
-        int CLICKS_SP =
+        int clicksSp =
             await Ref_Window.Ref_Management.Get_SharedPreferences_INT(
                 "CLICKS_SP") as int;
-        UtilsFlutter.MSG("CLICKS_SP = $CLICKS_SP");
+        UtilsFlutter.MSG("CLICKS_SP = $clicksSp");
         Ref_Window.Ref_Management.Save_Shared_Preferences_INT(
-            "CLICKS_SP", CLICKS_SP + 1);
+            "CLICKS_SP", clicksSp + 1);
       },
     );
   }

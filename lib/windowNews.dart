@@ -47,33 +47,31 @@ class State_windowNews extends State<windowNews> {
     // Print the XML data to the console to check if it's loaded correctly.
     print("XML Data: $newsXML");
 
-    if (newsXML != null) {
-      final document = xml.XmlDocument.parse(newsXML);
-      final rss = document.findElements('rss').first;
-      final channel = rss.findElements('channel').first;
-      final items = channel.findElements('item');
+    final document = xml.XmlDocument.parse(newsXML);
+    final rss = document.findElements('rss').first;
+    final channel = rss.findElements('channel').first;
+    final items = channel.findElements('item');
 
-      final itemList = <Map<String, String>>[];
+    final itemList = <Map<String, String>>[];
 
-      for (final item in items) {
-        final link = item.findElements('link').first.text;
-        final title = item.findElements('title').first.text;
-        final description = item.findElements('description').first.text;
-        final pubDate = item.findElements('pubDate').first.text;
+    for (final item in items) {
+      final link = item.findElements('link').first.text;
+      final title = item.findElements('title').first.text;
+      final description = item.findElements('description').first.text;
+      final pubDate = item.findElements('pubDate').first.text;
 
-        itemList.add({
-          'title': title,
-          'description': description,
-          'pubDate': pubDate,
-          'link': link,
-        });
-      }
-
-      setState(() {
-        news = itemList;
+      itemList.add({
+        'title': title,
+        'description': description,
+        'pubDate': pubDate,
+        'link': link,
       });
     }
-  }
+
+    setState(() {
+      news = itemList;
+    });
+    }
 
   // Function to load and parse XML data
   /*void _loadData() async {

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import 'Management.dart';
 import 'Utils.dart';
@@ -96,13 +94,13 @@ class State_windowGeneral extends State<windowGeneral> {
         Container(
           //      height: 40.0,
           child: TextButton(
-            child: Text(Ref_Window.Ref_Management.GetDefinicao("ACCAO_BTN_??", "Accao-BTN_?? ??")),
             style: TextButton.styleFrom(
               textStyle: const TextStyle(fontSize: 30),),
             onPressed: () async {
               UtilsFlutter.MSG("Carregou no botão");
               NavigateTo_New_Window(context);
             },
+            child: Text(Ref_Window.Ref_Management.GetDefinicao("ACCAO_BTN_??", "Accao-BTN_?? ??")),
           ),
         ),
       );

@@ -116,17 +116,13 @@ class _PostFormState extends State<PostForm> {
                       lastDate: DateTime(2101),
                     );
 
-                    if (pickedDate != null) {
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pickedDate);
+                    String formattedDate =
+                        DateFormat('yyyy-MM-dd').format(pickedDate!);
 
-                      setState(() {
-                        _dateController.text = formattedDate;
-                      });
-                    } else {
-                      print("Date is not selected");
-                    }
-                  },
+                    setState(() {
+                      _dateController.text = formattedDate;
+                    });
+                                    },
                 ),
                 const SizedBox(height: 10),
                 TextFormField(
