@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import 'Management.dart';
-import 'Utils.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
+import 'common/appTheme.dart';
 import 'database_help.dart';
-
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -19,19 +19,21 @@ class windowSearch extends StatefulWidget {
     windowTitle = "Search Window";
     Utils.MSG_Debug(windowTitle);
   }
+
   //--------------
-  Future<void> Load() async
-  {
-    Utils.MSG_Debug(windowTitle+":Load");
+  Future<void> Load() async {
+    Utils.MSG_Debug(windowTitle + ":Load");
   }
+
   //--------------
   @override
   State<StatefulWidget> createState() {
-    Utils.MSG_Debug(windowTitle+":createState");
+    Utils.MSG_Debug(windowTitle + ":createState");
     return State_windowSearch(this);
   }
 //--------------
 }
+
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 // ignore: camel_case_types
@@ -52,32 +54,35 @@ class State_windowSearch extends State<windowSearch> {
 
   final windowSearch Ref_Window;
   String className = "";
+
   //--------------
-  State_windowSearch(this.Ref_Window)
-      : super()
-  {
+  State_windowSearch(this.Ref_Window) : super() {
     className = "State_windowSearch";
     Utils.MSG_Debug("$className: createState");
   }
+
   //--------------
   @override
-  void dispose()  {
+  void dispose() {
     Utils.MSG_Debug("createState");
     super.dispose();
     Utils.MSG_Debug("$className:dispose");
   }
+
   //--------------
   @override
-  void deactivate()  {
+  void deactivate() {
     Utils.MSG_Debug("$className:deactivate");
     super.deactivate();
   }
+
   //--------------
   @override
-  void didChangeDependencies()  {
+  void didChangeDependencies() {
     Utils.MSG_Debug("$className: didChangeDependencies");
     super.didChangeDependencies();
   }
+
   //--------------
   @override
   void initState() {
@@ -88,10 +93,10 @@ class State_windowSearch extends State<windowSearch> {
   //------ Start of Database
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _beginningDateController = TextEditingController();
+  final TextEditingController _beginningDateController =
+      TextEditingController();
   final TextEditingController _endDateController = TextEditingController();
   final TextEditingController _placeController = TextEditingController();
-
 
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when you want to update an item
@@ -114,7 +119,7 @@ class State_windowSearch extends State<windowSearch> {
     }
 
     showModalBottomSheet(
-      backgroundColor: Color.fromARGB(255, 69, 78, 89),
+        backgroundColor: Color.fromARGB(255, 69, 78, 89),
         context: context,
         elevation: 5,
         isDismissible: false,
@@ -143,8 +148,7 @@ class State_windowSearch extends State<windowSearch> {
                         labelText: "Title", //label text of field
                         labelStyle: TextStyle(
                           color: Colors.white,
-                        )
-                    ),
+                        )),
                   ),
                   const SizedBox(
                     height: 10,
@@ -158,8 +162,7 @@ class State_windowSearch extends State<windowSearch> {
                         iconColor: Colors.white,
                         labelStyle: TextStyle(
                           color: Colors.white,
-                        )
-                    ),
+                        )),
                   ),
                   const SizedBox(
                     height: 10,
@@ -173,8 +176,7 @@ class State_windowSearch extends State<windowSearch> {
                         iconColor: Colors.white,
                         labelStyle: TextStyle(
                           color: Colors.white,
-                        )
-                    ),
+                        )),
                   ),
                   const SizedBox(
                     height: 10,
@@ -185,30 +187,41 @@ class State_windowSearch extends State<windowSearch> {
                     validator: formValidator,
                     controller: _beginningDateController,
                     decoration: InputDecoration(
-                        icon: Icon(Icons.calendar_today), //icon of text field
-                        labelText: "Start Date", //label text of field
+                        icon: Icon(Icons.calendar_today),
+                        //icon of text field
+                        labelText: "Start Date",
+                        //label text of field
                         iconColor: Colors.white,
                         labelStyle: TextStyle(
                           color: Colors.white,
-                        )
-                    ),
-                    readOnly: true,  //set it true, so that user will not able to edit text
+                        )),
+                    readOnly: true,
+                    //set it true, so that user will not able to edit text
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
-                          context: context, initialDate: DateTime.now(),
-                          firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101)
-                      );
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2101));
 
-                      print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate!);
-                      print(formattedDate); //formatted date output using intl package =>  2021-03-16
-                      //you can implement different kind of Date Format here according to your requirement
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2021-03-16
+                        //you can implement different kind of Date Format here according to your requirement
 
-                      setState(() {
-                        _beginningDateController.text = formattedDate; //set output date to TextField value.
-                      });
-                                        },
+                        setState(() {
+                          _beginningDateController.text =
+                              formattedDate; //set output date to TextField value.
+                        });
+                      } else {
+                        print("Date is not selected");
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -218,30 +231,41 @@ class State_windowSearch extends State<windowSearch> {
                     validator: formValidator,
                     controller: _endDateController,
                     decoration: InputDecoration(
-                        icon: Icon(Icons.calendar_today), //icon of text field
-                        labelText: "End Date", //label text of field
+                        icon: Icon(Icons.calendar_today),
+                        //icon of text field
+                        labelText: "End Date",
+                        //label text of field
                         iconColor: Colors.white,
                         labelStyle: TextStyle(
                           color: Colors.white,
-                        )
-                    ),
-                    readOnly: true,  //set it true, so that user will not able to edit text
+                        )),
+                    readOnly: true,
+                    //set it true, so that user will not able to edit text
                     onTap: () async {
                       DateTime? pickedDate = await showDatePicker(
-                          context: context, initialDate: DateTime.now(),
-                          firstDate: DateTime(2000), //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101)
-                      );
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          //DateTime.now() - not to allow to choose before today.
+                          lastDate: DateTime(2101));
 
-                      print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate!);
-                      print(formattedDate); //formatted date output using intl package =>  2021-03-16
-                      //you can implement different kind of Date Format here according to your requirement
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2021-03-16
+                        //you can implement different kind of Date Format here according to your requirement
 
-                      setState(() {
-                        _endDateController.text = formattedDate; //set output date to TextField value.
-                      });
-                                        },
+                        setState(() {
+                          _endDateController.text =
+                              formattedDate; //set output date to TextField value.
+                        });
+                      } else {
+                        print("Date is not selected");
+                      }
+                    },
                   ),
 
                   Row(
@@ -296,9 +320,8 @@ class State_windowSearch extends State<windowSearch> {
   }
 
   bool _showFab = true;
-  FloatingActionButtonLocation _fabLocation =
-      FloatingActionButtonLocation.centerDocked;//FloatingActionButtonLocation.endDocked;
-
+  FloatingActionButtonLocation _fabLocation = FloatingActionButtonLocation
+      .endDocked; //FloatingActionButtonLocation.endDocked;
 
   // Search Data in the Database, given the arguments
   Future<void> getItems() async {
@@ -307,93 +330,111 @@ class State_windowSearch extends State<windowSearch> {
     _refreshData();
      */
   }
+
   //--------------
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
     return MaterialApp(
-      home:
-      Scaffold(
-        backgroundColor: Color.fromARGB(255, 69, 78, 89),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      home: Scaffold(
           appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.secondary),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
             //automaticallyImplyLeading: false,
-            backgroundColor: Color.fromARGB(255, 54, 61, 70),
             //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Text(Ref_Window.Ref_Management.SETTINGS
-                .Get("JNL_SEARCH_TITLE_1", "Search")), // adicionar ao management!
+            title: Text(Ref_Window.Ref_Management.SETTINGS.Get(
+                "JNL_SEARCH_TITLE_1", "Search")), // adicionar ao management!
           ),
-          body:
-              Column(
-                children: [
+          body: Column(
+            children: [
               Expanded(
-                  child: Container(
-                    child: _isLoading
-                        ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                        : myData.isEmpty
-                        ? const Center(child: Text("No Data Available!!!")) // adicionar ao management
-                        : ListView.builder(
-                      itemCount: myData.length,
-                      itemBuilder: (context, index) => Card(
-                        color:
-                        index % 2 == 0 ? Colors.blue : Colors.blue[200],
-                        margin: const EdgeInsets.all(15),
-                        child: ListTile(
-                            title: Text(myData[index]['title']),
-                            subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(myData[index]['date']),
-                                  Text(myData[index]['description']),
-                                ]),
-                            trailing: SizedBox(
-                              width: 100,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    onPressed: () =>
-                                        showMyForm(myData[index]['id']),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {  },
-                                    // onPressed: {}
-                                    //() =>
-                                    // deleteItem(myData[index]['id']),
-                                  ),
-                                ],
+                child: Container(
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : myData.isEmpty
+                          ? const Center(
+                              child: Text(
+                                  "No Data Available!!!")) // adicionar ao management
+                          : ListView.builder(
+                              itemCount: myData.length,
+                              itemBuilder: (context, index) => Card(
+                                color: index % 2 == 0
+                                    ? Colors.blue
+                                    : Colors.blue[200],
+                                margin: const EdgeInsets.all(15),
+                                child: ListTile(
+                                    title: Text(myData[index]['title']),
+                                    subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(myData[index]['date']),
+                                          Text(myData[index]['description']),
+                                        ]),
+                                    trailing: SizedBox(
+                                      width: 100,
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(Icons.edit),
+                                            onPressed: () =>
+                                                showMyForm(myData[index]['id']),
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.delete),
+                                            onPressed: () {},
+                                            // onPressed: {}
+                                            //() =>
+                                            // deleteItem(myData[index]['id']),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
                               ),
-                            )),
-                      ),
+                            ),
+                ),
+              ),
+            ],
+          ),
+          floatingActionButton: _showFab
+              ? Container(
+                  width: 70.0, // Set the width
+                  height: 70.0, // Set the height
+                  child: FloatingActionButton(
+                    backgroundColor: const Color.fromARGB(230, 44, 71, 131),
+                    splashColor: Colors.blue,
+                    onPressed: () => showMyForm(null),
+                    tooltip: 'Search',
+                    child: Icon(
+                      Icons.search,
+                      size: 33.0, // Adjust the size to increase the icon size
                     ),
                   ),
-              ),],
-              ),
-          floatingActionButton: _showFab
-              ? FloatingActionButton(
-            backgroundColor:  const Color.fromARGB(230, 100, 130, 255),
-            splashColor: Colors.blue,
-            onPressed: () => showMyForm(null),
-            tooltip: 'Create',
-            child: const Icon(Icons.search),
-          )
+                )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
-            color: const Color.fromARGB(255, 54, 61, 70),
+            color: Theme.of(context)
+                .appBarTheme
+                .backgroundColor,
             child: IconTheme(
               data:
-              IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+                  IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
               child: Row(
                 children: <Widget>[
                   IconButton(
                     tooltip: 'Search',
                     icon: const Icon(Icons.home),
-                    onPressed: () {
-                      // NavigateTo_Window_Home(context);
+                    onPressed: () => {
+                      Navigator.of(context).pop(),
                     },
                   ),
                   IconButton(

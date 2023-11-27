@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
-import '../Management.dart';
-import '../Utils.dart';
+import '../common/Management.dart';
+import '../common/Utils.dart';
+import '../common/appTheme.dart';
 import '../firebase_auth_implementation/models/post_model.dart';
 import '../firestore/post_firestore.dart';
 
@@ -36,149 +37,149 @@ class _PostFormState extends State<PostForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Post Form'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(15),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                TextFormField(
-                  controller: _titleController,
-                  validator: formValidator,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.title),
-                    iconColor: Colors.blue,
-                    labelText: "Title",
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  validator: formValidator,
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.description),
-                    iconColor: Colors.blue,
-                    labelText: "Description",
-                  ),
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _locationController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.confirmation_number),
-                    iconColor: Colors.blue,
-                    labelText: "Total Seats",
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _startLocationController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.confirmation_number),
-                    iconColor: Colors.blue,
-                    labelText: "Total Seats",
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _endLocationController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.confirmation_number),
-                    iconColor: Colors.blue,
-                    labelText: "Total Seats",
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  validator: formValidator,
-                  controller: _dateController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today),
-                    iconColor: Colors.blue,
-                    labelText: "Enter Date",
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101),
-                    );
+    return MaterialApp(
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Post Form'),
+          ),
+          body: SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.all(15),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextFormField(
+                      controller: _titleController,
+                      validator: formValidator,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.title),
+                        labelText: "Title",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      validator: formValidator,
+                      controller: _descriptionController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.description),
+                        labelText: "Description",
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _locationController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.location_on),
+                        labelText: "Location",
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _startLocationController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.start),
+                        labelText: "Start Location",
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _endLocationController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.tab_sharp),
+                        labelText: "End Location",
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      validator: formValidator,
+                      controller: _dateController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.calendar_today),
+                        labelText: "Enter Date",
+                      ),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2101),
+                        );
 
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(pickedDate!);
+                        if (pickedDate != null) {
+                          String formattedDate =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
 
-                    setState(() {
-                      _dateController.text = formattedDate;
-                    });
-                                    },
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _totalSeatsController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.confirmation_number),
-                    iconColor: Colors.blue,
-                    labelText: "Total Seats",
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 10),
-                TextFormField(
-                  controller: _freeSeatsController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.event_seat),
-                    iconColor: Colors.blue,
-                    labelText: "Free Seats",
-                  ),
-                  keyboardType: TextInputType.number,
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (formKey.currentState!.validate()) {
-                      PostModel post = PostModel(
-                        uid: FirebaseAuth.instance.currentUser!.uid,
-                        pid: const Uuid().v4(),
-                        title: _titleController.text,
-                        description: _descriptionController.text,
-                        date: _dateController.text,
-                        totalSeats: _totalSeatsController.text,
-                        freeSeats: _freeSeatsController.text,
-                        location: _locationController.text,
-                        startLocation: _startLocationController.text,
-                        endLocation: _endLocationController.text,
-                        registerDate: Utils.currentTime(),
-                        lastChangedDate: Utils.currentTime(),
-                      );
+                          setState(() {
+                            _dateController.text = formattedDate;
+                          });
+                        } else {
+                          print("Date is not selected");
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _totalSeatsController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.confirmation_number),
+                        labelText: "Total Seats",
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _freeSeatsController,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.event_seat),
+                        labelText: "Free Seats",
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          PostModel post = PostModel(
+                            uid: FirebaseAuth.instance.currentUser!.uid,
+                            pid: const Uuid().v4(),
+                            title: _titleController.text,
+                            description: _descriptionController.text,
+                            date: _dateController.text,
+                            totalSeats: _totalSeatsController.text,
+                            freeSeats: _freeSeatsController.text,
+                            location: _locationController.text,
+                            startLocation: _startLocationController.text,
+                            endLocation: _endLocationController.text,
+                            registerDate: Utils.currentTime(),
+                            lastChangedDate: Utils.currentTime(),
+                          );
 
-                      String? uid = FirebaseAuth.instance.currentUser
-                          ?.uid; // may fix the problem of creating the post and then it appears with another user UID
+                          String? uid = FirebaseAuth.instance.currentUser
+                              ?.uid; // may fix the problem of creating the post and then it appears with another user UID
 
-                      await PostFirestore().savePostData(post, uid!);
+                          await PostFirestore().savePostData(post, uid!);
 
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Text('Submit'),
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text('Submit',
+                          style: Theme.of(context).textTheme.titleLarge),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   String? formValidator(String? value) {
