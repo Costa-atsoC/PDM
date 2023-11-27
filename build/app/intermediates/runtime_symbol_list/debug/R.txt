@@ -942,7 +942,7 @@ int layout select_dialog_multichoice_material 0x7f0b0026
 int layout select_dialog_singlechoice_material 0x7f0b0027
 int layout support_simple_spinner_dropdown_item 0x7f0b0028
 int layout toast_custom 0x7f0b0029
-int mipmap ic_launcher 0x7f0c0000
+int mipmap ryd 0x7f0c0000
 int raw firebase_common_keep 0x7f0d0000
 int string abc_action_bar_home_description 0x7f0e0000
 int string abc_action_bar_up_description 0x7f0e0001

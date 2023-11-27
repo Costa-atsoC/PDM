@@ -60,11 +60,9 @@ class Management {
 
     SETTINGS.Add("WND_LOGIN_BTN_1", "LOGIN");
 
-    //DEFINICOES.Add("TEXT_NEW_WINDOW_LOGIN", "Login");
-    //DEFINICOES.Add("TAMANHO_TEXTO_BTN_NEW_LOGIN", "20");
     SETTINGS.Add("TEXT_NEW_WINDOW_REGISTER", "Register Page");
     SETTINGS.Add(
-        "TEXT_OF_BUTTON_REGISTER", "If you don't have an account, click here");
+        "TEXT_OF_BUTTON_REGISTER", "Don't have an account? Click here");
     SETTINGS.Add("TAMANHO_TEXTO_BTN_NEW_REGISTER", "20");
 
     //--------- BOTTOM
@@ -101,10 +99,11 @@ class Management {
     //------------------------------------------------------//
 
     //--------- TEXT
-    SETTINGS.Add("WND_HOME_TITLE_1", "HOME PAGE 1");
+    SETTINGS.Add("WND_HOME_TITLE_1", "");
     SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
 
-    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", "teste");
+    //--------- DRAWER
+    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", "Name");
     SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
 
     SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "WELCOME");
@@ -126,9 +125,9 @@ class Management {
     SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT");
     SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
     SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+    //--------- END OF DRAWER
 
     //--------- ICONS
-
 
     //------- FUNCTIONS HOME
     int? JNL_HOME_NUMERO_ACESSOS =
@@ -141,8 +140,7 @@ class Management {
     }
 
     //------- FUNCTIONS HOME
-    String? USER_NAME =
-    await Get_SharedPreferences_STRING('NAME');
+    String? USER_NAME = await Get_SharedPreferences_STRING('NAME');
     if (USER_NAME != null) {
       Utils.MSG_Debug(USER_NAME!);
       SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
@@ -154,7 +152,6 @@ class Management {
     //----------------- WINDOW HOME ------------------------//
     //------------------------------------------------------//
     SETTINGS.Add("WND_PROFILE_TITLE_1", "User Profile");
-
 
     //--------- FUNÇÕES
     int? NUMERO_ACESSOS = await Get_SharedPreferences_INT('NUMERO_ACESSOS');
@@ -234,7 +231,6 @@ class Management {
     Utils.MSG_Debug("$TAG not deleted, there was a error");
     return "$TAG not deleted";
   }
-
 
   Future<String> ExecutaServidor() async {
     Utils.MSG_Debug("INICIO: ExecutaServidor!");

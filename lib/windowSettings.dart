@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'common/Management.dart';
 import 'common/Utils.dart';
+import 'common/appTheme.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -106,75 +107,77 @@ class State_windowSettings extends State<windowSettings> {
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(className, style: TextStyle(fontSize: 22)),
-        centerTitle: true,
-      ),
-      body: Container(
-          padding: const EdgeInsets.all(10),
-          child: ListView(
-            children: [
-              SizedBox(height: 40),
-              Row(
+    return MaterialApp(
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text(className, style: TextStyle(fontSize: 22)),
+            centerTitle: true,
+          ),
+          body: Container(
+              padding: const EdgeInsets.all(10),
+              child: ListView(
                 children: [
-                  Icon(
-                    Icons.person,
-                    color: Colors.blue,
-                  ),
-                  SizedBox(width: 10),
-                  Text("Account",
-                      style:
+                  SizedBox(height: 40),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      SizedBox(width: 10),
+                      Text("Account",
+                          style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                ],
-              ),
-              Divider(height: 20, thickness: 1),
-              SizedBox(height: 10),
-              buildAccountOption(context, "Change Password"),
-              buildAccountOption(context, "Change Password"),
-              buildAccountOption(context, "Change Password"),
-              buildAccountOption(context, "Change Password"),
-              buildAccountOption(context, "Change Password"),
-              SizedBox(height: 40),
-              Row(
-                children: [
-                  Icon(Icons.volume_up_outlined, color: Colors.blue),
-                  SizedBox(width: 10),
-                  Text("Notificatios",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                ],
-              ),
-              Divider(height: 20, thickness: 1),
-              SizedBox(height: 10),
-              buildNotificationOption(
-                  "Theme Dark", valNotify1, onChangeFunction1),
-              buildNotificationOption(
-                  "Theme Dark", valNotify2, onChangeFunction2),
-              buildNotificationOption(
-                  "Theme Dark", valNotify3, onChangeFunction3),
-              Center(
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                  onPressed: () {},
-                  child: Text(
-                    "SIGN OUT",
-                    style: TextStyle(
-                        fontSize: 16, letterSpacing: 2.2, color: Colors.black),
+                    ],
                   ),
-                ),
-              )
-            ],
-          )),
+                  Divider(height: 20, thickness: 1),
+                  SizedBox(height: 10),
+                  buildAccountOption(context, "Change Password"),
+                  buildAccountOption(context, "Change Password"),
+                  buildAccountOption(context, "Change Password"),
+                  buildAccountOption(context, "Change Password"),
+                  buildAccountOption(context, "Change Password"),
+                  SizedBox(height: 40),
+                  Row(
+                    children: [
+                      Icon(Icons.volume_up_outlined, color: Theme.of(context).colorScheme.onPrimary,),
+                      SizedBox(width: 10),
+                      Text("Notifications",
+                          style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                  Divider(height: 20, thickness: 1),
+                  SizedBox(height: 10),
+                  buildNotificationOption(
+                      "Theme Dark", valNotify1, onChangeFunction1),
+                  buildNotificationOption(
+                      "Theme Dark", valNotify2, onChangeFunction2),
+                  buildNotificationOption(
+                      "Theme Dark", valNotify3, onChangeFunction3),
+                  Center(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      onPressed: () {},
+                      child: Text(
+                        "SIGN OUT",
+                        style: Theme.of(context).textTheme.titleMedium
+                      ),
+                    ),
+                  )
+                ],
+              )),
+        )
     );
   }
 
-  Padding buildNotificationOption(
-      String title, bool value, Function onChangeMethod) {
+  Padding buildNotificationOption(String title, bool value,
+      Function onChangeMethod) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Row(

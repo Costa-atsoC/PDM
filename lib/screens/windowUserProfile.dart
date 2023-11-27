@@ -12,6 +12,7 @@ import '../database_help.dart';
 class windowUserProfile extends StatefulWidget {
   String windowTitle = "";
   final Management Ref_Management;
+  int? ACCESS_WINDOW_PROFILE;
 
   //--------------
   windowUserProfile(this.Ref_Management) {
@@ -22,6 +23,10 @@ class windowUserProfile extends StatefulWidget {
   //--------------
   Future<void> Load() async {
     Utils.MSG_Debug(windowTitle + ":Load");
+    ACCESS_WINDOW_PROFILE = await Ref_Management.Get_SharedPreferences_INT(
+        "WND_PROFILE_ACCESS_NUMBER");
+    Ref_Management.Save_Shared_Preferences_INT(
+        "WND_PROFILE_ACCESS_NUMBER", ACCESS_WINDOW_PROFILE! + 1);
   }
 
   //--------------

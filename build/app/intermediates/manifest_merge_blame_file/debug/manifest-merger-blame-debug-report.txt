@@ -84,7 +84,7 @@
 50        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
 50-->[androidx.core:core:1.10.1] /Users/rdsilva/.gradle/caches/transforms-3/ee256e1db890a3c83bc1c410fe19158c/transformed/core-1.10.1/AndroidManifest.xml:28:18-86
 51        android:debuggable="true"
-52        android:icon="@mipmap/ic_launcher"
+52        android:icon="@mipmap/ryd"
 53        android:label="semana2" >
 54        <activity
 55            android:name="com.example.semana2.MainActivity"

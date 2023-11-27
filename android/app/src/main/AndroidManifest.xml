@@ -3,7 +3,7 @@
    <application
         android:label="semana2"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ryd">
         <activity
             android:name=".MainActivity"
             android:exported="true"
