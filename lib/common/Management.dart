@@ -103,8 +103,12 @@ class Management {
     SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
 
     //--------- DRAWER
-    SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", "Name");
     SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
+    String? USER_NAME = await Get_SharedPreferences_STRING('NAME');
+    if (USER_NAME != null) {
+      Utils.MSG_Debug(USER_NAME!);
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
+    }
 
     SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "WELCOME");
     SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
@@ -140,11 +144,7 @@ class Management {
     }
 
     //------- FUNCTIONS HOME
-    String? USER_NAME = await Get_SharedPreferences_STRING('NAME');
-    if (USER_NAME != null) {
-      Utils.MSG_Debug(USER_NAME!);
-      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
-    }
+
 
     //--------- FIM DA JANELA HOME
 
