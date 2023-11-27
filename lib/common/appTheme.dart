@@ -8,7 +8,7 @@ class AppTheme {
 
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 252),
+    scaffoldBackgroundColor: Color.fromARGB(255, 232, 220, 202),
     appBarTheme: AppBarTheme(
       color: Color.fromARGB(255, 19, 40, 61),
       titleTextStyle: TextStyle(
@@ -18,7 +18,7 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       iconTheme: IconThemeData(
-        color: Colors.white,
+        color: Color.fromARGB(255, 19, 40, 61),
       ),
     ),
     colorScheme: ColorScheme.light(

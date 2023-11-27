@@ -209,6 +209,7 @@ class State_windowHome extends State<windowHome> {
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
     UserFirestore userFirestore = UserFirestore();
+    Ref_Window.Ref_Management.Load();
 
     return MaterialApp(
       theme: AppTheme.lightTheme,
