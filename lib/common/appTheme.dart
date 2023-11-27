@@ -10,21 +10,29 @@ class AppTheme {
     useMaterial3: true,
     scaffoldBackgroundColor: Color.fromARGB(255, 255, 255, 252),
     appBarTheme: AppBarTheme(
-      color: Color.fromARGB(230, 9, 21, 27),
+      color: Color.fromARGB(255, 19, 40, 61),
+      titleTextStyle: TextStyle(
+        fontFamily: 'Lato',
+        color: Colors.white,
+        fontSize: 25.0,
+        fontWeight: FontWeight.bold,
+      ),
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
     ),
     colorScheme: ColorScheme.light(
-      primary: Color.fromARGB(255, 20, 39, 61),
-      onPrimary: Color.fromARGB(255, 20, 39, 61),
+      primary: Color.fromARGB(255, 255, 255, 252),
+      onPrimary: Color.fromARGB(220, 20, 39, 61),
       secondary: Colors.white,
+      onSecondary:  Color.fromARGB(220, 20, 39, 61),
     ),
     cardTheme: CardTheme(
-      color: Colors.teal,
+      color: Color.fromARGB(220, 33, 65, 101), // Primary color for cards
+      shadowColor: Colors.blue, // Secondary color for card shadows
     ),
     iconTheme: IconThemeData(
-      color: Color.fromARGB(255, 20, 39, 61),
+      color: Colors.white,
     ),
     textTheme: TextTheme(
       titleLarge: TextStyle(
@@ -50,6 +58,10 @@ class AppTheme {
         padding: EdgeInsets.symmetric(vertical: 10.0),
         minimumSize: Size(double.infinity, 0),
         backgroundColor: Color.fromARGB(255, 208, 166, 144),
+        shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(8.0), // Adjust the radius as needed
+        ),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
@@ -72,65 +84,80 @@ class AppTheme {
 
   // -------- DARK THEME
   static final ThemeData darkTheme = ThemeData(
-    useMaterial3: true,
-    scaffoldBackgroundColor: Color.fromARGB(255, 20, 39, 61),
-    appBarTheme: AppBarTheme(
-      color: Color.fromARGB(130, 9, 21, 27),
+      useMaterial3: true,
+      scaffoldBackgroundColor: Color.fromARGB(220, 20, 39, 61),
+      appBarTheme: AppBarTheme(
+        color: Color.fromARGB(255, 19, 40, 61),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
+      colorScheme: const ColorScheme.dark(
+        primary: Color.fromARGB(220, 20, 39, 61),
+        onPrimary: Color.fromARGB(255, 255, 255, 252),
+        secondary: Colors.white,
+        onSecondary:  Color.fromARGB(220, 33, 65, 101),
+        primaryContainer: Color.fromARGB(220, 232, 71, 71),
+      ),
+      cardTheme: CardTheme(
+        color: Color.fromARGB(255, 255, 255, 252), // Primary color for cards
+        shadowColor: Colors.white, // Secondary color for card shadows
+      ),
       iconTheme: IconThemeData(
         color: Colors.white,
       ),
-    ),
-    colorScheme: ColorScheme.light(
-      primary: Color.fromARGB(130, 9, 21, 27),
-      onPrimary: Colors.white,
-      secondary: Colors.white,
-    ),
-    cardTheme: CardTheme(
-      color: Colors.black,
-    ),
-    iconTheme: IconThemeData(
-      color: Colors.white,
-    ),
-    textTheme: TextTheme(
-      titleLarge: TextStyle(
-        fontFamily: 'Lato',
-        color: Color.fromARGB(255, 255, 255, 255),
-        fontSize: 25.0,
-        fontWeight: FontWeight.bold,
-      ),
-      titleMedium: TextStyle(
-        color: Colors.white,
-        fontSize: 20.0,
-      ),
-      titleSmall: TextStyle(
-        color: Colors.white,
-        fontFamily: 'Lato',
-        fontSize: 17,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
-      style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 10.0),
-        minimumSize: Size(double.infinity, 0),
-        backgroundColor: Color.fromARGB(255, 201, 128, 94),
-      ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: ButtonStyle(
-        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-        backgroundColor: MaterialStateProperty.all<Color>(
-          Color.fromARGB(255, 201, 128, 94),
+      textTheme: TextTheme(
+        titleLarge: TextStyle(
+          fontFamily: 'Lato',
+          color: Color.fromARGB(255, 255, 255, 255),
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
+        titleMedium: TextStyle(
+          color: Colors.white,
+          fontSize: 20.0,
+        ),
+        titleSmall: TextStyle(
+          color: Colors.white,
+          fontFamily: 'Lato',
+          fontSize: 17,
+          fontWeight: FontWeight.bold,
         ),
       ),
-    ),
-    filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 10.0),
-        minimumSize: Size(double.infinity, 0),
-        backgroundColor:
-            Color.fromARGB(255, 201, 128, 94), // Adjust color as needed
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 10.0),
+          minimumSize: Size(double.infinity, 0),
+          backgroundColor: Color.fromARGB(255, 201, 128, 94),
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(8.0), // Adjust the radius as needed
+          ),
+        ),
       ),
-    ),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          backgroundColor: MaterialStateProperty.all<Color>(
+            Color.fromARGB(255, 201, 128, 94),
+          ),
+        ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 10.0),
+          minimumSize: Size(double.infinity, 0),
+          backgroundColor:
+              Color.fromARGB(255, 201, 128, 94), // Adjust color as needed
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: const Color.fromARGB(230, 44, 71, 131),
+        splashColor: Colors.white,
+        shape: CircleBorder(),
+      ),
+      inputDecorationTheme: InputDecorationTheme(),
+
+
   );
 }

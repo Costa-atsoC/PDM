@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import '../Management.dart';
-import '../Utils.dart';
+import '../common/Management.dart';
+import '../common/Utils.dart';
 import '../database_help.dart';
 
 //----------------------------------------------------------------
@@ -12,9 +12,10 @@ import '../database_help.dart';
 class windowUserProfile extends StatefulWidget {
   String windowTitle = "";
   final Management Ref_Management;
+  int? ACCESS_WINDOW_PROFILE;
 
   //--------------
-  windowUserProfile(this.Ref_Management, {super.key}) {
+  windowUserProfile(this.Ref_Management) {
     windowTitle = "General Window";
     Utils.MSG_Debug(windowTitle);
   }
@@ -22,6 +23,10 @@ class windowUserProfile extends StatefulWidget {
   //--------------
   Future<void> Load() async {
     Utils.MSG_Debug(windowTitle + ":Load");
+    ACCESS_WINDOW_PROFILE = await Ref_Management.Get_SharedPreferences_INT(
+        "WND_PROFILE_ACCESS_NUMBER");
+    Ref_Management.Save_Shared_Preferences_INT(
+        "WND_PROFILE_ACCESS_NUMBER", ACCESS_WINDOW_PROFILE! + 1);
   }
 
   //--------------
@@ -129,7 +134,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
     }
 
     showModalBottomSheet(
-        backgroundColor: const Color.fromARGB(255, 69, 78, 89),
+        backgroundColor: Color.fromARGB(255, 69, 78, 89),
         context: context,
         elevation: 5,
         isDismissible: false,
@@ -151,7 +156,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     controller: _titleController,
                     validator: formValidator,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.title), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Title", //label text of field
@@ -164,7 +169,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _descriptionController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.description), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Description", //label text of field
@@ -177,7 +182,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _dateController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Enter Date", //label text of field
@@ -193,19 +198,23 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           //DateTime.now() - not to allow to choose before today.
                           lastDate: DateTime(2101));
 
-                      print(
-                          pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                      String formattedDate =
-                          DateFormat('yyyy-MM-dd').format(pickedDate!);
-                      print(
-                          formattedDate); //formatted date output using intl package =>  2021-03-16
-                      //you can implement different kind of Date Format here according to your requirement
+                      if (pickedDate != null) {
+                        print(
+                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                        String formattedDate =
+                            DateFormat('yyyy-MM-dd').format(pickedDate);
+                        print(
+                            formattedDate); //formatted date output using intl package =>  2021-03-16
+                        //you can implement different kind of Date Format here according to your requirement
 
-                      setState(() {
-                        _dateController.text =
-                            formattedDate; //set output date to TextField value.
-                      });
-                                        },
+                        setState(() {
+                          _dateController.text =
+                              formattedDate; //set output date to TextField value.
+                        });
+                      } else {
+                        print("Date is not selected");
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 20,
@@ -291,7 +300,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
               .Get("WND_PROFILE_TITLE_1", "User Profile")),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           child: Column(
             children: [
               const SizedBox(
@@ -306,13 +315,13 @@ class State_windowUserProfile extends State<windowUserProfile> {
                       color: Colors.black.withOpacity(0.3),
                       spreadRadius: 5,
                       blurRadius: 5,
-                      offset: const Offset(0, 3),
+                      offset: Offset(0, 3),
                     ),
                   ],
                 ),
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 120,
-                  backgroundImage: AssetImage("assets/niko.jpg"),
+                  backgroundImage: AssetImage("assets/PORSCHE_MAIN.JPEG"),
                 ),
               ),
               const SizedBox(
@@ -394,7 +403,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             ),
                           ),
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(

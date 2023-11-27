@@ -4,7 +4,7 @@ import 'package:ubi/screens/windowInitial.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';
-import 'Management.dart';
+import 'common/Management.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

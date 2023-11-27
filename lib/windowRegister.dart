@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +8,8 @@ import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
 import '../firestore/user_firestore.dart';
 import 'firebase_auth_implementation/models/user_model.dart';
 import 'windowHome.dart';
-import 'screens/windowInitial.dart';
-import 'Management.dart';
-import 'Utils.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -124,19 +124,21 @@ class Estado_windowRegister extends State<windowRegister> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      radius: 100,
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      backgroundImage: AssetImage('assets/LOGO.png'),
+                    Container(
+                      child: CircleAvatar(
+                        radius: 100,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        backgroundImage: AssetImage('assets/LOGO.png'),
+                      ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 40,
                     ),
                     TextFormField(
                       controller: _email,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         icon: Icon(Icons.email), //icon of text field
                         iconColor: Theme.of(context).iconTheme.color,
@@ -153,7 +155,7 @@ class Estado_windowRegister extends State<windowRegister> {
                     TextFormField(
                       controller: _fullname,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         icon: Icon(Icons.drive_file_rename_outline),
                         //icon of text field
@@ -171,7 +173,7 @@ class Estado_windowRegister extends State<windowRegister> {
                     TextFormField(
                       controller: _username,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.black),
+                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         icon: Icon(Icons.alternate_email),
                         //icon of text field
@@ -222,9 +224,6 @@ class Estado_windowRegister extends State<windowRegister> {
                         }
                         if (value != _pass.text) {
                           return 'Not Match';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters!';
                         }
                         return null;
                       },
@@ -291,11 +290,6 @@ class Estado_windowRegister extends State<windowRegister> {
           "EMAIL", currentUser.email);
 
       Utils.MSG_Debug("User is successfully created with ID: $uid");
-      _username.clear();
-      _email.clear();
-      _pass.clear();
-      _confirmPass.clear();
-      _fullname.clear();
       NavigateTo_Window_Home(context);
     } catch (e) {
       Utils.MSG_Debug("Error creating user: $e");

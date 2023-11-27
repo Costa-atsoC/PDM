@@ -1,16 +1,17 @@
+import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowPostForm.dart';
 
 import 'package:ubi/windowSettings.dart';
-import 'package:uuid/uuid.dart';
-import 'Management.dart';
-import 'Utils.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
+import 'common/appTheme.dart';
+import 'common/widgets/DetailScreen.dart';
 import 'firebase_auth_implementation/models/post_model.dart';
 import 'firestore/post_firestore.dart';
 import 'windowSearch.dart';
@@ -61,6 +62,7 @@ class State_windowHome extends State<windowHome> {
   final windowHome Ref_Window;
   String className = "";
 
+  // PARA FOTOS, IMPLEMENTAR NO PERFIL!
   Future selectFile() async {
     final result = await FilePicker.platform.pickFiles();
     if (result == null) return;
@@ -78,9 +80,6 @@ class State_windowHome extends State<windowHome> {
     if (_dataLoaded) {
       return; // Skip fetching data if it's already loaded
     }
-
-    String? uid =
-        await Ref_Window.Ref_Management.Get_SharedPreferences_STRING("UID");
     try {
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
       setState(() {
@@ -100,8 +99,6 @@ class State_windowHome extends State<windowHome> {
   final formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
-
-  //------ end of database constants
 
   //--------------
   State_windowHome(this.Ref_Window) : super() {
@@ -149,18 +146,18 @@ class State_windowHome extends State<windowHome> {
 
   //------ END OF DATABASE
 
-  bool _showFab = true;
+  final bool _showFab = true;
   final FloatingActionButtonLocation _fabLocation =
       FloatingActionButtonLocation.endDocked;
 
   Future NavigateTo_Window_Home(context) async {
-    windowHome win = windowHome(Ref_Window.Ref_Management);
+    windowHome win = new windowHome(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
   Future NavigateTo_Window_User_Profile(context) async {
-    windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management);
+    windowUserProfile win = new windowUserProfile(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -177,15 +174,8 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  //--------------
-  GetID() async {
-    final String userID;
-    userID = (await Ref_Window.Ref_Management.ACCESS_NUMBER) as String;
-    return userID;
-  }
-
   //-------------
-
+/*
   Widget CriarButton_Shared_Preferences() {
     return TextButton(
       style: TextButton.styleFrom(
@@ -202,15 +192,17 @@ class State_windowHome extends State<windowHome> {
         UtilsFlutter.MSG(Ref_Window.Ref_Management.GetDefinicao(
             "TITULO_BTN_SHARED_PREFERENCE", "Accao-BTN_SHARED_PREFERENCE ??"));
 
-        int clicksSp =
+        int CLICKS_SP =
             await Ref_Window.Ref_Management.Get_SharedPreferences_INT(
                 "CLICKS_SP") as int;
-        UtilsFlutter.MSG("CLICKS_SP = $clicksSp");
+        UtilsFlutter.MSG("CLICKS_SP = $CLICKS_SP");
         Ref_Window.Ref_Management.Save_Shared_Preferences_INT(
-            "CLICKS_SP", clicksSp + 1);
+            "CLICKS_SP", CLICKS_SP + 1);
       },
     );
   }
+
+ */
 
   //--------------
   @override
@@ -219,16 +211,17 @@ class State_windowHome extends State<windowHome> {
     UserFirestore userFirestore = UserFirestore();
 
     return MaterialApp(
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       home: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           drawer: Drawer(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).appBarTheme.backgroundColor,
                     image: DecorationImage(
                       fit: BoxFit.fill,
                       image: AssetImage('assets/images/cover.jpg'),
@@ -236,12 +229,12 @@ class State_windowHome extends State<windowHome> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CircleAvatar(
-                        radius: 30, // Tamanho do círculo
+                        radius: 30, // Tamanho do raio do círculo
                         backgroundImage:
-                            AssetImage('caminho/para/foto_de_perfil.jpg'),
+                            AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
                       ),
                       SizedBox(height: 10), // Espaço entre a foto e o texto
                       Text(
@@ -255,81 +248,112 @@ class State_windowHome extends State<windowHome> {
                 ListTile(
                   leading: Icon(Icons.input),
                   // meter o logo da app
-                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
                   ),
                   // adicionar ao management
-                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
                   onTap: () => {},
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 ListTile(
                   leading: Icon(Icons.person),
-                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
                   ),
-                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
                   onTap: () => {NavigateTo_Window_User_Profile(context)},
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 ListTile(
                   leading: Icon(Icons.settings),
-                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
                   ),
-                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
                   onTap: () => {NavigateTo_Window_Settings(context)},
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 ListTile(
                   leading: Icon(Icons.border_color),
-                  iconColor: Theme.of(context).iconTheme.color,
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
                   ),
-                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
+                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
+                  textColor: Theme.of(context).colorScheme.onPrimary,
                   onTap: () => {Navigator.of(context).pop()},
                 ),
-                ListTile(
-                  leading: Icon(Icons.exit_to_app),
-                  iconColor: Theme.of(context).iconTheme.color,
-                  title: Text(
-                    Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
-                  ),
-                  titleTextStyle: Theme.of(context).textTheme.titleMedium,
-                  onTap: () => {
-                    Ref_Window.Ref_Management.Delete_Shared_Preferences(
-                        "EMAIL"),
-                    Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME"),
-                    FirebaseAuth.instance.signOut(),
-                    Navigator.of(context).pop(),
-                  },
+                const SizedBox(
+                  height: 10,
                 ),
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: ListTile(
+                          // leading: Icon(Icons.exit_to_app),
+                          // iconColor: Theme.of(context).scaffoldBackgroundColor,
+                          title: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              Ref_Window.Ref_Management.SETTINGS
+                                  .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.primaryContainer,),
+                            ),
+                          ),
+                          onTap: () => {
+                            Ref_Window.Ref_Management.Delete_Shared_Preferences(
+                                "EMAIL"),
+                            Ref_Window.Ref_Management.Delete_Shared_Preferences(
+                                "NAME"),
+                            FirebaseAuth.instance.signOut(),
+                            Navigator.of(context).pop(),
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
           appBar: AppBar(
-            //automaticallyImplyLeading: false,
-            backgroundColor: Theme.of(context).primaryColor,
-            title: Text(Ref_Window.Ref_Management.SETTINGS
-                .Get("JNL_HOME_TITLE_1", "Home Page 1")),
+            title: Text(
+                Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_TITLE_1", "")),
           ),
-          body: RefreshIndicator(
-            onRefresh: () async {
-              await getData();
-              setState(() {});
-            },
-            child: FutureBuilder(
+          body: RefreshIndicator(onRefresh: () async {
+            await getData();
+            setState(() {});
+          }, child: Builder(builder: (BuildContext context) {
+            return FutureBuilder(
               future: getData(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Color.fromARGB(255, 19, 40, 61),
+                    ),
                   );
                 } else if (snapshot.hasError) {
                   print("Error: ${snapshot.error}");
@@ -346,125 +370,150 @@ class State_windowHome extends State<windowHome> {
                               child: CircularProgressIndicator(),
                             )
                           : loadedPosts.isEmpty
-                              ? const Center(
-                                  child: Text("No Data Available!!!"))
+                              ? Center(
+                                  child: Text(Ref_Window.Ref_Management.SETTINGS
+                                      .Get("JNL_HOME_TITLE_1", "No Posts !")))
                               : ListView.builder(
                                   itemCount: loadedPosts.length,
-                                  itemBuilder: (context, index) => Card(
-                                    color: index % 2 == 0
-                                        ? const Color.fromARGB(
-                                            255, 201, 128, 94)
-                                        : Color.fromARGB(255, 201, 108, 94),
-                                    margin: const EdgeInsets.all(15),
-                                    child: Column(
-                                      children: [
-                                        ListTile(
-                                          leading: CircleAvatar(
-                                            radius: 20, // Adjust the radius as needed
-                                            backgroundImage: NetworkImage('https://example.com/user_profile_image.jpg'), // Add the user's profile image URL
-                                          ),
-                                          title: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                loadedPosts[index].title,
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              Text(
-                                                  "Date: ${loadedPosts[index].date}"),
-                                            ],
-                                          ),
-                                          subtitle: Column(
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                          DetailScreen.show(context, loadedPosts[index]);
+                                      },
+                                      child: Hero(
+                                        tag:
+                                            'postHero${loadedPosts[index].pid}',
+                                        child: Card(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          margin: const EdgeInsets.all(15),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              FutureBuilder<String>(
-                                                future: userFirestore.getUserAttribute(
-                                                    loadedPosts[index].uid, 'fullName'),
-                                                builder: (context, userSnapshot) {
-                                                  if (userSnapshot.connectionState ==
-                                                      ConnectionState.waiting) {
-                                                    return Text("User: Loading...");
-                                                  } else if (userSnapshot.hasError) {
-                                                    return Text("User: Error loading user data");
-                                                  } else {
-                                                    String fullName =
-                                                        userSnapshot.data ?? "Unknown";
-                                                    return Text("User: $fullName");
-                                                  }
-                                                },
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundImage: AssetImage(
+                                                          'assets/PORSCHE_MAIN_2.jpeg'),
+                                                    ),
+                                                    SizedBox(width: 10),
+                                                    FutureBuilder<String>(
+                                                      future: userFirestore
+                                                          .getUserAttribute(
+                                                        loadedPosts[index].uid,
+                                                        'fullName',
+                                                      ),
+                                                      builder: (context,
+                                                          userSnapshot) {
+                                                        if (userSnapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return Text(
+                                                              "User: Loading...");
+                                                        } else if (userSnapshot
+                                                            .hasError) {
+                                                          return Text(
+                                                              "User: Error loading user data");
+                                                        } else {
+                                                          String fullName =
+                                                              userSnapshot
+                                                                      .data ??
+                                                                  "Unknown";
+                                                          return Text(
+                                                              "User: $fullName");
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              Text(
-                                                  "Description: ${loadedPosts[index].description}"),
-                                              Text(
-                                                  "Total Seats: ${loadedPosts[index].totalSeats}"),
-                                              Text(
-                                                  "Free Seats: ${loadedPosts[index].freeSeats}"),
-                                              Text(
-                                                  "UID: ${loadedPosts[index].uid}"),
-                                              Text(
-                                                  "Location: ${loadedPosts[index].location}"),
-                                              // Add more attributes as needed
+                                              ListTile(
+                                                title: Text(
+                                                  loadedPosts[index].title,
+                                                  style: Theme.of(context).textTheme.titleMedium
+                                                ),
+                                                subtitle: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        "Date: ${loadedPosts[index].date}"),
+                                                    Text(
+                                                        "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}"),
+                                                    Text(
+                                                        "Location: ${loadedPosts[index].location}"),
+                                                    // Add more attributes as needed
+                                                  ],
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  if (currentUserUID ==
+                                                      loadedPosts[index]
+                                                          .uid) ...[
+                                                    IconButton(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      icon: const Icon(
+                                                          Icons.edit),
+                                                      onPressed: () =>
+                                                          showMyForm(
+                                                        loadedPosts[index].pid
+                                                            as int?,
+                                                      ),
+                                                    ),
+                                                    IconButton(
+                                                      color: Colors.red[300],
+                                                      icon: const Icon(
+                                                          Icons.delete),
+                                                      onPressed: () {
+                                                        // Handle delete functionality
+                                                      },
+                                                    ),
+                                                  ] else ...[
+                                                    IconButton(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      icon: const Icon(
+                                                          Icons.thumb_up),
+                                                      onPressed: () {
+                                                        // Handle like functionality
+                                                      },
+                                                    ),
+                                                    IconButton(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      icon: const Icon(
+                                                          Icons.message),
+                                                      onPressed: () {
+                                                        // Handle message functionality
+                                                      },
+                                                    ),
+                                                  ],
+                                                ],
+                                              ),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              if (currentUserUID ==
-                                                  loadedPosts[index].uid) ...[
-                                                IconButton(
-                                                  color: Colors.white,
-                                                  icon: const Icon(Icons.edit),
-                                                  onPressed: () => showMyForm(
-                                                    loadedPosts[index].pid
-                                                        as int?,
-                                                  ),
-                                                ),
-                                                IconButton(
-                                                  color: Colors.white,
-                                                  icon:
-                                                      const Icon(Icons.delete),
-                                                  onPressed: () {
-                                                    // Handle delete functionality
-                                                  },
-                                                ),
-                                              ] else ...[
-                                                IconButton(
-                                                  color: Colors.white,
-                                                  icon: const Icon(
-                                                      Icons.thumb_up),
-                                                  onPressed: () {
-                                                    // Handle like functionality
-                                                  },
-                                                ),
-                                                IconButton(
-                                                  color: Colors.white,
-                                                  icon:
-                                                      const Icon(Icons.message),
-                                                  onPressed: () {
-                                                    // Handle send message functionality
-                                                  },
-                                                ),
-                                              ],
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                    );
+                                  },
                                 ));
                 }
               },
-            ),
-          ),
+            );
+          })),
           floatingActionButton: _showFab
               ? Container(
                   width: 70.0, // Set the width
@@ -477,17 +526,22 @@ class State_windowHome extends State<windowHome> {
                     child: Icon(
                       Icons.add,
                       size: 33.0, // Adjust the size to increase the icon size
+                      color: Colors.white,
                     ),
+                    shape: CircleBorder(),
                   ),
                 )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
+            height: 60,
             shape: const CircularNotchedRectangle(),
-            color: Theme.of(context).primaryColor, // mudar para Theme
+            color: Theme.of(context)
+                .appBarTheme
+                .backgroundColor, // mudar para Theme
             child: IconTheme(
-              data:
-                  IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+              data: IconThemeData(
+                  color: Theme.of(context).appBarTheme.iconTheme?.color),
               child: Row(
                 children: <Widget>[
                   IconButton(

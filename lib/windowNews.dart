@@ -5,8 +5,8 @@ import 'package:scrollable_text_indicator/scrollable_text_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:xml/xml.dart' as xml;
 
-import 'Management.dart';
-import 'Utils.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -47,31 +47,33 @@ class State_windowNews extends State<windowNews> {
     // Print the XML data to the console to check if it's loaded correctly.
     print("XML Data: $newsXML");
 
-    final document = xml.XmlDocument.parse(newsXML);
-    final rss = document.findElements('rss').first;
-    final channel = rss.findElements('channel').first;
-    final items = channel.findElements('item');
+    if (newsXML != null) {
+      final document = xml.XmlDocument.parse(newsXML);
+      final rss = document.findElements('rss').first;
+      final channel = rss.findElements('channel').first;
+      final items = channel.findElements('item');
 
-    final itemList = <Map<String, String>>[];
+      final itemList = <Map<String, String>>[];
 
-    for (final item in items) {
-      final link = item.findElements('link').first.text;
-      final title = item.findElements('title').first.text;
-      final description = item.findElements('description').first.text;
-      final pubDate = item.findElements('pubDate').first.text;
+      for (final item in items) {
+        final link = item.findElements('link').first.text;
+        final title = item.findElements('title').first.text;
+        final description = item.findElements('description').first.text;
+        final pubDate = item.findElements('pubDate').first.text;
 
-      itemList.add({
-        'title': title,
-        'description': description,
-        'pubDate': pubDate,
-        'link': link,
+        itemList.add({
+          'title': title,
+          'description': description,
+          'pubDate': pubDate,
+          'link': link,
+        });
+      }
+
+      setState(() {
+        news = itemList;
       });
     }
-
-    setState(() {
-      news = itemList;
-    });
-    }
+  }
 
   // Function to load and parse XML data
   /*void _loadData() async {

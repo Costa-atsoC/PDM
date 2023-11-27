@@ -3,8 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 
-import '../Management.dart';
-import '../Utils.dart';
+import '../common/Management.dart';
+import '../common/Utils.dart';
+import '../common/appTheme.dart';
 import '../common/widgets/RWMButtons.dart';
 import '../firebase_auth_implementation/firebase_auth_services.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
@@ -15,15 +16,6 @@ class MyHomePage extends StatefulWidget {
   Management Ref_Management;
 
   MyHomePage(this.Ref_Management, this.title);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
 
   final String title;
 
@@ -72,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         selected: selected,
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+            (Set<MaterialState> states) {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white;
               }
@@ -80,17 +72,17 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
+            (Set<MaterialState> states) {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white;
               }
-              return null; // defer to the defaults
+              return Theme.of(context).scaffoldBackgroundColor; // defer to the defaults
             },
           ),
         ),
         onPressed: () {
           setState(
-                () {
+            () {
               selected = !selected;
               UtilsFlutter.MSG(Ref_Management.GetDefinicao(
                   "TEXT_NEW_WINDOW_REGISTER",
@@ -106,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
               fontFamily: 'Lato',
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: Color.fromARGB(240, 85, 126, 167)),
+              color: Theme.of(context).colorScheme.onPrimary),
         ));
   }
 
@@ -128,27 +120,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _initializeData() async {
-   // Ref_Management.Save_Shared_Preferences_STRING("EMAIL", "email");
+    // Ref_Management.Save_Shared_Preferences_STRING("EMAIL", "email");
     //print("_initializeData.......................................................");
     String? email = await Ref_Management.Get_SharedPreferences_STRING("EMAIL");
     String? uid = await Ref_Management.Get_SharedPreferences_STRING("UID");
     print(uid);
-    if(email == "??"){
+    if (email == "??") {
       _email.text = "";
-    }
-    else{
+    } else {
       _email.text = email!;
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       home: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body:
-        Center(
+        body: Center(
           child: SingleChildScrollView(
             child: Container(
               margin: const EdgeInsets.only(left: 0.0, right: 0.0),
@@ -164,20 +155,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(140),
                           ),
-                          child: const CircleAvatar(
+                          child: CircleAvatar(
                             radius: 100,
                             backgroundColor: Color.fromARGB(0, 0, 0, 0),
                             backgroundImage: AssetImage('assets/LOGO.png'),
                           ),
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height:
-                          40, // meter isto responsivo e meter no management
+                              40, // meter isto responsivo e meter no management
                         ),
                         TextFormField(
                           controller: _email,
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.alternate_email),
+                            icon: Icon(Icons.alternate_email),
                             iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_10", "Email"),
@@ -187,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
-                            focusedBorder: const UnderlineInputBorder(
+                            focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: Colors.blueAccent,
                                   width: 3.0), // Set the border color here
@@ -196,12 +187,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           style: Theme.of(context).textTheme.titleSmall,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your username';
+                              return 'Please enter your email';
                             }
-                            return value;
+                            return null;
                           },
                         ),
-                        const SizedBox(
+                        SizedBox(
                           height: 5,
                         ),
                         TextFormField(
@@ -209,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           obscureText: bool.parse(Ref_Management.SETTINGS
                               .Get("WND_REGISTER_OBSTEXT_3", "true")),
                           decoration: InputDecoration(
-                            icon: const Icon(Icons.password_outlined),
+                            icon: Icon(Icons.password_outlined),
                             iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
@@ -219,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
-                            focusedBorder: const UnderlineInputBorder(
+                            focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: Colors.blueAccent,
                                   width: 3.0), // Set the border color here
@@ -236,7 +227,6 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: ElevatedButton(
-                            style: Theme.of(context).elevatedButtonTheme.style,
                             onPressed: () {
                               _signIn();
                               if (_formKey.currentState!.validate()) {
@@ -247,10 +237,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Text(
                                 Ref_Management.SETTINGS.Get(
                                     "WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                            ),
+                                style: Theme.of(context).textTheme.titleLarge),
                           ),
                         ),
                         Create_Button_New_Window_Register(),
@@ -269,7 +256,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //--------------
   void _signIn() async {
     UserFirestore userFirestore = UserFirestore();
-    
+
     // String username = _username.text;
     String email = _email.text;
     String password = _pass.text;
@@ -280,8 +267,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     UserModel? userData = await userFirestore.getUserData(user!.uid);
     Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
-    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
-    Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
+    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData!.email);
+    Ref_Management.Save_Shared_Preferences_STRING(
+        "USERNAME", userData!.username);
 
     if (user != null) {
       Utils.MSG_Debug("User is signed");
