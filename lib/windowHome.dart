@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +36,7 @@ class windowHome extends StatefulWidget {
         "JANELA_HOME_NUMERO_ACESSOS");
     Ref_Management.Save_Shared_Preferences_INT(
         "JANELA_HOME_NUMERO_ACESSOS", ACCESS_WINDOW_HOME! + 1);
+    Ref_Management.Load();
   }
 
   int? Get_ACESSO_JANELA_HOME() {
@@ -89,7 +88,7 @@ class State_windowHome extends State<windowHome> {
         _dataLoaded = true; // Set the flag to true after loading data
       });
     } catch (e) {
-      print("Error fetching data: $e");
+      Utils.MSG_Debug("Error fetching data: $e");
       setState(() {
         _isLoading = false; // Set isLoading to false even in case of an error
       });
@@ -150,26 +149,26 @@ class State_windowHome extends State<windowHome> {
   final FloatingActionButtonLocation _fabLocation =
       FloatingActionButtonLocation.endDocked;
 
-  Future NavigateTo_Window_Home(context) async {
-    windowHome win = new windowHome(Ref_Window.Ref_Management);
+  Future navigateToWindowHome(context) async {
+    windowHome win = windowHome(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  Future NavigateTo_Window_User_Profile(context) async {
-    windowUserProfile win = new windowUserProfile(Ref_Window.Ref_Management);
+  Future navigateToWindowUserProfile(context) async {
+    windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  Future NavigateTo_Window_Search(context) async {
-    windowSearch win = new windowSearch(Ref_Window.Ref_Management);
+  Future navigateToWindowSearch(context) async {
+    windowSearch win = windowSearch(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  Future NavigateTo_Window_Settings(context) async {
-    windowSettings win = new windowSettings(Ref_Window.Ref_Management);
+  Future navigateToWindowSettings(context) async {
+    windowSettings win = windowSettings(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -223,7 +222,7 @@ class State_windowHome extends State<windowHome> {
                 DrawerHeader(
                   decoration: BoxDecoration(
                     color: Theme.of(context).appBarTheme.backgroundColor,
-                    image: DecorationImage(
+                    image: const DecorationImage(
                       fit: BoxFit.fill,
                       image: AssetImage('assets/images/cover.jpg'),
                     ),
@@ -232,12 +231,12 @@ class State_windowHome extends State<windowHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        radius: 30, // Tamanho do raio do círculo
+                      const CircleAvatar(
+                        radius: 30,
                         backgroundImage:
                             AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
                       ),
-                      SizedBox(height: 10), // Espaço entre a foto e o texto
+                      const SizedBox(height: 10),
                       Text(
                         Ref_Window.Ref_Management.SETTINGS
                             .Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
@@ -247,7 +246,7 @@ class State_windowHome extends State<windowHome> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.input),
+                  leading: const Icon(Icons.input),
                   // meter o logo da app
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
@@ -262,33 +261,33 @@ class State_windowHome extends State<windowHome> {
                   height: 10,
                 ),
                 ListTile(
-                  leading: Icon(Icons.person),
+                  leading: const Icon(Icons.person),
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
                   ),
                   titleTextStyle: Theme.of(context).textTheme.titleLarge,
                   textColor: Theme.of(context).colorScheme.onPrimary,
-                  onTap: () => {NavigateTo_Window_User_Profile(context)},
+                  onTap: () => {navigateToWindowUserProfile(context)},
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings),
+                  leading: const Icon(Icons.settings),
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
                   ),
                   titleTextStyle: Theme.of(context).textTheme.titleLarge,
                   textColor: Theme.of(context).colorScheme.onPrimary,
-                  onTap: () => {NavigateTo_Window_Settings(context)},
+                  onTap: () => {navigateToWindowSettings(context)},
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 ListTile(
-                  leading: Icon(Icons.border_color),
+                  leading: const Icon(Icons.border_color),
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
@@ -302,7 +301,7 @@ class State_windowHome extends State<windowHome> {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  margin: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -319,8 +318,14 @@ class State_windowHome extends State<windowHome> {
                               Ref_Window.Ref_Management.SETTINGS
                                   .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
                               textAlign: TextAlign.center,
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: Theme.of(context).colorScheme.primaryContainer,),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
+                                  ),
                             ),
                           ),
                           onTap: () => {
@@ -345,7 +350,9 @@ class State_windowHome extends State<windowHome> {
           ),
           body: RefreshIndicator(onRefresh: () async {
             await getData();
-            setState(() {});
+            setState(() {
+
+            });
           }, child: Builder(builder: (BuildContext context) {
             return FutureBuilder(
               future: getData(),
@@ -357,7 +364,7 @@ class State_windowHome extends State<windowHome> {
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  print("Error: ${snapshot.error}");
+                  Utils.MSG_Debug("Error: ${snapshot.error}");
                   return const Center(
                     child: Text("Error loading data"),
                   );
@@ -379,130 +386,153 @@ class State_windowHome extends State<windowHome> {
                                   itemBuilder: (context, index) {
                                     return GestureDetector(
                                       onTap: () {
-                                          DetailScreen.show(context, loadedPosts[index]);
+                                        DetailScreen.show(
+                                            context, loadedPosts[index]);
                                       },
                                       child: Hero(
                                         tag:
                                             'postHero${loadedPosts[index].pid}',
                                         child: Card(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          margin: const EdgeInsets.all(15),
+                                          //margin: const EdgeInsets.all(10),
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                                              Container(
+                                                color: Theme.of(context)
+                                                    .colorScheme.onSecondary
+                                                    .withOpacity(0.5),
+                                                // Set your desired color
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      const CircleAvatar(
+                                                        radius: 20,
+                                                        backgroundImage: AssetImage(
+                                                            'assets/PORSCHE_MAIN_2.jpeg'),
+                                                      ),
+                                                      const SizedBox(width: 10),
+                                                      FutureBuilder<String>(
+                                                        future: userFirestore
+                                                            .getUserAttribute(
+                                                          loadedPosts[index]
+                                                              .uid,
+                                                          'fullName',
+                                                        ),
+                                                        builder: (context,
+                                                            userSnapshot) {
+                                                          if (userSnapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return const Text(
+                                                                "User: Loading...");
+                                                          } else if (userSnapshot
+                                                              .hasError) {
+                                                            return const Text(
+                                                                "User: Error loading user data");
+                                                          } else {
+                                                            String fullName =
+                                                                userSnapshot
+                                                                        .data ??
+                                                                    "Unknown";
+                                                            return Text(
+                                                                "User: $fullName");
+                                                          }
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Theme.of(context).scaffoldBackgroundColor,
+                                                // Set your desired color
+                                                child: ListTile(
+                                                  title: Text(
+                                                    loadedPosts[index].title,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .titleMedium,
+                                                  ),
+                                                  subtitle: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                          "Date: ${loadedPosts[index].date}"),
+                                                      Text(
+                                                          "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}"),
+                                                      Text(
+                                                          "Location: ${loadedPosts[index].location}"),
+                                                      // Add more attributes as needed
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                color: Theme.of(context)
+                                                    .colorScheme.onSecondary
+                                                    .withOpacity(0.5),
+                                                // Set your desired color
                                                 child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
                                                   children: [
-                                                    CircleAvatar(
-                                                      radius: 20,
-                                                      backgroundImage: AssetImage(
-                                                          'assets/PORSCHE_MAIN_2.jpeg'),
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    FutureBuilder<String>(
-                                                      future: userFirestore
-                                                          .getUserAttribute(
-                                                        loadedPosts[index].uid,
-                                                        'fullName',
+                                                    if (currentUserUID ==
+                                                        loadedPosts[index]
+                                                            .uid) ...[
+                                                      IconButton(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                        icon: const Icon(
+                                                            Icons.edit),
+                                                        onPressed: () =>
+                                                            showMyForm(
+                                                                loadedPosts[index]
+                                                                        .pid
+                                                                    as int?),
                                                       ),
-                                                      builder: (context,
-                                                          userSnapshot) {
-                                                        if (userSnapshot
-                                                                .connectionState ==
-                                                            ConnectionState
-                                                                .waiting) {
-                                                          return Text(
-                                                              "User: Loading...");
-                                                        } else if (userSnapshot
-                                                            .hasError) {
-                                                          return Text(
-                                                              "User: Error loading user data");
-                                                        } else {
-                                                          String fullName =
-                                                              userSnapshot
-                                                                      .data ??
-                                                                  "Unknown";
-                                                          return Text(
-                                                              "User: $fullName");
-                                                        }
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              ListTile(
-                                                title: Text(
-                                                  loadedPosts[index].title,
-                                                  style: Theme.of(context).textTheme.titleMedium
-                                                ),
-                                                subtitle: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                        "Date: ${loadedPosts[index].date}"),
-                                                    Text(
-                                                        "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}"),
-                                                    Text(
-                                                        "Location: ${loadedPosts[index].location}"),
-                                                    // Add more attributes as needed
-                                                  ],
-                                                ),
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.end,
-                                                children: [
-                                                  if (currentUserUID ==
-                                                      loadedPosts[index]
-                                                          .uid) ...[
-                                                    IconButton(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onPrimary,
-                                                      icon: const Icon(
-                                                          Icons.edit),
-                                                      onPressed: () =>
-                                                          showMyForm(
-                                                        loadedPosts[index].pid
-                                                            as int?,
+                                                      IconButton(
+                                                        color: Colors.red[300],
+                                                        icon: const Icon(
+                                                            Icons.delete),
+                                                        onPressed: () {
+                                                          // Handle delete functionality
+                                                        },
                                                       ),
-                                                    ),
-                                                    IconButton(
-                                                      color: Colors.red[300],
-                                                      icon: const Icon(
-                                                          Icons.delete),
-                                                      onPressed: () {
-                                                        // Handle delete functionality
-                                                      },
-                                                    ),
-                                                  ] else ...[
-                                                    IconButton(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onPrimary,
-                                                      icon: const Icon(
-                                                          Icons.thumb_up),
-                                                      onPressed: () {
-                                                        // Handle like functionality
-                                                      },
-                                                    ),
-                                                    IconButton(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onPrimary,
-                                                      icon: const Icon(
-                                                          Icons.message),
-                                                      onPressed: () {
-                                                        // Handle message functionality
-                                                      },
-                                                    ),
+                                                    ] else ...[
+                                                      Text(loadedPosts[index].likes, style: Theme.of(context).textTheme.titleMedium,),
+                                                      IconButton(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                        icon: const Icon(
+                                                            Icons.thumb_up),
+                                                        onPressed: () async {
+                                                          // Replace with your logic to get the current user's UID
+                                                          PostFirestore postManager = PostFirestore();
+
+                                                          await postManager.toggleLikePost(currentUserUID!, loadedPosts[index]);
+                                                        },
+                                                      ),
+                                                      IconButton(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                        icon: const Icon(
+                                                            Icons.message),
+                                                        onPressed: () {
+                                                          // Handle message functionality
+                                                        },
+                                                      ),
+                                                    ],
                                                   ],
-                                                ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -524,12 +554,12 @@ class State_windowHome extends State<windowHome> {
                     backgroundColor: const Color.fromARGB(230, 44, 71, 131),
                     splashColor: Colors.white,
                     tooltip: 'Create',
-                    child: Icon(
+                    shape: const CircleBorder(),
+                    child: const Icon(
                       Icons.add,
                       size: 33.0, // Adjust the size to increase the icon size
                       color: Colors.white,
                     ),
-                    shape: CircleBorder(),
                   ),
                 )
               : null,
@@ -541,15 +571,15 @@ class State_windowHome extends State<windowHome> {
                 .appBarTheme
                 .backgroundColor, // mudar para Theme
             child: IconTheme(
-              data: IconThemeData(
-                  color: Theme.of(context).appBarTheme.iconTheme?.color),
+              data:
+                  IconThemeData(color: Theme.of(context).colorScheme.secondary),
               child: Row(
                 children: <Widget>[
                   IconButton(
                     tooltip: 'Search',
                     icon: const Icon(Icons.search),
                     onPressed: () {
-                      NavigateTo_Window_Search(context);
+                      navigateToWindowSearch(context);
                     },
                   ),
                   IconButton(
