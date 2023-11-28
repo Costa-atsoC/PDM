@@ -207,7 +207,6 @@ class State_windowHome extends State<windowHome> {
   //--------------
   @override
   Widget build(BuildContext context) {
-    Utils.MSG_Debug("$className: build");
     UserFirestore userFirestore = UserFirestore();
     Ref_Window.Ref_Management.Load();
 
@@ -223,7 +222,7 @@ class State_windowHome extends State<windowHome> {
                 DrawerHeader(
                   decoration: BoxDecoration(
                     color: Theme.of(context).appBarTheme.backgroundColor,
-                    image: DecorationImage(
+                    image: const DecorationImage(
                       fit: BoxFit.fill,
                       image: AssetImage('assets/images/cover.jpg'),
                     ),
@@ -232,12 +231,12 @@ class State_windowHome extends State<windowHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         radius: 30, // Tamanho do raio do círculo
                         backgroundImage:
                             AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
                       ),
-                      SizedBox(height: 10), // Espaço entre a foto e o texto
+                      const SizedBox(height: 10), // Espaço entre a foto e o texto
                       Text(
                         Ref_Window.Ref_Management.SETTINGS
                             .Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
@@ -247,8 +246,8 @@ class State_windowHome extends State<windowHome> {
                   ),
                 ),
                 ListTile(
-                  leading: Icon(Icons.input),
-                  // meter o logo da app
+                  leading: const Icon(Icons.input),
+                  // TODO meter o logo da app
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
@@ -262,7 +261,7 @@ class State_windowHome extends State<windowHome> {
                   height: 10,
                 ),
                 ListTile(
-                  leading: Icon(Icons.person),
+                  leading: const Icon(Icons.person),
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
@@ -275,7 +274,7 @@ class State_windowHome extends State<windowHome> {
                   height: 10,
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings),
+                  leading: const Icon(Icons.settings),
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
@@ -288,7 +287,7 @@ class State_windowHome extends State<windowHome> {
                   height: 10,
                 ),
                 ListTile(
-                  leading: Icon(Icons.border_color),
+                  leading: const Icon(Icons.border_color),
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
@@ -302,7 +301,7 @@ class State_windowHome extends State<windowHome> {
                 ),
                 Container(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  margin: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -397,12 +396,12 @@ class State_windowHome extends State<windowHome> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
-                                                    CircleAvatar(
+                                                    const CircleAvatar(
                                                       radius: 20,
                                                       backgroundImage: AssetImage(
                                                           'assets/PORSCHE_MAIN_2.jpeg'),
                                                     ),
-                                                    SizedBox(width: 10),
+                                                    const SizedBox(width: 10),
                                                     FutureBuilder<String>(
                                                       future: userFirestore
                                                           .getUserAttribute(
@@ -415,19 +414,13 @@ class State_windowHome extends State<windowHome> {
                                                                 .connectionState ==
                                                             ConnectionState
                                                                 .waiting) {
-                                                          return Text(
-                                                              "User: Loading...");
+                                                          return const Text("User: Loading...");
                                                         } else if (userSnapshot
                                                             .hasError) {
-                                                          return Text(
-                                                              "User: Error loading user data");
+                                                          return const Text("User: Error loading user data");
                                                         } else {
-                                                          String fullName =
-                                                              userSnapshot
-                                                                      .data ??
-                                                                  "Unknown";
-                                                          return Text(
-                                                              "User: $fullName");
+                                                          String fullName = userSnapshot.data ?? "Unknown";
+                                                          return Text("User: $fullName");
                                                         }
                                                       },
                                                     ),

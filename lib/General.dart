@@ -56,10 +56,10 @@ class General {
     Utils.MSG_Debug("ObjectoGeral: " + NomeObjecto!);
     Iterable<String> listaKeys = Dados.keys;
 
-    if (listaKeys.isNotEmpty) {
-      for (String key in listaKeys)
-        Utils.MSG_Debug(strEspacos + "\tDados[" + key + "]=" + Dados[key]!);
-    }
+    // if (listaKeys.isNotEmpty) {
+    //   for (String key in listaKeys)
+    //     Utils.MSG_Debug(strEspacos + "\tDados[" + key + "]=" + Dados[key]!);
+    // }
   }
 
   //----------------------------------------

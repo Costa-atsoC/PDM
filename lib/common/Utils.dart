@@ -37,6 +37,15 @@ class Utils {
     return formattedDate;
   }
 
+  //For the creation of the user we need different date format
+  static String currentTimeUser(){
+    DateTime now = DateTime.now();
+
+    String formattedDate = '${now.year}-${now.month}-${now.day}';
+
+    return formattedDate;
+  }
+
 //--------------------------------------
 //--------------------------------------
 //--------------------------------------
