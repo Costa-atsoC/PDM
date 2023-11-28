@@ -35,7 +35,6 @@ class Management {
 
   //--------------------------------------
   Management(this.appName) {
-    Utils.MSG_Debug("Management");
     ACCESS_NUMBER = 0;
   }
 
@@ -136,14 +135,14 @@ class Management {
       //JNL_HOME_NUMERO_ACESSOS++;
       Save_Shared_Preferences_INT(
           'JNL_HOME_NUMERO_ACESSOS', JNL_HOME_NUMERO_ACESSOS + 1);
-      Utils.MSG_Debug("JNL_HOME_NUMERO_ACESSOS = $JNL_HOME_NUMERO_ACESSOS");
     }
 
     //------- FUNCTIONS HOME
-    String? USER_NAME = await Get_SharedPreferences_STRING('NAME');
-    if (USER_NAME != null) {
-      Utils.MSG_Debug(USER_NAME!);
-      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
+    String? FULL_NAME = await Get_SharedPreferences_STRING('NAME');
+    if (FULL_NAME != null) {
+      (FULL_NAME);
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", FULL_NAME);
+      SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
     }
 
     //--------- FIM DA JANELA HOME
@@ -158,7 +157,7 @@ class Management {
     if (NUMERO_ACESSOS != null) {
       //NUMERO_ACESSOS++;
       Save_Shared_Preferences_INT('NUMERO_ACESSOS', NUMERO_ACESSOS + 1);
-      Utils.MSG_Debug("NUMERO_ACESSOS = $NUMERO_ACESSOS");
+      //("NUMERO_ACESSOS = $NUMERO_ACESSOS");
     }
 
     String? NOTICIAS = await Get_SharedPreferences_STRING('NOTICIAS');
@@ -167,6 +166,28 @@ class Management {
     }
 
     SETTINGS.Mostrar(2);
+
+    //------------------------------------------------------//
+    //----------------- WINDOW PROFILE----------------------//
+    //------------------------------------------------------//
+
+    if(FULL_NAME != null){
+      SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
+    }
+
+    String? LOCATION = await Get_SharedPreferences_STRING('LOCATION');
+    SETTINGS.Add("WND_USER_PROFILE_LOCATION", LOCATION!);
+
+    String? USERNAME = await Get_SharedPreferences_STRING('USERNAME');
+    SETTINGS.Add("WND_USER_PROFILE_USERNAME", USERNAME!);
+
+    String? UID = await Get_SharedPreferences_STRING('UID');
+    SETTINGS.Add('WND_USER_PROFILE_UID', UID!);
+
+    SETTINGS.Add("WND_USER_PROFILE_MEM", "Member since: ");
+
+    String? REGISTERDATE = await Get_SharedPreferences_STRING('REGDATE');
+    SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
   }
 
   //--------------------------------------
@@ -206,21 +227,19 @@ class Management {
   void Save_Shared_Preferences_INT(String TAG, int Valor) async {
     final SharedPreferences pfs = await prefs;
     pfs.setInt(TAG, Valor);
-    Utils.MSG_Debug(TAG + "=" + Valor.toString());
   }
 
   //--------------------------------------
   void Save_Shared_Preferences_STRING(String TAG, String Valor) async {
     final SharedPreferences pfs = await prefs;
     pfs.setString(TAG, Valor);
-    Utils.MSG_Debug(TAG + "=" + Valor);
   }
 
   //--------------------------------------
   Future<Object?> Delete_Shared_Preferences(String TAG) async {
     final SharedPreferences pfs = await prefs;
     if (pfs == null) {
-      Utils.MSG_Debug("$TAG doens't exist");
+      ("$TAG doens't exist");
       return "$TAG doesn't exist";
     }
     if (pfs.containsKey(TAG)) {
@@ -233,7 +252,6 @@ class Management {
   }
 
   Future<String> ExecutaServidor() async {
-    Utils.MSG_Debug("INICIO: ExecutaServidor!");
     String Resposta_Servidor = "";
     HTTP.Client Servidor = HTTP.Client();
     try {

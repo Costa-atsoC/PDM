@@ -155,13 +155,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(140),
                           ),
-                          child: CircleAvatar(
+                          child: const CircleAvatar(
                             radius: 100,
                             backgroundColor: Color.fromARGB(0, 0, 0, 0),
                             backgroundImage: AssetImage('assets/LOGO.png'),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height:
                               40, // meter isto responsivo e meter no management
                         ),
@@ -178,7 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
-                            focusedBorder: UnderlineInputBorder(
+                            focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: Colors.blueAccent,
                                   width: 3.0), // Set the border color here
@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             return null;
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         TextFormField(
@@ -210,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
-                            focusedBorder: UnderlineInputBorder(
+                            focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                   color: Colors.blueAccent,
                                   width: 3.0), // Set the border color here
@@ -265,11 +265,12 @@ class _MyHomePageState extends State<MyHomePage> {
     User? user = await _auth.signInWithEmailAndPassword(email, password);
     Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
 
-    UserModel? userData = await userFirestore.getUserData(user!.uid);
+    UserModel? userData = await userFirestore.getUserData(user.uid);
     Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
-    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData!.email);
-    Ref_Management.Save_Shared_Preferences_STRING(
-        "USERNAME", userData!.username);
+    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
+    Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
+    Ref_Management.Save_Shared_Preferences_STRING("LOCATION", userData.location);
+    Ref_Management.Save_Shared_Preferences_STRING("REGDATE", userData.registerDate);
 
     if (user != null) {
       Utils.MSG_Debug("User is signed");

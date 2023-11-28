@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../database_help.dart';
+import '../firestore/post_firestore.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -17,12 +19,12 @@ class windowUserProfile extends StatefulWidget {
   //--------------
   windowUserProfile(this.Ref_Management) {
     windowTitle = "General Window";
-    Utils.MSG_Debug(windowTitle);
+    //Utils.MSG_Debug(windowTitle);
   }
 
   //--------------
   Future<void> Load() async {
-    Utils.MSG_Debug(windowTitle + ":Load");
+    //Utils.MSG_Debug(windowTitle + ":Load");
     ACCESS_WINDOW_PROFILE = await Ref_Management.Get_SharedPreferences_INT(
         "WND_PROFILE_ACCESS_NUMBER");
     Ref_Management.Save_Shared_Preferences_INT(
@@ -32,7 +34,7 @@ class windowUserProfile extends StatefulWidget {
   //--------------
   @override
   State<StatefulWidget> createState() {
-    Utils.MSG_Debug(windowTitle + ":createState");
+    //Utils.MSG_Debug(windowTitle + ":createState");
     return State_windowUserProfile(this);
   }
 //--------------
@@ -48,35 +50,35 @@ class State_windowUserProfile extends State<windowUserProfile> {
   //--------------
   State_windowUserProfile(this.Ref_Window) : super() {
     className = "State_windowGeneral";
-    Utils.MSG_Debug("$className: createState");
+    //Utils.MSG_Debug("$className: createState");
   }
 
   //--------------
   @override
   void dispose() {
-    Utils.MSG_Debug("createState");
+    //Utils.MSG_Debug("createState");
     super.dispose();
-    Utils.MSG_Debug("$className:dispose");
+    //Utils.MSG_Debug("$className:dispose");
   }
 
   //--------------
   @override
   void deactivate() {
-    Utils.MSG_Debug("$className:deactivate");
+    //Utils.MSG_Debug("$className:deactivate");
     super.deactivate();
   }
 
   //--------------
   @override
   void didChangeDependencies() {
-    Utils.MSG_Debug("$className: didChangeDependencies");
+    //Utils.MSG_Debug("$className: didChangeDependencies");
     super.didChangeDependencies();
   }
 
   //--------------
   @override
   void initState() {
-    Utils.MSG_Debug("$className: initState");
+    //Utils.MSG_Debug("$className: initState");
     super.initState();
     _refreshData();
   }
@@ -91,18 +93,21 @@ class State_windowUserProfile extends State<windowUserProfile> {
 
   //--- database constants
   // All data
-  List<Map<String, dynamic>> myData = [];
+  List<PostModel> userData = [];
   final formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
 
   // This function is used to fetch all data from the database
   void _refreshData() async {
-    final data = await DatabaseHelper.getItems();
+    final List<PostModel> data = await PostFirestore().getUserPosts(Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1"));
     setState(() {
-      myData = data;
+      userData.addAll(data);
       _isLoading = false;
     });
+    for (var i = 0; i < userData.length; i++) {
+      Utils.MSG_Debug("DATA: ${userData[i].title}");
+    }
   }
 
   //------ end of database constants
@@ -119,14 +124,14 @@ class State_windowUserProfile extends State<windowUserProfile> {
 
   // This function will be triggered when the floating button is pressed
   // It will also be triggered when you want to update an item
-  void showMyForm(int? id) async {
+  void showMyForm(String? id) async {
     // id == null -> create new item
     // id != null -> update an existing item
     if (id != null) {
-      final existingData = myData.firstWhere((element) => element['id'] == id);
-      _titleController.text = existingData['title'];
-      _descriptionController.text = existingData['description'];
-      _dateController.text = existingData['date'];
+      final existingData = userData.firstWhere((element) => element.uid == id);
+      _titleController.text = existingData.title;
+      _descriptionController.text = existingData.description;
+      _dateController.text = existingData.date;
     } else {
       _titleController.text = "";
       _descriptionController.text = "";
@@ -134,7 +139,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
     }
 
     showModalBottomSheet(
-        backgroundColor: Color.fromARGB(255, 69, 78, 89),
+        backgroundColor: const Color.fromARGB(255, 69, 78, 89),
         context: context,
         elevation: 5,
         isDismissible: false,
@@ -156,7 +161,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     controller: _titleController,
                     validator: formValidator,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       icon: Icon(Icons.title), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Title", //label text of field
@@ -169,7 +174,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _descriptionController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       icon: Icon(Icons.description), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Description", //label text of field
@@ -182,7 +187,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _dateController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Enter Date", //label text of field
@@ -239,7 +244,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             }
 
                             if (id != null) {
-                              await updateItem(id);
+                              await updateItem(id as int);
                             }
 
                             // Clear the text fields
@@ -289,7 +294,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
   //--------------
   @override
   Widget build(BuildContext context) {
-    Utils.MSG_Debug("$className: build");
+    Ref_Window.Ref_Management.Load();
+
+    //Utils.MSG_Debug("$className: build");
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -300,120 +307,132 @@ class State_windowUserProfile extends State<windowUserProfile> {
               .Get("WND_PROFILE_TITLE_1", "User Profile")),
         ),
         body: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              const SizedBox(
-                // trocar isto por margin, mas por enquanto fica assim
-                height: 30,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(140),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 5,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 5,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const CircleAvatar(
+                    radius: 100,
+                    backgroundImage: AssetImage("assets/niko.jpg"),
+                  ),
                 ),
-                child: CircleAvatar(
-                  radius: 120,
-                  backgroundImage: AssetImage("assets/PORSCHE_MAIN.JPEG"),
-                ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Row(
+              Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Name',
-                      style: TextStyle(
+                      Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_TITLE_1", "Nome"),
+                      style: const TextStyle(
                         fontSize: 35,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                     Text(
-                      'Location',
-                      style: TextStyle(
+                      Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOCATION", "?????"),
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 25,
                       ),
                     ),
                   ]),
-              const Row(
+               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '@username',
-                      style: TextStyle(
+                      '@${Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_USERNAME", "username")}',
+                      style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 20,
                       ),
                     ),
                   ]),
               const SizedBox(
-                height: 60,
+                height: 30,
+              ),
+              Row(
+                children: [
+                  Text(
+                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_MEM", "Member:"),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  Text(
+                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_REGDATE", "YYYY-MM-DD"),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Container(
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
-                    : myData.isEmpty
+                    : userData.isEmpty
                         ? const Center(child: Text("No Data Available!!!"))
                         : ListView.builder(
-                            itemCount: myData.length,
-                            itemBuilder: (context, index) => Card(
-                              color: index % 2 == 0
-                                  ? Colors.blue
-                                  : Colors.blue[200],
-                              margin: const EdgeInsets.all(15),
-                              child: ListTile(
-                                  title: Text(myData[index]['title']),
-                                  subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(myData[index]['date']),
-                                        Text(myData[index]['description']),
-                                      ]),
-                                  trailing: SizedBox(
-                                    width: 100,
-                                    child: Row(
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(Icons.edit),
-                                          onPressed: () =>
-                                              showMyForm(myData[index]['id']),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.delete),
-                                          onPressed: () =>
-                                              deleteItem(myData[index]['id']),
-                                        ),
-                                      ],
-                                    ),
-                                  )),
-                            ),
+                            itemCount: userData.length,
+                            itemBuilder: (context, index) {
+                              return Hero(
+                                tag: 'postHero${userData[index].pid}',
+                                child: Card(
+                                  color: index % 2 == 0
+                                    ? Colors.blue
+                                    : Colors.blue[200],
+                                  //margin: const EdgeInsets.all(15),
+                                  child: ListTile(
+                                    title: Text(userData[index].title),
+                                    subtitle: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(userData[index].date),
+                                          Text(userData[index].description),
+                                        ]),
+                                    trailing: SizedBox(
+                                      width: 100,
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(Icons.edit),
+                                            onPressed: () =>
+                                                showMyForm(userData[index].pid),
+                                          ),
+                                          IconButton(
+                                            icon: const Icon(Icons.delete),
+                                            onPressed: () =>
+                                                deleteItem(
+                                                    userData[index].pid as int),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                                ),
+                              );
+                            },
                           ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 18,
-                  ),
-                  SizedBox(
-                    width: 18,
-                  ),
-                ],
-              ),
+              )
             ],
           ),
         ),

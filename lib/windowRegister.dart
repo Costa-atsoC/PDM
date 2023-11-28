@@ -266,7 +266,7 @@ class Estado_windowRegister extends State<windowRegister> {
     String email = _email.text;
     String password = _pass.text;
     String fullname = _fullname.text;
-    String currentTime = Utils.currentTime();
+    String currentTime = Utils.currentTimeUser();
 
     try {
       User? user = await _auth.signUpWithEmailAndPassword(email, password);
@@ -279,15 +279,14 @@ class Estado_windowRegister extends State<windowRegister> {
           username: username,
           fullName: fullname,
           registerDate: currentTime,
-          lastChangedDate: currentTime);
+          lastChangedDate: currentTime,
+          location: '??');
       await userFirestore.saveUserData(currentUser);
 
       Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL");
       Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME");
-      Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
-          "NAME", currentUser.fullName);
-      Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
-          "EMAIL", currentUser.email);
+      Ref_Window.Ref_Management.Save_Shared_Preferences_STRING("NAME", currentUser.fullName);
+      Ref_Window.Ref_Management.Save_Shared_Preferences_STRING("EMAIL", currentUser.email);
 
       Utils.MSG_Debug("User is successfully created with ID: $uid");
       NavigateTo_Window_Home(context);

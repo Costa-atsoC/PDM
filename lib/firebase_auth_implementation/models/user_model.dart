@@ -5,6 +5,7 @@ class UserModel {
   final String fullName;
   final String registerDate;
   final String lastChangedDate;
+  final String location;
   /*final String register_date;
   final String last_changed_date;
 
@@ -20,6 +21,7 @@ class UserModel {
     required this.fullName,
     required this.registerDate,
     required this.lastChangedDate,
+    required this.location,
     //required this.phoneNo,
   });
 /*
