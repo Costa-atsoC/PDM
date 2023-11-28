@@ -208,6 +208,7 @@ class State_windowHome extends State<windowHome> {
   @override
   Widget build(BuildContext context) {
     UserFirestore userFirestore = UserFirestore();
+    Ref_Window.Ref_Management.Load();
 
     return MaterialApp(
       theme: AppTheme.lightTheme,

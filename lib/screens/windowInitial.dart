@@ -76,7 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white;
               }
-              return Theme.of(context).scaffoldBackgroundColor; // defer to the defaults
+              return Theme.of(context)
+                  .scaffoldBackgroundColor; // defer to the defaults
             },
           ),
         ),
@@ -169,13 +170,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           controller: _email,
                           decoration: InputDecoration(
                             icon: Icon(Icons.alternate_email),
-                            iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_10", "Email"),
                             labelStyle: Theme.of(context).textTheme.titleSmall,
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
                             focusedBorder: const UnderlineInputBorder(
@@ -201,13 +200,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               .Get("WND_REGISTER_OBSTEXT_3", "true")),
                           decoration: InputDecoration(
                             icon: Icon(Icons.password_outlined),
-                            iconColor: Theme.of(context).iconTheme.color,
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
                             labelStyle: Theme.of(context).textTheme.titleSmall,
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
-                                  color: Theme.of(context).primaryColor,
                                   width: 3.0), // Set the border color here
                             ),
                             focusedBorder: const UnderlineInputBorder(

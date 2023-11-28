@@ -18,7 +18,7 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       iconTheme: IconThemeData(
-        color: Colors.white,
+        color: Color.fromARGB(255, 19, 40, 61),
       ),
     ),
     colorScheme: const ColorScheme.light(
