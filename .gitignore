@@ -1,4 +1,6 @@
 .DS_STORE
 build/
 .flutter-plugins
--flutter-plugins-dependencies
+.flutter-plugins-dependencies
+.idea/
+.dart_tool/package
