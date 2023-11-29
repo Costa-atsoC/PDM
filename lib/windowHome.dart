@@ -446,6 +446,7 @@ class State_windowHome extends State<windowHome> {
                                                
                                                 ),
                                               ),
+                                              ),
                                               Container(
                                                 color: Theme.of(context).scaffoldBackgroundColor,
                                                 // Set your desired color
