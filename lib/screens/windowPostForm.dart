@@ -155,7 +155,7 @@ class _PostFormState extends State<PostForm> {
                             PostModel post = PostModel(
                               uid: FirebaseAuth.instance.currentUser!.uid,
                               pid: const Uuid().v4(),
-                              likes: "0",
+                              likes: '0',
                               title: _titleController.text,
                               description: _descriptionController.text,
                               date: _dateController.text,
