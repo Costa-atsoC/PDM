@@ -11,6 +11,7 @@ class PostFirestore {
       await _firestore.collection('users').doc(uid).collection('posts').doc(post.pid).set({
         'uid': post.uid,
         'pid': post.pid,
+        'likes' : post.likes,
         'title': post.title,
         'description': post.description,
         'date': post.date,
@@ -21,6 +22,12 @@ class PostFirestore {
         'endLocation': post.endLocation,
         'registerDate': post.registerDate,
         'lastChangedDate': post.lastChangedDate,
+      });
+      // Save post data in the likes collection
+      await _firestore.collection('likes').doc(post.pid).set({
+        'uid': post.uid,
+        'pid': post.pid,
+        'liked' : '0',
       });
     } catch (error) {
       Utils.MSG_Debug('Error saving post data: $error');
@@ -48,6 +55,7 @@ class PostFirestore {
           PostModel post = PostModel(
             uid: data['uid'],
             pid: data['pid'],
+            likes: data['likes'],
             title: data['title'],
             description: data['description'],
             date: data['date'],
@@ -85,6 +93,7 @@ class PostFirestore {
         PostModel post = PostModel(
           uid: data['uid'],
           pid: data['pid'],
+          likes: data['likes'],
           title: data['title'],
           description: data['description'],
           date: data['date'],
@@ -105,6 +114,74 @@ class PostFirestore {
     Utils.MSG_Debug('Fetching posts');
     return allPosts;
   }
+  Future<int> toggleLikePost(String uid, PostModel post) async {
+    try {
+      // Check if the user has already liked the post
+      DocumentReference likesRef = _firestore.collection('likes').doc('${post.pid}_${uid}');
+      DocumentSnapshot likesSnapshot = await likesRef.get();
+      bool isLiked = likesSnapshot.exists &&
+          (likesSnapshot.data() as Map<String, dynamic>)['liked'] == 1;
+
+      // Toggle the like status
+      isLiked = !isLiked;
+
+      // Update the like status in the likes collection
+      if (isLiked) {
+        // Create a new like document or update existing
+        await likesRef.set({
+          'pid': post.pid,
+          'uid': uid,
+          'liked': 1,
+          // Add any other fields needed for likes
+        });
+
+        // Increment the likes count on the post
+        int updatedLikes = await _updatePostLikesCount(post.uid, post.pid, 1);
+
+        Utils.MSG_Debug(updatedLikes as String);
+
+        return updatedLikes;
+
+      } else {
+        // Delete the like document
+        await likesRef.delete();
+
+        // Decrement the likes count on the post
+        int updatedLikes = await _updatePostLikesCount(post.uid, post.pid, -1);
+        return updatedLikes;
+      }
+    } catch (error) {
+      Utils.MSG_Debug('Error toggling like for post: $error');
+      return -1;
+    }
+  }
+
+  Future<int> _updatePostLikesCount(String uid, String pid, int incrementValue) async {
+    try {
+      // Get the current likes count as a string
+      DocumentSnapshot postSnapshot = await _firestore.collection('users').doc(uid).collection('posts').doc(pid).get();
+
+      if (postSnapshot.exists) {
+        // Convert the likes count to an integer, increment, and update the field
+        String currentLikes = (postSnapshot.data() as Map<String, dynamic>)['likes'].toString() ?? '0';
+        int updatedLikes = int.parse(currentLikes) + incrementValue;
+
+        await _firestore.collection('users').doc(uid).collection('posts').doc(pid).update({
+          'likes': updatedLikes.toString(),
+        });
+
+        return updatedLikes;
+        Utils.MSG_Debug('Likes count updated for post with ID $pid in user\'s $uid posts collection. New count: $updatedLikes');
+      } else {
+        Utils.MSG_Debug('Post document with ID $pid does not exist in user\'s $uid posts collection.');
+        return -1;
+      }
+    } catch (error) {
+      Utils.MSG_Debug('Error updating likes count for post: $error');
+      return -1;
+    }
+  }
+
 
 
 
