@@ -207,6 +207,7 @@ class State_windowHome extends State<windowHome> {
   @override
   Widget build(BuildContext context) {
     UserFirestore userFirestore = UserFirestore();
+    PostFirestore postFirestore = PostFirestore();
     Ref_Window.Ref_Management.Load();
 
     return MaterialApp(
@@ -214,13 +215,19 @@ class State_windowHome extends State<windowHome> {
       darkTheme: AppTheme.darkTheme,
       home: Scaffold(
           drawer: Drawer(
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: Theme
+                .of(context)
+                .colorScheme
+                .primary,
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).appBarTheme.backgroundColor,
+                    color: Theme
+                        .of(context)
+                        .appBarTheme
+                        .backgroundColor,
                     image: const DecorationImage(
                       fit: BoxFit.fill,
                       image: AssetImage('assets/images/cover.jpg'),
@@ -233,13 +240,17 @@ class State_windowHome extends State<windowHome> {
                       const CircleAvatar(
                         radius: 30, // Tamanho do raio do círculo
                         backgroundImage:
-                            AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
+                        AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
                       ),
-                      const SizedBox(height: 10), // Espaço entre a foto e o texto
+                      const SizedBox(height: 10),
+                      // Espaço entre a foto e o texto
                       Text(
                         Ref_Window.Ref_Management.SETTINGS
                             .Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .titleLarge,
                       ),
                     ],
                   ),
@@ -252,8 +263,14 @@ class State_windowHome extends State<windowHome> {
                         .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
                   ),
                   // adicionar ao management
-                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  titleTextStyle: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge,
+                  textColor: Theme
+                      .of(context)
+                      .colorScheme
+                      .onPrimary,
                   onTap: () => {},
                 ),
                 const SizedBox(
@@ -265,8 +282,14 @@ class State_windowHome extends State<windowHome> {
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
                   ),
-                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  titleTextStyle: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge,
+                  textColor: Theme
+                      .of(context)
+                      .colorScheme
+                      .onPrimary,
                   onTap: () => {navigateToWindowUserProfile(context)},
                 ),
                 const SizedBox(
@@ -278,8 +301,14 @@ class State_windowHome extends State<windowHome> {
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
                   ),
-                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  titleTextStyle: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge,
+                  textColor: Theme
+                      .of(context)
+                      .colorScheme
+                      .onPrimary,
                   onTap: () => {navigateToWindowSettings(context)},
                 ),
                 const SizedBox(
@@ -291,8 +320,14 @@ class State_windowHome extends State<windowHome> {
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
                   ),
-                  titleTextStyle: Theme.of(context).textTheme.titleLarge,
-                  textColor: Theme.of(context).colorScheme.onPrimary,
+                  titleTextStyle: Theme
+                      .of(context)
+                      .textTheme
+                      .titleLarge,
+                  textColor: Theme
+                      .of(context)
+                      .colorScheme
+                      .onPrimary,
                   onTap: () => {Navigator.of(context).pop()},
                 ),
                 const SizedBox(
@@ -317,17 +352,20 @@ class State_windowHome extends State<windowHome> {
                               Ref_Window.Ref_Management.SETTINGS
                                   .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
                               textAlign: TextAlign.center,
-                              style: Theme.of(context)
+                              style: Theme
+                                  .of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primaryContainer,
-                                  ),
+                                color: Theme
+                                    .of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                              ),
                             ),
                           ),
-                          onTap: () => {
+                          onTap: () =>
+                          {
                             Ref_Window.Ref_Management.Delete_Shared_Preferences(
                                 "EMAIL"),
                             Ref_Window.Ref_Management.Delete_Shared_Preferences(
@@ -346,6 +384,18 @@ class State_windowHome extends State<windowHome> {
           appBar: AppBar(
             title: Text(
                 Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_TITLE_1", "")),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () async {
+                  setState(() {
+                    _dataLoaded = false;
+                  });
+
+                  await getData();
+                },
+              ),
+            ],
           ),
           body: RefreshIndicator(onRefresh: () async {
             await getData();
@@ -374,204 +424,270 @@ class State_windowHome extends State<windowHome> {
                   return Container(
                       child: _isLoading
                           ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
+                        child: CircularProgressIndicator(),
+                      )
                           : loadedPosts.isEmpty
-                              ? Center(
-                                  child: Text(Ref_Window.Ref_Management.SETTINGS
-                                      .Get("JNL_HOME_TITLE_1", "No Posts !")))
-                              : ListView.builder(
-                                  itemCount: loadedPosts.length,
-                                  itemBuilder: (context, index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        DetailScreen.show(
-                                            context, loadedPosts[index]);
-                                      },
-                                      child: Hero(
-                                        tag:
-                                            'postHero${loadedPosts[index].pid}',
-                                        child: Card(
-                                          //margin: const EdgeInsets.all(10),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                color: Theme.of(context)
-                                                    .colorScheme.onSecondary
-                                                    .withOpacity(0.5),
-                                                // Set your desired color
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      const CircleAvatar(
-                                                        radius: 20,
-                                                        backgroundImage: AssetImage(
-                                                            'assets/PORSCHE_MAIN_2.jpeg'),
-                                                      ),
-                                                      const SizedBox(width: 10),
-                                                      FutureBuilder<String>(
-                                                        future: userFirestore
-                                                            .getUserAttribute(
-                                                          loadedPosts[index]
-                                                              .uid,
-                                                          'fullName',
-                                                        ),
-                                                        builder: (context,
-                                                            userSnapshot) {
-                                                          if (userSnapshot
-                                                                  .connectionState ==
-                                                              ConnectionState
-                                                                  .waiting) {
-                                                            return const Text(
-                                                                "User: Loading...");
-                                                          } else if (userSnapshot
-                                                              .hasError) {
-                                                            return const Text(
-                                                                "User: Error loading user data");
-                                                          } else {
-                                                            String fullName =
-                                                                userSnapshot
-                                                                        .data ??
-                                                                    "Unknown";
-                                                            return Text(
-                                                                "User: $fullName");
-                                                          }
-                                                        },
-                                                      ),
-                                                    ],
-                                               
-                                                ),
+                          ? Center(
+                          child: Text(Ref_Window.Ref_Management.SETTINGS
+                              .Get("JNL_HOME_TITLE_1", "No Posts !")))
+                          : ListView.builder(
+                        itemCount: loadedPosts.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              DetailScreen.show(
+                                  context, loadedPosts[index]);
+                            },
+                            child: Hero(
+                              tag:
+                              'postHero${loadedPosts[index].pid}',
+                              child: Card(
+                                //margin: const EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      color: Theme
+                                          .of(context)
+                                          .colorScheme
+                                          .onSecondary
+                                          .withOpacity(0.5),
+                                      // Set your desired color
+                                      child: Padding(
+                                        padding:
+                                        const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const CircleAvatar(
+                                              radius: 20,
+                                              backgroundImage: AssetImage(
+                                                  'assets/PORSCHE_MAIN_2.jpeg'),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            FutureBuilder<String>(
+                                              future: userFirestore
+                                                  .getUserAttribute(
+                                                loadedPosts[index]
+                                                    .uid,
+                                                'fullName',
                                               ),
-                                              Container(
-                                                color: Theme.of(context).scaffoldBackgroundColor,
-                                                // Set your desired color
-                                                child: ListTile(
-                                                  title: Text(
-                                                    loadedPosts[index].title,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleMedium,
-                                                  ),
-                                                  subtitle: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                          "Date: ${loadedPosts[index].date}"),
-                                                      Text(
-                                                          "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}"),
-                                                      Text(
-                                                          "Location: ${loadedPosts[index].location}"),
-                                                      // Add more attributes as needed
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                color: Theme.of(context)
-                                                    .colorScheme.onSecondary
-                                                    .withOpacity(0.5),
-                                                // Set your desired color
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    if (currentUserUID ==
-                                                        loadedPosts[index]
-                                                            .uid) ...[
-                                                      IconButton(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        icon: const Icon(
-                                                            Icons.edit),
-                                                        onPressed: () =>
-                                                            showMyForm(
-                                                                loadedPosts[index]
-                                                                        .pid
-                                                                    as int?),
-                                                      ),
-                                                      IconButton(
-                                                        color: Colors.red[300],
-                                                        icon: const Icon(
-                                                            Icons.delete),
-                                                        onPressed: () {
-                                                          // Handle delete functionality
-                                                        },
-                                                      ),
-                                                    ] else ...[
-                                                      Text(loadedPosts[index].likes, style: Theme.of(context).textTheme.titleMedium,),
-                                                      IconButton(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        icon: const Icon(
-                                                            Icons.thumb_up),
-                                                        onPressed: () async {
-                                                          // Replace with your logic to get the current user's UID
-                                                          PostFirestore postManager = PostFirestore();
-
-                                                          await postManager.toggleLikePost(currentUserUID!, loadedPosts[index]);
-                                                        },
-                                                      ),
-                                                      IconButton(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        icon: const Icon(
-                                                            Icons.message),
-                                                        onPressed: () {
-                                                          // Handle message functionality
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                              builder: (context,
+                                                  userSnapshot) {
+                                                if (userSnapshot
+                                                    .connectionState ==
+                                                    ConnectionState
+                                                        .waiting) {
+                                                  return const Text(
+                                                      "User: Loading...");
+                                                } else if (userSnapshot
+                                                    .hasError) {
+                                                  return const Text(
+                                                      "User: Error loading user data");
+                                                } else {
+                                                  String fullName =
+                                                      userSnapshot
+                                                          .data ??
+                                                          "Unknown";
+                                                  return Text(
+                                                      "User: $fullName");
+                                                }
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    );
-                                  },
-                                ));
+                                    ),
+                                    Container(
+                                      color: Theme
+                                          .of(context)
+                                          .scaffoldBackgroundColor,
+                                      // Set your desired color
+                                      child: ListTile(
+                                        title: Text(
+                                          loadedPosts[index].title,
+                                          style: Theme
+                                              .of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment
+                                              .start,
+                                          children: [
+                                            Text(
+                                                "Date: ${loadedPosts[index]
+                                                    .date}"),
+                                            Text(
+                                                "Free Seats: ${loadedPosts[index]
+                                                    .freeSeats}/${loadedPosts[index]
+                                                    .totalSeats}"),
+                                            Text(
+                                                "Location: ${loadedPosts[index]
+                                                    .location}"),
+                                            // Add more attributes as needed
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      color: Theme
+                                          .of(context)
+                                          .colorScheme
+                                          .onSecondary
+                                          .withOpacity(0.5),
+                                      // Set your desired color
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.end,
+                                        children: [
+                                          if (currentUserUID ==
+                                              loadedPosts[index]
+                                                  .uid) ...[
+                                            IconButton(
+                                              color: Theme
+                                                  .of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                              icon: const Icon(
+                                                  Icons.edit),
+                                              onPressed: () =>
+                                                  showMyForm(
+                                                      loadedPosts[index]
+                                                          .pid
+                                                      as int?),
+                                            ),
+                                            IconButton(
+                                              color: Colors.red[300],
+                                              icon: const Icon(
+                                                  Icons.delete),
+                                              onPressed: () {
+                                                // Handle delete functionality
+                                              },
+                                            ),
+                                          ] else
+                                            ...[
+                                              Text(loadedPosts[index].likes,
+                                                style: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .titleMedium,),
+                                              IconButton(
+                                                color: Theme
+                                                    .of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                                icon:
+                                                FutureBuilder<bool>(
+                                                  future: postFirestore
+                                                      .getIsLikedStatus(
+                                                      currentUserUID!,
+                                                      loadedPosts[
+                                                      index]),
+                                                  builder: (context,
+                                                      snapshot) {
+                                                    if (snapshot
+                                                        .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      // If still loading, you can show a loading indicator or default icon
+                                                      return const Icon(
+                                                          Icons
+                                                              .favorite_border);
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      // Handle error
+                                                      Utils.MSG_Debug(
+                                                          'Error checking like status: ${snapshot
+                                                              .error}');
+                                                      return const Icon(
+                                                          Icons
+                                                              .favorite_border);
+                                                    } else {
+                                                      // Determine the appropriate icon based on the like status
+                                                      return snapshot
+                                                          .data ??
+                                                          false
+                                                          ? const Icon(
+                                                        Icons
+                                                            .favorite,
+                                                        color: Colors
+                                                            .redAccent,
+                                                      ) // Liked
+                                                          : const Icon(Icons
+                                                          .favorite_border); // Not liked
+                                                    }
+                                                  },
+                                                ),
+                                                onPressed: () async {
+                                                  // Replace with your logic to get the current user's UID
+                                                  PostFirestore postManager = PostFirestore();
+
+                                                  await postManager
+                                                      .toggleLikePost(
+                                                      currentUserUID!,
+                                                      loadedPosts[index]);
+                                                },
+                                              ),
+                                              IconButton(
+                                                color: Theme
+                                                    .of(context)
+                                                    .colorScheme
+                                                    .onPrimary,
+                                                icon: const Icon(
+                                                    Icons.message),
+                                                onPressed: () {
+                                                  // Handle message functionality
+                                                },
+                                              ),
+                                            ],
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ));
                 }
               },
             );
           })),
           floatingActionButton: _showFab
               ? Container(
-                  width: 70.0, // Set the width
-                  height: 70.0, // Set the height
-                  child: FloatingActionButton(
-                    onPressed: () => showMyForm(null),
-                    backgroundColor: const Color.fromARGB(230, 44, 71, 131),
-                    splashColor: Colors.white,
-                    tooltip: 'Create',
-                    shape: const CircleBorder(),
-                    child: const Icon(
-                      Icons.add,
-                      size: 33.0, // Adjust the size to increase the icon size
-                      color: Colors.white,
-                    ),
-                  ),
-                )
+            width: 70.0, // Set the width
+            height: 70.0, // Set the height
+            child: FloatingActionButton(
+              onPressed: () => showMyForm(null),
+              backgroundColor: const Color.fromARGB(230, 44, 71, 131),
+              splashColor: Colors.white,
+              tooltip: 'Create',
+              shape: const CircleBorder(),
+              child: const Icon(
+                Icons.add,
+                size: 33.0, // Adjust the size to increase the icon size
+                color: Colors.white,
+              ),
+            ),
+          )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
             height: 60,
             shape: const CircularNotchedRectangle(),
-            color: Theme.of(context)
+            color: Theme
+                .of(context)
                 .appBarTheme
                 .backgroundColor, // mudar para Theme
             child: IconTheme(
               data:
-                  IconThemeData(color: Theme.of(context).colorScheme.secondary),
+              IconThemeData(color: Theme
+                  .of(context)
+                  .colorScheme
+                  .secondary),
               child: Row(
                 children: <Widget>[
                   IconButton(
