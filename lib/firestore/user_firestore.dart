@@ -18,6 +18,7 @@ class UserFirestore {
           'fullName': user.fullName,
           'registerDate' : user.registerDate,
           'lastChangedDate' : user.lastChangedDate,
+          'location': 'null'
         })
         .then((value) => Utils.MSG_Debug("User $id Added"))
         .catchError((error) => Utils.MSG_Debug("Failed to add user: $error"));
@@ -36,7 +37,8 @@ class UserFirestore {
           username: userDoc['username'],
           fullName: userDoc['fullName'],
           registerDate: userDoc['registerDate'],
-          lastChangedDate: userDoc['lastChangedDate']
+          lastChangedDate: userDoc['lastChangedDate'],
+          location: userDoc['location'],
         );
       } else {
         Utils.MSG_Debug("User with UID $uid not found");
@@ -56,7 +58,7 @@ class UserFirestore {
 
       if (userDoc.exists) {
         String attributeFinal = userDoc[attribute];
-        Utils.MSG_Debug("########################### $attributeFinal");
+        //Utils.MSG_Debug("########################### $attributeFinal");
         return attributeFinal;
       } else {
         Utils.MSG_Debug("User with UID $uid not found");

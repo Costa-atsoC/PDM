@@ -21,20 +21,20 @@ class AppTheme {
         color: Color.fromARGB(255, 19, 40, 61),
       ),
     ),
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: Color.fromARGB(255, 255, 255, 252),
       onPrimary: Color.fromARGB(220, 20, 39, 61),
       secondary: Colors.white,
       onSecondary:  Color.fromARGB(220, 20, 39, 61),
     ),
-    cardTheme: CardTheme(
+    cardTheme: const CardTheme(
       color: Color.fromARGB(220, 33, 65, 101), // Primary color for cards
       shadowColor: Colors.blue, // Secondary color for card shadows
     ),
-    iconTheme: IconThemeData(
+    iconTheme: const IconThemeData(
       color: Colors.white,
     ),
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       titleLarge: TextStyle(
         fontFamily: 'Lato',
         color: Colors.white,
@@ -55,9 +55,9 @@ class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 10.0),
-        minimumSize: Size(double.infinity, 0),
-        backgroundColor: Color.fromARGB(255, 208, 166, 144),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        minimumSize: const Size(double.infinity, 0),
+        backgroundColor: const Color.fromARGB(255, 208, 166, 144),
         shape: RoundedRectangleBorder(
           borderRadius:
               BorderRadius.circular(8.0), // Adjust the radius as needed
@@ -68,16 +68,16 @@ class AppTheme {
       style: ButtonStyle(
         foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
         backgroundColor: MaterialStateProperty.all<Color>(
-          Color.fromARGB(255, 201, 128, 94),
+          const Color.fromARGB(255, 201, 128, 94),
         ),
       ),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 10.0),
-        minimumSize: Size(double.infinity, 0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        minimumSize: const Size(double.infinity, 0),
         backgroundColor:
-            Color.fromARGB(255, 208, 166, 144), // Adjust color as needed
+        const Color.fromARGB(255, 208, 166, 144), // Adjust color as needed
       ),
     ),
   );
@@ -85,8 +85,8 @@ class AppTheme {
   // -------- DARK THEME
   static final ThemeData darkTheme = ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: Color.fromARGB(220, 20, 39, 61),
-      appBarTheme: AppBarTheme(
+      scaffoldBackgroundColor: const Color.fromARGB(220, 20, 39, 61),
+      appBarTheme: const AppBarTheme(
         color: Color.fromARGB(255, 19, 40, 61),
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -99,14 +99,14 @@ class AppTheme {
         onSecondary:  Color.fromARGB(220, 33, 65, 101),
         primaryContainer: Color.fromARGB(220, 232, 71, 71),
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardTheme(
         color: Color.fromARGB(255, 255, 255, 252), // Primary color for cards
         shadowColor: Colors.white, // Secondary color for card shadows
       ),
-      iconTheme: IconThemeData(
+      iconTheme: const IconThemeData(
         color: Colors.white,
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         titleLarge: TextStyle(
           fontFamily: 'Lato',
           color: Color.fromARGB(255, 255, 255, 255),
@@ -126,9 +126,9 @@ class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          minimumSize: Size(double.infinity, 0),
-          backgroundColor: Color.fromARGB(255, 201, 128, 94),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          minimumSize: const Size(double.infinity, 0),
+          backgroundColor: const Color.fromARGB(255, 201, 128, 94),
           shape: RoundedRectangleBorder(
             borderRadius:
                 BorderRadius.circular(8.0), // Adjust the radius as needed
@@ -139,24 +139,24 @@ class AppTheme {
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
           backgroundColor: MaterialStateProperty.all<Color>(
-            Color.fromARGB(255, 201, 128, 94),
+            const Color.fromARGB(255, 201, 128, 94),
           ),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 10.0),
-          minimumSize: Size(double.infinity, 0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          minimumSize: const Size(double.infinity, 0),
           backgroundColor:
-              Color.fromARGB(255, 201, 128, 94), // Adjust color as needed
+          const Color.fromARGB(255, 201, 128, 94), // Adjust color as needed
         ),
       ),
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: const Color.fromARGB(230, 44, 71, 131),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Color.fromARGB(230, 44, 71, 131),
         splashColor: Colors.white,
         shape: CircleBorder(),
       ),
-      inputDecorationTheme: InputDecorationTheme(),
+      inputDecorationTheme: const InputDecorationTheme(),
 
 
   );

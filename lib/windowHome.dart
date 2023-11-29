@@ -206,7 +206,6 @@ class State_windowHome extends State<windowHome> {
   //--------------
   @override
   Widget build(BuildContext context) {
-    Utils.MSG_Debug("$className: build");
     UserFirestore userFirestore = UserFirestore();
     Ref_Window.Ref_Management.Load();
 
@@ -232,11 +231,11 @@ class State_windowHome extends State<windowHome> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const CircleAvatar(
-                        radius: 30,
+                        radius: 30, // Tamanho do raio do círculo
                         backgroundImage:
                             AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 10), // Espaço entre a foto e o texto
                       Text(
                         Ref_Window.Ref_Management.SETTINGS
                             .Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
@@ -247,7 +246,7 @@ class State_windowHome extends State<windowHome> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.input),
-                  // meter o logo da app
+                  // TODO meter o logo da app
                   title: Text(
                     Ref_Window.Ref_Management.SETTINGS
                         .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
@@ -444,7 +443,7 @@ class State_windowHome extends State<windowHome> {
                                                         },
                                                       ),
                                                     ],
-                                                  ),
+                                               
                                                 ),
                                               ),
                                               Container(

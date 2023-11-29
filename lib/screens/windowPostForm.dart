@@ -82,7 +82,7 @@ class _PostFormState extends State<PostForm> {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _startLocationController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         icon: Icon(Icons.start),
                         labelText: "Start Location",
                       ),
@@ -91,7 +91,7 @@ class _PostFormState extends State<PostForm> {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _endLocationController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         icon: Icon(Icons.tab_sharp),
                         labelText: "End Location",
                       ),
@@ -101,7 +101,7 @@ class _PostFormState extends State<PostForm> {
                     TextFormField(
                       validator: formValidator,
                       controller: _dateController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         icon: Icon(Icons.calendar_today),
                         labelText: "Enter Date",
                       ),
@@ -129,7 +129,7 @@ class _PostFormState extends State<PostForm> {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _totalSeatsController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         icon: Icon(Icons.confirmation_number),
                         labelText: "Total Seats",
                       ),
@@ -138,7 +138,7 @@ class _PostFormState extends State<PostForm> {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _freeSeatsController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         icon: Icon(Icons.event_seat),
                         labelText: "Free Seats",
                       ),
@@ -148,28 +148,32 @@ class _PostFormState extends State<PostForm> {
                     ElevatedButton(
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
-                          PostModel post = PostModel(
-                            uid: FirebaseAuth.instance.currentUser!.uid,
-                            pid: const Uuid().v4(),
-                            likes: '0',
-                            title: _titleController.text,
-                            description: _descriptionController.text,
-                            date: _dateController.text,
-                            totalSeats: _totalSeatsController.text,
-                            freeSeats: _freeSeatsController.text,
-                            location: _locationController.text,
-                            startLocation: _startLocationController.text,
-                            endLocation: _endLocationController.text,
-                            registerDate: Utils.currentTime(),
-                            lastChangedDate: Utils.currentTime(),
-                          );
+                          //Check if total seats is greater than free seats
+                          if (int.parse(_totalSeatsController.text) < int.parse(_freeSeatsController.text)) {
+                            _freeSeatsController.text = "0";
+                          } else {
+                            PostModel post = PostModel(
+                              uid: FirebaseAuth.instance.currentUser!.uid,
+                              pid: const Uuid().v4(),
+                              title: _titleController.text,
+                              description: _descriptionController.text,
+                              date: _dateController.text,
+                              totalSeats: _totalSeatsController.text,
+                              freeSeats: _freeSeatsController.text,
+                              location: _locationController.text,
+                              startLocation: _startLocationController.text,
+                              endLocation: _endLocationController.text,
+                              registerDate: Utils.currentTime(),
+                              lastChangedDate: Utils.currentTime(),
+                            );
 
-                          String? uid = FirebaseAuth.instance.currentUser
-                              ?.uid; // may fix the problem of creating the post and then it appears with another user UID
+                            String? uid = FirebaseAuth.instance.currentUser
+                                ?.uid; // may fix the problem of creating the post and then it appears with another user UID
 
-                          await PostFirestore().savePostData(post, uid!);
+                            await PostFirestore().savePostData(post, uid!);
 
-                          Navigator.pop(context);
+                            Navigator.pop(context);
+                          }
                         }
                       },
                       child: Text('Submit',
