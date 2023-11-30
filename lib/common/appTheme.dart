@@ -10,7 +10,7 @@ class AppTheme {
     useMaterial3: true,
     scaffoldBackgroundColor: Color.fromARGB(255, 245, 237, 225),
     appBarTheme: AppBarTheme(
-      color: Color.fromARGB(255, 19, 40, 61),
+      color: Color.fromARGB(220, 35, 40, 56),
       titleTextStyle: TextStyle(
         fontFamily: 'Lato',
         color: Colors.white,
@@ -23,9 +23,11 @@ class AppTheme {
     ),
     colorScheme: const ColorScheme.light(
       primary: Color.fromARGB(255, 255, 255, 252),
-      onPrimary: Color.fromARGB(220, 20, 39, 61),
+      onPrimary: Color.fromARGB(255, 19, 40, 61),
       secondary: Colors.white,
-      onSecondary:  Color.fromARGB(220, 20, 39, 61),
+      onSecondary: Color.fromARGB(220, 35, 40, 56),
+      primaryContainer: Color.fromARGB(255, 201, 128, 94),
+      secondaryContainer: Color.fromARGB(255, 201, 128, 94),
     ),
     cardTheme: const CardTheme(
       color: Color.fromARGB(220, 255, 255, 250), // Primary color for cards// Secondary color for card shadows
@@ -84,12 +86,13 @@ class AppTheme {
       splashColor: Colors.white,
       shape: CircleBorder(),
     ),
+
   );
 
   // -------- DARK THEME
   static final ThemeData darkTheme = ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: const Color.fromARGB(220, 24, 26, 37),
+      scaffoldBackgroundColor: const Color.fromARGB(255, 24, 26, 37),
       appBarTheme: const AppBarTheme(
         color: Color.fromARGB(220, 24, 26, 37),
         iconTheme: IconThemeData(
@@ -97,11 +100,12 @@ class AppTheme {
         ),
       ),
       colorScheme: const ColorScheme.dark(
-        primary: Color.fromARGB(220, 20, 39, 61),
+        primary: Color.fromARGB(255, 35, 40, 56),
         onPrimary: Color.fromARGB(255, 255, 255, 252),
         secondary: Colors.white,
         onSecondary:  Color.fromARGB(220, 33, 65, 101),
         primaryContainer: Color.fromARGB(220, 232, 71, 71),
+        secondaryContainer: Color.fromARGB(255, 201, 128, 94),
       ),
       cardTheme: const CardTheme(
         color: Color.fromARGB(220, 35, 40, 56), // Primary color for cards
