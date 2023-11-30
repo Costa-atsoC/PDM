@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "_flutterfire_internals",
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted/pub.dev/_flutterfire_internals-1.3.14",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/_flutterfire_internals-1.3.14",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -14,8 +14,8 @@
       "languageVersion": "2.18"
     },
     {
-      "name": "auth0_flutter
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted/pub.dev/auth0_flutter-1.3.1
+      "name": "auth0_flutter",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/auth0_flutter-1.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -45,25 +45,25 @@
     },
     {
       "name": "cloud_firestore",
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted/pub.dev/cloud_firestore-4.13.3",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/cloud_firestore-4.13.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "cloud_firestore_platform_interface",
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted/pub.dev/cloud_firestore_platform_interface-6.0.7
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-6.0.7",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "cloud_firestore_web",
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted/pub.dev/cloud_firestore_web-3.8.7",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/cloud_firestore_web-3.8.7",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/collection-1.17.2",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -105,25 +105,25 @@
     },
     {
       "name": "firebase_auth",
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_auth-4.15.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "firebase_auth_platform_interface",
-      "rootUri": "file:///C:/Users/gonca/AppD
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_auth_platform_interface-7.0.6",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "firebase_auth_web",
-      "rootUri": "file:///C:/Use
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_auth_web-5.8.9",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "firebase_core",
-      "rootUri": "file
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_core-2.24.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -135,25 +135,25 @@
     },
     {
       "name": "firebase_core_web",
-      "rootUri": "file
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_core_web-2.9.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "firebase_storage",
-      "rootUri": "fil
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_storage-11.5.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
-      "name": "firebase_stora
-      "rootUri": "file:
+      "name": "firebase_storage_platform_interface",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_storage_platform_interface-5.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
-      "name": "firebase_stora
-      "rootUri": "fil
+      "name": "firebase_storage_web",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/firebase_storage_web-3.6.15",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -161,7 +161,7 @@
       "name": "flutter",
       "rootUri": "file:///Users/rdsilva/Developer/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_lints",
@@ -179,17 +179,17 @@
       "name": "flutter_test",
       "rootUri": "file:///Users/rdsilva/Developer/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
       "rootUri": "file:///Users/rdsilva/Developer/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
-      "name": "fluttertoas
-      "rootUri": "file:
+      "name": "fluttertoast",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/fluttertoast-8.2.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -237,13 +237,13 @@
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/meta-1.9.1",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/meta-1.10.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "nested",
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted/pub.dev/nested-1.0.0",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/nested-1.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -302,14 +302,14 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "plugin_pl
-      "rootUri": "
+      "name": "plugin_platform_interface",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.7",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "provider",
-      "rootUri": "file:///C:/Users/gonca/AppData/Local/Pub/Cache/hosted/pub.dev/provider-6.1.1",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/provider-6.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -365,7 +365,7 @@
       "name": "sky_engine",
       "rootUri": "file:///Users/rdsilva/Developer/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.2"
     },
     {
       "name": "source_span",
@@ -386,22 +386,22 @@
       "languageVersion": "3.0"
     },
     {
-      "name": "sqflite_comm
-      "rootUri": "file
+      "name": "sqflite_common",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/sqflite_common-2.5.0+2",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/stack_trace-1.11.0",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "stream_channel",
-      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/stream_channel-2.1.1",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/stream_channel-2.1.2",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.19"
     },
     {
       "name": "string_scanner",
@@ -423,9 +423,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/test_api-0.6.0",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/test_api-0.6.1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "typed_data",
@@ -435,49 +435,49 @@
     },
     {
       "name": "url_launcher",
-      "rootUri": "file:///C:/U
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher-6.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
     {
-      "name": "url_launcher
-      "rootUri": "f
+      "name": "url_launcher_android",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher_android-6.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
-      "name": "url_lau
-      "rootUri"
+      "name": "url_launcher_ios",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher_ios-6.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
     {
-      "name": "url_
-      "rootUri":
+      "name": "url_launcher_linux",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher_linux-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
-      "name": "url
-      "rootUri"
+      "name": "url_launcher_macos",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher_macos-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
-      "name": "ur
-      "rootUri"
+      "name": "url_launcher_platform_interface",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher_platform_interface-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
     {
-      "name": "u
-      "rootUri"
+      "name": "url_launcher_web",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
     {
-      "name": "url_l
-      "rootUri":
+      "name": "url_launcher_windows",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -495,13 +495,13 @@
     },
     {
       "name": "web",
-      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/web-0.1.4-beta",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/web-0.3.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.2"
     },
     {
-      "name": "win3
-      "rootUri": 
+      "name": "win32",
+      "rootUri": "file:///Users/rdsilva/.pub-cache/hosted/pub.dev/win32-5.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.1"
     },
@@ -524,7 +524,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "
+  "generated": "2023-11-30T08:51:57.406396Z",
   "generator": "pub",
-  "generatorVersion": "3.1.2"
+  "generatorVersion": "3.2.1"
 }

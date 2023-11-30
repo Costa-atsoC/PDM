@@ -1,0 +1,1 @@
+ /Users/rdsilva/Documents/001UBI/003ANO/001SEMESTRE/005PDM/002PROJETO-FINAL/001GITHUB/pdm-github/PDM/.dart_tool/flutter_build/5563f93249b155673b1e1defce97ae8b/native_assets.yaml: 

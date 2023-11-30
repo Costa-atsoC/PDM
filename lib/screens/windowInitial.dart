@@ -103,6 +103,52 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 
+  Widget Create_Button_Forgot_Password() {
+    double TAM = double.parse(
+        Ref_Management.GetDefinicao("SIZE_TEXT_BUTTON_FORGOT_PASSWORD", "10"));
+    return SelectableButton(
+        selected: selected,
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return Colors.white;
+              }
+              return null; // defer to the defaults
+            },
+          ),
+          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+            (Set<MaterialState> states) {
+              if (states.contains(MaterialState.selected)) {
+                return Colors.white;
+              }
+              return Theme.of(context)
+                  .scaffoldBackgroundColor; // defer to the defaults
+            },
+          ),
+        ),
+        onPressed: () {
+          setState(
+            () {
+              selected = !selected;
+              UtilsFlutter.MSG(Ref_Management.GetDefinicao(
+                  "TEXT_BUTTON_FORGOT_PASSWORD",
+                  "Forgot the password?"));
+              // NavigateTo_Window_Forgot_Password(context);
+            },
+          );
+        },
+        child: Text(
+          Ref_Management.GetDefinicao(
+              "TEXT_BUTTON_FORGOT_PASSWORD", "Forgot the password?"),
+          style: TextStyle(
+              fontFamily: 'Lato',
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onPrimary),
+        ));
+  }
+
   /// -----------------------------------
   ///            WINDOW FUNCTIONS
   /// -----------------------------------
@@ -221,6 +267,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             return null;
                           },
                         ),
+                        Create_Button_Forgot_Password(),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           child: ElevatedButton(
@@ -265,9 +312,12 @@ class _MyHomePageState extends State<MyHomePage> {
     UserModel? userData = await userFirestore.getUserData(user.uid);
     Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
     Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
-    Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
-    Ref_Management.Save_Shared_Preferences_STRING("LOCATION", userData.location);
-    Ref_Management.Save_Shared_Preferences_STRING("REGDATE", userData.registerDate);
+    Ref_Management.Save_Shared_Preferences_STRING(
+        "USERNAME", userData.username);
+    Ref_Management.Save_Shared_Preferences_STRING(
+        "LOCATION", userData.location);
+    Ref_Management.Save_Shared_Preferences_STRING(
+        "REGDATE", userData.registerDate);
 
     if (user != null) {
       Utils.MSG_Debug("User is signed");
