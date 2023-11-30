@@ -28,8 +28,7 @@ class AppTheme {
       onSecondary:  Color.fromARGB(220, 20, 39, 61),
     ),
     cardTheme: const CardTheme(
-      color: Color.fromARGB(220, 33, 65, 101), // Primary color for cards
-      shadowColor: Colors.blue, // Secondary color for card shadows
+      color: Color.fromARGB(220, 255, 255, 250), // Primary color for cards// Secondary color for card shadows
     ),
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -80,14 +79,19 @@ class AppTheme {
         const Color.fromARGB(255, 208, 166, 144), // Adjust color as needed
       ),
     ),
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: Color.fromARGB(255, 201, 128, 94),
+      splashColor: Colors.white,
+      shape: CircleBorder(),
+    ),
   );
 
   // -------- DARK THEME
   static final ThemeData darkTheme = ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: const Color.fromARGB(220, 20, 39, 61),
+      scaffoldBackgroundColor: const Color.fromARGB(220, 24, 26, 37),
       appBarTheme: const AppBarTheme(
-        color: Color.fromARGB(255, 19, 40, 61),
+        color: Color.fromARGB(220, 24, 26, 37),
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
@@ -100,8 +104,7 @@ class AppTheme {
         primaryContainer: Color.fromARGB(220, 232, 71, 71),
       ),
       cardTheme: const CardTheme(
-        color: Color.fromARGB(255, 255, 255, 252), // Primary color for cards
-        shadowColor: Colors.white, // Secondary color for card shadows
+        color: Color.fromARGB(220, 35, 40, 56), // Primary color for cards
       ),
       iconTheme: const IconThemeData(
         color: Colors.white,
@@ -152,7 +155,7 @@ class AppTheme {
         ),
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: Color.fromARGB(230, 44, 71, 131),
+        backgroundColor: Color.fromARGB(255, 201, 128, 94),
         splashColor: Colors.white,
         shape: CircleBorder(),
       ),

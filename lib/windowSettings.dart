@@ -40,23 +40,32 @@ class State_windowSettings extends State<windowSettings> {
   bool valNotify2 = false;
   bool valNotify3 = false;
 
-  onChangeFunction1(bool newValue1) {
+  String selectedOption = '';
+
+  void onChangeFunction1(bool newValue) {
     setState(() {
-      valNotify1 = newValue1;
+      if (!newValue) {
+        valNotify1 = false;
+        valNotify2 = true; // Se valNotify1 for desligado, valNotify2 é ligado
+      }
     });
   }
 
-  onChangeFunction2(bool newValue2) {
+  void onChangeFunction2(bool newValue) {
     setState(() {
-      valNotify2 = newValue2;
+      if (valNotify2 && !newValue) {
+        valNotify2 = false;
+        // Se valNotify2 estiver ligado e for desligado, não muda valNotify1
+      }
     });
   }
 
-  onChangeFunction3(bool newValue3) {
+  void onChangeFunction3(bool newValue3) {
     setState(() {
       valNotify3 = newValue3;
     });
   }
+
 
   final windowSettings Ref_Window;
   String className = "";
@@ -107,77 +116,72 @@ class State_windowSettings extends State<windowSettings> {
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
-    return MaterialApp(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text(className, style: TextStyle(fontSize: 22)),
-            centerTitle: true,
-          ),
-          body: Container(
-              padding: const EdgeInsets.all(10),
-              child: ListView(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(className, style: TextStyle(fontSize: 22)),
+        centerTitle: true,
+      ),
+      body: Container(
+          padding: const EdgeInsets.all(10),
+          child: ListView(
+            children: [
+              SizedBox(height: 40),
+              Row(
                 children: [
-                  SizedBox(height: 40),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.person,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                      SizedBox(width: 10),
-                      Text("Account",
-                          style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                    ],
+                  Icon(
+                    Icons.person,
+                    color: Colors.blue,
                   ),
-                  Divider(height: 20, thickness: 1),
-                  SizedBox(height: 10),
-                  buildAccountOption(context, "Change Password"),
-                  buildAccountOption(context, "Change Password"),
-                  buildAccountOption(context, "Change Password"),
-                  buildAccountOption(context, "Change Password"),
-                  buildAccountOption(context, "Change Password"),
-                  SizedBox(height: 40),
-                  Row(
-                    children: [
-                      Icon(Icons.volume_up_outlined, color: Theme.of(context).colorScheme.onPrimary,),
-                      SizedBox(width: 10),
-                      Text("Notifications",
-                          style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                    ],
-                  ),
-                  Divider(height: 20, thickness: 1),
-                  SizedBox(height: 10),
-                  buildNotificationOption(
-                      "Theme Dark", valNotify1, onChangeFunction1),
-                  buildNotificationOption(
-                      "Theme Dark", valNotify2, onChangeFunction2),
-                  buildNotificationOption(
-                      "Theme Dark", valNotify3, onChangeFunction3),
-                  Center(
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20))),
-                      onPressed: () {},
-                      child: Text(
-                        "SIGN OUT",
-                        style: Theme.of(context).textTheme.titleMedium
-                      ),
-                    ),
-                  )
+                  SizedBox(width: 10),
+                  Text("Account",
+                      style:
+                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
                 ],
-              )),
-        )
+              ),
+              Divider(height: 20, thickness: 1),
+              SizedBox(height: 20),
+              buildAccountOption(context, "Change Password", actions: ['Yes', 'No']),
+              buildAccountOption(context, "Appearance", actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
+              SizedBox(height: 40),
+              Row(
+                children: [
+                  Icon(Icons.volume_up_outlined, color: Colors.blue),
+                  SizedBox(width: 10),
+                  Text("Notifications",
+                      style:
+                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                ],
+              ),
+              Divider(height: 20, thickness: 1),
+              SizedBox(height: 10),
+              buildNotificationOption(
+                  "Notifications", valNotify1, onChangeFunction1),
+              buildNotificationOption(
+                  "Notifications", valNotify2, onChangeFunction2),
+              buildNotificationOption(
+                  "Notifications", valNotify3, onChangeFunction3),
+              Center(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                  onPressed: () {},
+                  child: Text(
+                    "SIGN OUT",
+                    style: TextStyle(
+                        fontSize: 16, letterSpacing: 2.2, color: Colors.black),
+                  ),
+                ),
+              )
+            ],
+          )),
     );
   }
 
-  Padding buildNotificationOption(String title, bool value,
-      Function onChangeMethod) {
+  Padding buildNotificationOption(
+      String title, bool value, Function onChangeMethod) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
       child: Row(
@@ -204,44 +208,100 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 
-  GestureDetector buildAccountOption(BuildContext context, String title) {
+  GestureDetector buildAccountOption(BuildContext context, String title, {List<String>? actions}) {
     return GestureDetector(
-        onTap: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text(title),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [Text("Option 1"), Text("Option 2")],
-                  ),
-                  actions: [
-                    TextButton(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(title),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (actions != null && actions.isNotEmpty)
+                    for (var action in actions)
+                      ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop();
+                          // Lógica para as ações do "Appearance"
+                          if (action == 'Device Theme') {
+                            // Lógica para 'Device Theme'
+                            Navigator.of(context).pop();
+                          } else if (action == 'Dark Theme') {
+                            // Lógica para 'Dark Theme'
+                            Navigator.of(context).pop();
+                          } else if (action == 'Light Theme') {
+                            // Lógica para 'Light Theme'
+                            Navigator.of(context).pop();
+                          }
                         },
-                        child: Text("Close"))
-                  ],
-                );
-              });
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey[600])),
-              Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.grey,
-              )
-            ],
-          ),
-        ));
+                        child: Text(action),
+                      )
+                  else
+                    Column(
+                      children: [
+                        RadioListTile<String>(
+                          title: Text('Device Theme'),
+                          value: 'Device Theme',
+                          groupValue: selectedOption,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedOption = value!;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        RadioListTile<String>(
+                          title: Text('Dark Theme'),
+                          value: 'Dark Theme',
+                          groupValue: selectedOption,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedOption = value!;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        RadioListTile<String>(
+                          title: Text('Light Theme'),
+                          value: 'Light Theme',
+                          groupValue: selectedOption,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedOption = value!;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey[600],
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.grey,
+            ),
+          ],
+        ),
+      ),
+    );
   }
+
 }
