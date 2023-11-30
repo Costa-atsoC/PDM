@@ -66,7 +66,6 @@ class State_windowSettings extends State<windowSettings> {
     });
   }
 
-
   final windowSettings Ref_Window;
   String className = "";
 
@@ -116,67 +115,79 @@ class State_windowSettings extends State<windowSettings> {
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(className, style: TextStyle(fontSize: 22)),
-        centerTitle: true,
-      ),
-      body: Container(
-          padding: const EdgeInsets.all(10),
-          child: ListView(
-            children: [
-              SizedBox(height: 40),
-              Row(
-                children: [
-                  Icon(
-                    Icons.person,
-                    color: Colors.blue,
-                  ),
-                  SizedBox(width: 10),
-                  Text("Account",
-                      style:
-                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                ],
-              ),
-              Divider(height: 20, thickness: 1),
-              SizedBox(height: 20),
-              buildAccountOption(context, "Change Password", actions: ['Yes', 'No']),
-              buildAccountOption(context, "Appearance", actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
-              SizedBox(height: 40),
-              Row(
-                children: [
-                  Icon(Icons.volume_up_outlined, color: Colors.blue),
-                  SizedBox(width: 10),
-                  Text("Notifications",
-                      style:
-                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                ],
-              ),
-              Divider(height: 20, thickness: 1),
-              SizedBox(height: 10),
-              buildNotificationOption(
-                  "Notifications", valNotify1, onChangeFunction1),
-              buildNotificationOption(
-                  "Notifications", valNotify2, onChangeFunction2),
-              buildNotificationOption(
-                  "Notifications", valNotify3, onChangeFunction3),
-              Center(
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                  onPressed: () {},
-                  child: Text(
-                    "SIGN OUT",
-                    style: TextStyle(
-                        fontSize: 16, letterSpacing: 2.2, color: Colors.black),
-                  ),
+    return MaterialApp(
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(className, style: const TextStyle(fontSize: 22)),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back,
+                color: Theme.of(context).colorScheme.secondary),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        body: Container(
+            padding: const EdgeInsets.all(10),
+            child: ListView(
+              children: [
+                const SizedBox(height: 40),
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.person,
+                    ),
+                    SizedBox(width: 10),
+                    Text("Account",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold))
+                  ],
                 ),
-              )
-            ],
-          )),
+                const Divider(height: 20, thickness: 1),
+                const SizedBox(height: 20),
+                buildAccountOption(context, "Change Password",
+                    actions: ['Yes', 'No']),
+                buildAccountOption(context, "Appearance",
+                    actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
+                const SizedBox(height: 40),
+                const Row(
+                  children: [
+                    Icon(Icons.volume_up_outlined),
+                    SizedBox(width: 10),
+                    Text("Notifications",
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold))
+                  ],
+                ),
+                const Divider(height: 20, thickness: 1),
+                const SizedBox(height: 10),
+                buildNotificationOption(
+                    "Notifications", valNotify1, onChangeFunction1),
+                buildNotificationOption(
+                    "Notifications", valNotify2, onChangeFunction2),
+                buildNotificationOption(
+                    "Notifications", valNotify3, onChangeFunction3),
+                const Divider(height: 20, thickness: 1),
+                const SizedBox(height: 10),
+                Center(
+                    child: Container(
+                  margin: const EdgeInsets.only(
+                      top: 10, left: 20, right: 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      // padding: const EdgeInsets.symmetric(horizontal: 100),
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      "SIGN OUT",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                ))
+              ],
+            )),
+      ),
     );
   }
 
@@ -195,7 +206,7 @@ class State_windowSettings extends State<windowSettings> {
           Transform.scale(
             scale: 0.7,
             child: CupertinoSwitch(
-              activeColor: Colors.blue,
+              activeColor: Theme.of(context).colorScheme.secondaryContainer,
               trackColor: Colors.grey,
               value: value,
               onChanged: (bool newValue) {
@@ -208,7 +219,8 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 
-  GestureDetector buildAccountOption(BuildContext context, String title, {List<String>? actions}) {
+  GestureDetector buildAccountOption(BuildContext context, String title,
+      {List<String>? actions}) {
     return GestureDetector(
       onTap: () {
         showDialog(
@@ -294,14 +306,12 @@ class State_windowSettings extends State<windowSettings> {
                 color: Colors.grey[600],
               ),
             ),
-            Icon(
+            const Icon(
               Icons.arrow_forward_ios,
-              color: Colors.grey,
             ),
           ],
         ),
       ),
     );
   }
-
 }

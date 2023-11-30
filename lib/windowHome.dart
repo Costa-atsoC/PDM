@@ -310,6 +310,7 @@ class State_windowHome extends State<windowHome> {
                       Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
+                          side: BorderSide(color: Theme.of(context).colorScheme.secondary),
                         ),
                         child: ListTile(
                           // leading: Icon(Icons.exit_to_app),
@@ -326,7 +327,7 @@ class State_windowHome extends State<windowHome> {
                                   ?.copyWith(
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .primaryContainer,
+                                        .secondaryContainer,
                                   ),
                             ),
                           ),
