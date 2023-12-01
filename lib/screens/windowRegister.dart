@@ -7,7 +7,7 @@ import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
 
 import '../../firestore/user_firestore.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
-import 'windowHome.dart';
+import '../windowHome.dart';
 import '../common/Management.dart';
 import '../common/Utils.dart';
 

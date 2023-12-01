@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowPostForm.dart';
-import '../common/widgets/modals/modalUpdatePost.dart';
+import 'common/widgets/modals/modalUpdatePost.dart';
 
 import 'package:ubi/screens/windowSettings.dart';
-import '../common/Management.dart';
-import '../common/Utils.dart';
-import '../common/appTheme.dart';
-import '../common/widgets/modals/modalPostViewer.dart';
-import '../firebase_auth_implementation/models/post_model.dart';
-import '../firestore/post_firestore.dart';
-import 'windowSearch.dart';
-import 'windowUserProfile.dart';
+import 'common/Management.dart';
+import 'common/Utils.dart';
+import 'common/appTheme.dart';
+import 'common/widgets/modals/modalPostViewer.dart';
+import 'firebase_auth_implementation/models/post_model.dart';
+import 'firestore/post_firestore.dart';
+import 'screens/windowSearch.dart';
+import 'screens/windowUserProfile.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
