@@ -10,7 +10,7 @@ class AppTheme {
     useMaterial3: true,
     scaffoldBackgroundColor: Color.fromARGB(255, 245, 237, 225),
     appBarTheme: AppBarTheme(
-      color: Color.fromARGB(220, 35, 40, 56),
+      color: Color.fromARGB(255, 35, 40, 56),
       titleTextStyle: TextStyle(
         fontFamily: 'Lato',
         color: Colors.white,
@@ -94,7 +94,7 @@ class AppTheme {
       useMaterial3: true,
       scaffoldBackgroundColor: const Color.fromARGB(255, 24, 26, 37),
       appBarTheme: const AppBarTheme(
-        color: Color.fromARGB(220, 24, 26, 37),
+        color: Color.fromARGB(255, 24, 26, 37),
         iconTheme: IconThemeData(
           color: Colors.white,
         ),

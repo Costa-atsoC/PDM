@@ -39,6 +39,7 @@ class windowHome extends StatefulWidget {
     Ref_Management.Load();
   }
 
+
   int? Get_ACESSO_JANELA_HOME() {
     return ACCESS_WINDOW_HOME;
   }
@@ -491,17 +492,17 @@ class State_windowHome extends State<windowHome> {
                                                         builder: (context, snapshot) {
                                                           if (snapshot.connectionState == ConnectionState.waiting) {
                                                             // If still loading, you can show a loading indicator or default icon
-                                                            return const Icon(Icons.favorite_border);
+                                                            return const Icon(Icons.thumb_up_alt_outlined);
                                                           } else if (snapshot.hasError) {
                                                             // Handle error
                                                             Utils.MSG_Debug(
                                                                 'Error checking like status: ${snapshot.error}');
-                                                            return const Icon(Icons.favorite_border);
+                                                            return const Icon(Icons.thumb_up_alt_outlined);
                                                           } else {
                                                             // Determine the appropriate icon based on the like status
                                                             return snapshot.data ?? false
-                                                                ? const Icon(Icons.favorite, color: Colors.redAccent)
-                                                                : const Icon(Icons.favorite_border);
+                                                                ? Icon(Icons.thumb_up_alt, color: Theme.of(context).colorScheme.secondaryContainer)
+                                                                : const Icon(Icons.thumb_up_alt_outlined);
                                                           }
                                                         },
                                                       ),
@@ -582,8 +583,8 @@ class State_windowHome extends State<windowHome> {
                     },
                   ),
                   IconButton(
-                    tooltip: 'Favorite',
-                    icon: const Icon(Icons.favorite),
+                    tooltip: 'Notifications',
+                    icon: const Icon(Icons.notifications),
                     onPressed: () {},
                   ),
                 ],

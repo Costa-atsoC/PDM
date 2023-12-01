@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,7 +7,11 @@ import 'package:intl/intl.dart';
 import 'common/Management.dart';
 import 'common/Utils.dart';
 import 'common/appTheme.dart';
+import 'common/widgets/modalSearch.dart';
 import 'database_help.dart';
+import 'firebase_auth_implementation/models/post_model.dart';
+import 'firestore/post_firestore.dart';
+import 'firestore/user_firestore.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -41,16 +46,32 @@ class State_windowSearch extends State<windowSearch> {
   List<Map<String, dynamic>> myData = [];
   final formKey = GlobalKey<FormState>();
 
-  bool _isLoading = true;
+  List<PostModel> loadedPosts = [];
+  List<int> localLikes = [];
+  bool _dataLoaded = false;
 
-  // This function is used to fetch all data from the database
-  void _refreshData() async {
-    final data = await DatabaseHelper.getItems();
-    setState(() {
-      myData = data;
-      _isLoading = false;
-    });
+  // Updated getData method
+  Future getData() async {
+    if (_dataLoaded) {
+      return; // Skip fetching data if it's already loaded
+    }
+    try {
+      List<PostModel> newPosts = await PostFirestore().getAllPosts();
+      setState(() {
+        loadedPosts.clear(); // Clear the list before adding new data
+        loadedPosts.addAll(newPosts);
+        _isLoading = false; // Data has been loaded
+        _dataLoaded = true; // Set the flag to true after loading data
+      });
+    } catch (e) {
+      Utils.MSG_Debug("Error fetching data: $e");
+      setState(() {
+        _isLoading = false; // Set isLoading to false even in case of an error
+      });
+    }
   }
+
+  bool _isLoading = true;
 
   final windowSearch Ref_Window;
   String className = "";
@@ -98,222 +119,6 @@ class State_windowSearch extends State<windowSearch> {
   final TextEditingController _endDateController = TextEditingController();
   final TextEditingController _placeController = TextEditingController();
 
-  // This function will be triggered when the floating button is pressed
-  // It will also be triggered when you want to update an item
-  void showMyForm(int? id) async {
-    // id == null -> create new item
-    // id != null -> update an existing item
-    if (id != null) {
-      final existingData = myData.firstWhere((element) => element['id'] == id);
-      _titleController.text = existingData['title'];
-      _descriptionController.text = existingData['description'];
-      _beginningDateController.text = existingData['date'];
-      _endDateController.text = existingData['endDate'];
-      _placeController.text = existingData['place'];
-    } else {
-      _titleController.text = "";
-      _descriptionController.text = "";
-      _beginningDateController.text = '';
-      _endDateController.text = '';
-      _placeController.text = '';
-    }
-
-    showModalBottomSheet(
-        backgroundColor: Color.fromARGB(255, 69, 78, 89),
-        context: context,
-        elevation: 5,
-        isDismissible: false,
-        isScrollControlled: true,
-        builder: (_) => Container(
-            padding: EdgeInsets.only(
-              top: 15,
-              left: 15,
-              right: 15,
-              // prevent the soft keyboard from covering the text fields
-              bottom: MediaQuery.of(context).viewInsets.bottom + 120,
-            ),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    controller: _titleController,
-                    validator: formValidator,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.title), //icon of text field
-                        iconColor: Colors.white,
-                        labelText: "Title", //label text of field
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.description), //icon of text field
-                        labelText: "Description", //label text of field
-                        iconColor: Colors.white,
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _placeController,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.place), //icon of text field
-                        labelText: "Place", //label text of field
-                        iconColor: Colors.white,
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                        )),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // new approach - Notion
-                  // Beginning Date
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _beginningDateController,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.calendar_today),
-                        //icon of text field
-                        labelText: "Start Date",
-                        //label text of field
-                        iconColor: Colors.white,
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                        )),
-                    readOnly: true,
-                    //set it true, so that user will not able to edit text
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101));
-
-                      if (pickedDate != null) {
-                        print(
-                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(
-                            formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
-
-                        setState(() {
-                          _beginningDateController.text =
-                              formattedDate; //set output date to TextField value.
-                        });
-                      } else {
-                        print("Date is not selected");
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // End Date
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _endDateController,
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.calendar_today),
-                        //icon of text field
-                        labelText: "End Date",
-                        //label text of field
-                        iconColor: Colors.white,
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                        )),
-                    readOnly: true,
-                    //set it true, so that user will not able to edit text
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101));
-
-                      if (pickedDate != null) {
-                        print(
-                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(
-                            formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
-
-                        setState(() {
-                          _endDateController.text =
-                              formattedDate; //set output date to TextField value.
-                        });
-                      } else {
-                        print("Date is not selected");
-                      }
-                    },
-                  ),
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Cancel")),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            if (id == null) {
-                              // await addItem();
-                            }
-
-                            if (id != null) {
-                              // await updateItem(id);
-                            }
-
-                            // Clear the text fields
-                            setState(() {
-                              _titleController.text = '';
-                              _descriptionController.text = '';
-                              _beginningDateController.text = '';
-                              _endDateController.text = '';
-                            });
-
-                            // Close the bottom sheet
-                            Navigator.pop(context);
-                            //_refreshData();
-                          }
-                          // Save new data
-                        },
-                        child: Text(id == null ? 'Add' : 'Update'),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )));
-  }
-
   String? formValidator(String? value) {
     if (value!.isEmpty) return 'Field is Required';
     return null;
@@ -334,112 +139,339 @@ class State_windowSearch extends State<windowSearch> {
   //--------------
   @override
   Widget build(BuildContext context) {
-    Utils.MSG_Debug("$className: build");
+    UserFirestore userFirestore = UserFirestore();
+    PostFirestore postFirestore = PostFirestore();
+    Ref_Window.Ref_Management.Load();
+
     return MaterialApp(
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       home: Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.secondary),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            //automaticallyImplyLeading: false,
-            //backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            title: Text(Ref_Window.Ref_Management.SETTINGS.Get(
-                "JNL_SEARCH_TITLE_1", "Search")), // adicionar ao management!
-          ),
-          body: Column(
-            children: [
-              Expanded(
-                child: Container(
-                  child: _isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : myData.isEmpty
-                          ? const Center(
-                              child: Text(
-                                  "No Data Available!!!")) // adicionar ao management
-                          : ListView.builder(
-                              itemCount: myData.length,
-                              itemBuilder: (context, index) => Card(
-                                color: index % 2 == 0
-                                    ? Colors.blue
-                                    : Colors.blue[200],
-                                margin: const EdgeInsets.all(15),
-                                child: ListTile(
-                                    title: Text(myData[index]['title']),
-                                    subtitle: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(myData[index]['date']),
-                                          Text(myData[index]['description']),
-                                        ]),
-                                    trailing: SizedBox(
-                                      width: 100,
-                                      child: Row(
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(Icons.edit),
-                                            onPressed: () =>
-                                                showMyForm(myData[index]['id']),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(Icons.delete),
-                                            onPressed: () {},
-                                            // onPressed: {}
-                                            //() =>
-                                            // deleteItem(myData[index]['id']),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                            ),
-                ),
+            title: Text(
+                Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_TITLE_1", "")),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () async {
+                  setState(() {
+                    _dataLoaded = false;
+                  });
+                  await getData();
+                },
               ),
             ],
           ),
+          body: RefreshIndicator(onRefresh: () async {
+            setState(() {
+              _dataLoaded = false;
+            });
+            await getData();
+          }, child: Builder(builder: (BuildContext context) {
+            return FutureBuilder(
+              future: _dataLoaded ? null : getData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: Color.fromARGB(255, 19, 40, 61),
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  Utils.MSG_Debug("Error: ${snapshot.error}");
+                  return const Center(
+                    child: Text("Error loading data"),
+                  );
+                } else {
+                  String? currentUserUID =
+                      FirebaseAuth.instance.currentUser?.uid;
+
+                  return Container(
+                      child: _isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : loadedPosts.isEmpty
+                              ? Center(
+                                  child: Text(Ref_Window.Ref_Management.SETTINGS
+                                      .Get("JNL_HOME_TITLE_1", "No Posts !")))
+                              : ListView.builder(
+                                  itemCount: loadedPosts.length,
+                                  itemBuilder: (context, index) {
+                                    if (localLikes.length <= index) {
+                                      localLikes.add(
+                                          int.parse(loadedPosts[index].likes));
+                                    }
+                                    return GestureDetector(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (BuildContext context) {
+                                            return Container(
+                                              color: Colors.transparent,
+                                              child:
+                                                  SearchFormWidget(), // Use the search form widget
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Hero(
+                                        tag:
+                                            'postHero${loadedPosts[index].pid}',
+                                        child: Card(
+                                          shape:
+                                              const ContinuousRectangleBorder(
+                                            borderRadius: BorderRadius.zero,
+                                          ),
+                                          elevation: 0,
+                                          // Set elevation to 0 to remove the shadow
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    const CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundImage: AssetImage(
+                                                          'assets/PORSCHE_MAIN_2.jpeg'),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    FutureBuilder<String>(
+                                                      future: userFirestore
+                                                          .getUserAttribute(
+                                                        loadedPosts[index].uid,
+                                                        'fullName',
+                                                      ),
+                                                      builder: (context,
+                                                          userSnapshot) {
+                                                        if (userSnapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .waiting) {
+                                                          return const Text(
+                                                              "User: Loading...");
+                                                        } else if (userSnapshot
+                                                            .hasError) {
+                                                          return const Text(
+                                                              "User: Error loading user data");
+                                                        } else {
+                                                          String fullName =
+                                                              userSnapshot
+                                                                      .data ??
+                                                                  "Unknown";
+                                                          return Text(
+                                                              "User: $fullName");
+                                                        }
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              ListTile(
+                                                title: Text(
+                                                  loadedPosts[index].title,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                                subtitle: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        "Date: ${loadedPosts[index].date}"),
+                                                    Text(
+                                                        "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}"),
+                                                    Text(
+                                                        "Location: ${loadedPosts[index].location}"),
+                                                    // Add more attributes as needed
+                                                  ],
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  if (currentUserUID ==
+                                                      loadedPosts[index]
+                                                          .uid) ...[
+                                                    IconButton(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary,
+                                                        icon: const Icon(
+                                                            Icons.edit),
+                                                        onPressed: () => {}),
+                                                    IconButton(
+                                                      color: Colors.red[300],
+                                                      icon: const Icon(
+                                                          Icons.delete),
+                                                      onPressed: () {
+                                                        // Handle delete functionality
+                                                      },
+                                                    ),
+                                                  ] else ...[
+                                                    Text(
+                                                      localLikes[index]
+                                                          .toString(),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium,
+                                                    ),
+                                                    IconButton(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      icon: FutureBuilder<bool>(
+                                                        future: postFirestore
+                                                            .getIsLikedStatus(
+                                                                currentUserUID!,
+                                                                loadedPosts[
+                                                                    index]),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          if (snapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            // If still loading, you can show a loading indicator or default icon
+                                                            return const Icon(Icons
+                                                                .thumb_up_alt_outlined);
+                                                          } else if (snapshot
+                                                              .hasError) {
+                                                            // Handle error
+                                                            Utils.MSG_Debug(
+                                                                'Error checking like status: ${snapshot.error}');
+                                                            return const Icon(Icons
+                                                                .thumb_up_alt_outlined);
+                                                          } else {
+                                                            // Determine the appropriate icon based on the like status
+                                                            return snapshot
+                                                                        .data ??
+                                                                    false
+                                                                ? Icon(
+                                                                    Icons
+                                                                        .thumb_up_alt,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .secondaryContainer)
+                                                                : const Icon(Icons
+                                                                    .thumb_up_alt_outlined);
+                                                          }
+                                                        },
+                                                      ),
+                                                      onPressed: () async {
+                                                        // Replace with your logic to get the current user's UID
+                                                        PostFirestore
+                                                            postManager =
+                                                            PostFirestore();
+
+                                                        int updatedLikes =
+                                                            await postManager
+                                                                .toggleLikePost(
+                                                                    currentUserUID!,
+                                                                    loadedPosts[
+                                                                        index]);
+
+                                                        setState(() {
+                                                          localLikes[index] =
+                                                              updatedLikes;
+                                                        });
+                                                      },
+                                                    ),
+                                                    IconButton(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      icon: const Icon(
+                                                          Icons.message),
+                                                      onPressed: () {
+                                                        // Handle message functionality
+                                                      },
+                                                    ),
+                                                  ],
+                                                  IconButton(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimary,
+                                                    icon:
+                                                        const Icon(Icons.share),
+                                                    onPressed: () {
+                                                      // Handle message functionality
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ));
+                }
+              },
+            );
+          })),
           floatingActionButton: _showFab
               ? Container(
                   width: 70.0, // Set the width
                   height: 70.0, // Set the height
                   child: FloatingActionButton(
-                    backgroundColor: const Color.fromARGB(230, 44, 71, 131),
-                    splashColor: Colors.blue,
-                    onPressed: () => showMyForm(null),
+                    onPressed: () => {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (BuildContext context) {
+                          return Container(
+                            color: Colors.transparent,
+                            child:
+                                SearchFormWidget(), // Use the search form widget
+                          );
+                        },
+                      )
+                    },
+                    splashColor: Colors.white,
                     tooltip: 'Search',
-                    child: Icon(
-                      Icons.search,
+                    shape: const CircleBorder(),
+                    child: const Icon(
+                      Icons.search_rounded,
                       size: 33.0, // Adjust the size to increase the icon size
+                      color: Colors.white,
                     ),
                   ),
                 )
               : null,
           floatingActionButtonLocation: _fabLocation,
           bottomNavigationBar: BottomAppBar(
+            height: 60,
             shape: const CircularNotchedRectangle(),
             color: Theme.of(context)
                 .appBarTheme
-                .backgroundColor,
+                .backgroundColor, // mudar para Theme
             child: IconTheme(
               data:
-                  IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+                  IconThemeData(color: Theme.of(context).colorScheme.secondary),
               child: Row(
                 children: <Widget>[
                   IconButton(
-                    tooltip: 'Search',
-                    icon: const Icon(Icons.home),
-                    onPressed: () => {
-                      Navigator.of(context).pop(),
+                    tooltip: 'Home',
+                    icon: const Icon(Icons.home_filled),
+                    onPressed: () {
+                      Navigator.of(context).pop();
                     },
                   ),
                   IconButton(
-                    tooltip: 'Favorite',
-                    icon: const Icon(Icons.favorite),
+                    tooltip: 'Notifications',
+                    icon: const Icon(Icons.notifications),
                     onPressed: () {},
                   ),
                 ],
