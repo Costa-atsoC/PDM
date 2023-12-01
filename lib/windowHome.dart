@@ -39,7 +39,6 @@ class windowHome extends StatefulWidget {
     Ref_Management.Load();
   }
 
-
   int? Get_ACESSO_JANELA_HOME() {
     return ACCESS_WINDOW_HOME;
   }
@@ -307,7 +306,8 @@ class State_windowHome extends State<windowHome> {
                       Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
-                          side: BorderSide(color: Theme.of(context).colorScheme.secondary),
+                          side: BorderSide(
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                         child: ListTile(
                           // leading: Icon(Icons.exit_to_app),
@@ -408,92 +408,175 @@ class State_windowHome extends State<windowHome> {
                                         tag:
                                             'postHero${loadedPosts[index].pid}',
                                         child: Card(
-                                          shape: const ContinuousRectangleBorder(
+                                          shape:
+                                              const ContinuousRectangleBorder(
                                             borderRadius: BorderRadius.zero,
                                           ),
-                                          elevation: 0, // Set elevation to 0 to remove the shadow
+                                          elevation: 0,
+                                          // Set elevation to 0 to remove the shadow
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
                                                     const CircleAvatar(
                                                       radius: 20,
-                                                      backgroundImage: AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
+                                                      backgroundImage: AssetImage(
+                                                          'assets/PORSCHE_MAIN_2.jpeg'),
                                                     ),
                                                     const SizedBox(width: 10),
-                                                    FutureBuilder<String>(
-                                                      future: userFirestore.getUserAttribute(
-                                                        loadedPosts[index].uid,
-                                                        'fullName',
+                                                    Column(children: [ // passar isto para o getData, só porque é chato tar sempre a dar load
+                                                      FutureBuilder<String>(
+                                                        future: userFirestore
+                                                            .getUserAttribute(
+                                                          loadedPosts[index]
+                                                              .uid,
+                                                          'username',
+                                                        ),
+                                                        builder: (context,
+                                                            userSnapshot) {
+                                                          if (userSnapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return const Text(
+                                                                "User: Loading...");
+                                                          } else if (userSnapshot
+                                                              .hasError) {
+                                                            return const Text(
+                                                                "User: Error loading user data");
+                                                          } else {
+                                                            String username =
+                                                                userSnapshot
+                                                                        .data ??
+                                                                    "Unknown";
+                                                            return Text(
+                                                                "@$username");
+                                                          }
+                                                        },
                                                       ),
-                                                      builder: (context, userSnapshot) {
-                                                        if (userSnapshot.connectionState == ConnectionState.waiting) {
-                                                          return const Text("User: Loading...");
-                                                        } else if (userSnapshot.hasError) {
-                                                          return const Text("User: Error loading user data");
-                                                        } else {
-                                                          String fullName = userSnapshot.data ?? "Unknown";
-                                                          return Text("User: $fullName");
-                                                        }
-                                                      },
-                                                    ),
+                                                      FutureBuilder<String>(
+                                                        future: userFirestore
+                                                            .getUserAttribute(
+                                                          loadedPosts[index]
+                                                              .uid,
+                                                          'fullName',
+                                                        ),
+                                                        builder: (context,
+                                                            userSnapshot) {
+                                                          if (userSnapshot
+                                                              .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
+                                                            return const Text(
+                                                                "User: Loading...");
+                                                          } else if (userSnapshot
+                                                              .hasError) {
+                                                            return const Text(
+                                                                "User: Error loading user data");
+                                                          } else {
+                                                            String fullName =
+                                                                userSnapshot
+                                                                    .data ??
+                                                                    "Unknown";
+                                                            return Text(
+                                                                fullName, style: Theme.of(context).textTheme.titleSmall,);
+                                                          }
+                                                        },
+                                                      ),
+                                                    ]),
+                                                    const Spacer(),
+                                                    Text(loadedPosts[index]
+                                                        .registerDate)
                                                   ],
                                                 ),
                                               ),
                                               ListTile(
                                                 title: Text(
                                                   loadedPosts[index].title,
-                                                  style: Theme.of(context).textTheme.titleMedium,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium,
                                                 ),
                                                 subtitle: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Text("Date: ${loadedPosts[index].date}"),
+                                                    Text(
+                                                        "Date: ${loadedPosts[index].date}"),
+                                                    Text(
+                                                        "Description: ${loadedPosts[index].description}"),
+                                                    Text(
+                                                        "Location: ${loadedPosts[index].location}"),
                                                     Text(
                                                         "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}"),
-                                                    Text("Location: ${loadedPosts[index].location}"),
-                                                    // Add more attributes as needed
                                                   ],
                                                 ),
                                               ),
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
-                                                  if (currentUserUID == loadedPosts[index].uid) ...[
+                                                  if (currentUserUID ==
+                                                      loadedPosts[index]
+                                                          .uid) ...[
                                                     IconButton(
-                                                      color: Theme.of(context).colorScheme.onPrimary,
-                                                      icon: const Icon(Icons.edit),
-                                                      onPressed: () => {ModalUpdatePost.show(context, loadedPosts[index])},
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      icon: const Icon(
+                                                          Icons.edit),
+                                                      onPressed: () => {
+                                                        ModalUpdatePost.show(
+                                                            context,
+                                                            loadedPosts[index])
+                                                      },
                                                     ),
                                                     IconButton(
                                                       color: Colors.red[300],
-                                                      icon: const Icon(Icons.delete),
+                                                      icon: const Icon(
+                                                          Icons.delete),
                                                       onPressed: () {
                                                         // Show a confirmation dialog
                                                         showDialog(
                                                           context: context,
-                                                          builder: (BuildContext context) {
+                                                          builder: (BuildContext
+                                                              context) {
                                                             return AlertDialog(
-                                                              title: const Text('Confirm Delete'),
-                                                              content: const Text('Are you sure you want to delete this post?'),
+                                                              title: const Text(
+                                                                  'Confirm Delete'),
+                                                              content: const Text(
+                                                                  'Are you sure you want to delete this post?'),
                                                               actions: <Widget>[
                                                                 TextButton(
-                                                                  onPressed: () {
-                                                                    Navigator.of(context).pop(); // Close the dialog
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop(); // Close the dialog
                                                                   },
-                                                                  child: const Text('Cancel'),
+                                                                  child: const Text(
+                                                                      'Cancel'),
                                                                 ),
                                                                 TextButton(
-                                                                  onPressed: () {
+                                                                  onPressed:
+                                                                      () {
                                                                     // Close the dialog and delete the post
-                                                                    Navigator.of(context).pop();
-                                                                    PostFirestore().deletePost(currentUserUID!, loadedPosts[index].pid);
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    PostFirestore().deletePost(
+                                                                        currentUserUID!,
+                                                                        loadedPosts[index]
+                                                                            .pid);
                                                                     //MISSING THE REFRESH!!
                                                                   },
-                                                                  child: const Text('Delete'),
+                                                                  child: const Text(
+                                                                      'Delete'),
                                                                 ),
                                                               ],
                                                             );
@@ -503,54 +586,91 @@ class State_windowHome extends State<windowHome> {
                                                     ),
                                                   ] else ...[
                                                     Text(
-                                                      localLikes[index].toString(),
-                                                      style: Theme.of(context).textTheme.titleMedium,
+                                                      localLikes[index]
+                                                          .toString(),
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium,
                                                     ),
                                                     IconButton(
-                                                      color: Theme.of(context).colorScheme.onPrimary,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
                                                       icon: FutureBuilder<bool>(
-                                                        future: postFirestore.getIsLikedStatus(
-                                                            currentUserUID!, loadedPosts[index]),
-                                                        builder: (context, snapshot) {
-                                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                                        future: postFirestore
+                                                            .getIsLikedStatus(
+                                                                currentUserUID!,
+                                                                loadedPosts[
+                                                                    index]),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          if (snapshot
+                                                                  .connectionState ==
+                                                              ConnectionState
+                                                                  .waiting) {
                                                             // If still loading, you can show a loading indicator or default icon
-                                                            return const Icon(Icons.thumb_up_alt_outlined);
-                                                          } else if (snapshot.hasError) {
+                                                            return const Icon(Icons
+                                                                .thumb_up_alt_outlined);
+                                                          } else if (snapshot
+                                                              .hasError) {
                                                             // Handle error
                                                             Utils.MSG_Debug(
                                                                 'Error checking like status: ${snapshot.error}');
-                                                            return const Icon(Icons.thumb_up_alt_outlined);
+                                                            return const Icon(Icons
+                                                                .thumb_up_alt_outlined);
                                                           } else {
                                                             // Determine the appropriate icon based on the like status
-                                                            return snapshot.data ?? false
-                                                                ? Icon(Icons.thumb_up_alt, color: Theme.of(context).colorScheme.secondaryContainer)
-                                                                : const Icon(Icons.thumb_up_alt_outlined);
+                                                            return snapshot
+                                                                        .data ??
+                                                                    false
+                                                                ? Icon(
+                                                                    Icons
+                                                                        .thumb_up_alt,
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .secondaryContainer)
+                                                                : const Icon(Icons
+                                                                    .thumb_up_alt_outlined);
                                                           }
                                                         },
                                                       ),
                                                       onPressed: () async {
                                                         // Replace with your logic to get the current user's UID
-                                                        PostFirestore postManager = PostFirestore();
+                                                        PostFirestore
+                                                            postManager =
+                                                            PostFirestore();
 
-                                                        int updatedLikes = await postManager.toggleLikePost(
-                                                            currentUserUID!, loadedPosts[index]);
+                                                        int updatedLikes =
+                                                            await postManager
+                                                                .toggleLikePost(
+                                                                    currentUserUID!,
+                                                                    loadedPosts[
+                                                                        index]);
 
                                                         setState(() {
-                                                          localLikes[index] = updatedLikes;
+                                                          localLikes[index] =
+                                                              updatedLikes;
                                                         });
                                                       },
                                                     ),
                                                     IconButton(
-                                                      color: Theme.of(context).colorScheme.onPrimary,
-                                                      icon: const Icon(Icons.message),
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onPrimary,
+                                                      icon: const Icon(
+                                                          Icons.message),
                                                       onPressed: () {
                                                         // Handle message functionality
                                                       },
                                                     ),
                                                   ],
                                                   IconButton(
-                                                    color: Theme.of(context).colorScheme.onPrimary,
-                                                    icon: const Icon(Icons.share),
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onPrimary,
+                                                    icon:
+                                                        const Icon(Icons.share),
                                                     onPressed: () {
                                                       // Handle message functionality
                                                     },
