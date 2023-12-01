@@ -191,14 +191,21 @@ class UtilsFlutter {
 //---------
   static Object onBackPressed(BuildContext context) {
     return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Are you sure?'),
-        content: const Text('Do you want to exit an App'),
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(false),
-            child: const Text("NO"),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to exit an App'),
+            actions: <Widget>[
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: const Text("NO"),
+              ),
+              const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () => Navigator.of(context).pop(true),
+                child: const Text("YES"),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           GestureDetector(

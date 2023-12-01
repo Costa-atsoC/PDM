@@ -32,7 +32,6 @@ class windowHome extends StatefulWidget {
 
   //--------------
   Future<void> Load() async {
-    Utils.MSG_Debug(windowTitle + ":Load");
     ACCESS_WINDOW_HOME = await Ref_Management.Get_SharedPreferences_INT(
         "JANELA_HOME_NUMERO_ACESSOS");
     Ref_Management.Save_Shared_Preferences_INT(
@@ -48,7 +47,6 @@ class windowHome extends StatefulWidget {
   //--------------
   @override
   State<StatefulWidget> createState() {
-    Utils.MSG_Debug(windowTitle + ":createState");
     return State_windowHome(this);
   }
 //--------------
@@ -105,15 +103,12 @@ class State_windowHome extends State<windowHome> {
   //--------------
   State_windowHome(this.Ref_Window) : super() {
     className = "State_windowHome";
-    Utils.MSG_Debug("$className: createState");
   }
 
   //--------------
   @override
   void dispose() {
-    Utils.MSG_Debug("createState");
     super.dispose();
-    Utils.MSG_Debug("$className:dispose");
   }
 
   //--------------
