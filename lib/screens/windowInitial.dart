@@ -10,7 +10,7 @@ import '../common/widgets/RWMButtons.dart';
 import '../firebase_auth_implementation/firebase_auth_services.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
 import '../windowHome.dart';
-import '../windowRegister.dart';
+import 'windowRegister.dart';
 
 class MyHomePage extends StatefulWidget {
   Management Ref_Management;

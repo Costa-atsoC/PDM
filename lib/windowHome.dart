@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowPostForm.dart';
+import 'common/widgets/modals/modalUpdatePost.dart';
 
-import 'package:ubi/windowSettings.dart';
+import 'package:ubi/screens/windowSettings.dart';
 import 'common/Management.dart';
 import 'common/Utils.dart';
 import 'common/appTheme.dart';
-import 'common/widgets/DetailScreen.dart';
+import 'common/widgets/modals/modalPostViewer.dart';
 import 'firebase_auth_implementation/models/post_model.dart';
 import 'firestore/post_firestore.dart';
-import 'windowSearch.dart';
+import 'screens/windowSearch.dart';
 import 'screens/windowUserProfile.dart';
 
 //----------------------------------------------------------------
@@ -400,7 +401,7 @@ class State_windowHome extends State<windowHome> {
                                     }
                                     return GestureDetector(
                                       onTap: () {
-                                        DetailScreen.show(
+                                        modalPost.show(
                                             context, loadedPosts[index]);
                                       },
                                       child: Hero(
@@ -465,13 +466,39 @@ class State_windowHome extends State<windowHome> {
                                                     IconButton(
                                                       color: Theme.of(context).colorScheme.onPrimary,
                                                       icon: const Icon(Icons.edit),
-                                                      onPressed: () => showMyForm(loadedPosts[index].pid as int?),
+                                                      onPressed: () => {ModalUpdatePost.show(context, loadedPosts[index])},
                                                     ),
                                                     IconButton(
                                                       color: Colors.red[300],
                                                       icon: const Icon(Icons.delete),
                                                       onPressed: () {
-                                                        // Handle delete functionality
+                                                        // Show a confirmation dialog
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context) {
+                                                            return AlertDialog(
+                                                              title: const Text('Confirm Delete'),
+                                                              content: const Text('Are you sure you want to delete this post?'),
+                                                              actions: <Widget>[
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop(); // Close the dialog
+                                                                  },
+                                                                  child: const Text('Cancel'),
+                                                                ),
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    // Close the dialog and delete the post
+                                                                    Navigator.of(context).pop();
+                                                                    PostFirestore().deletePost(currentUserUID!, loadedPosts[index].pid);
+                                                                    //MISSING THE REFRESH!!
+                                                                  },
+                                                                  child: const Text('Delete'),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
                                                       },
                                                     ),
                                                   ] else ...[
