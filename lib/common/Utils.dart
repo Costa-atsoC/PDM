@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -191,18 +192,18 @@ class UtilsFlutter {
   static Object onBackPressed(BuildContext context) {
     return showDialog(
           context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit an App'),
+          builder: (context) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to exit an App'),
             actions: <Widget>[
-              new GestureDetector(
+              GestureDetector(
                 onTap: () => Navigator.of(context).pop(false),
-                child: Text("NO"),
+                child: const Text("NO"),
               ),
-              SizedBox(height: 16),
-              new GestureDetector(
+              const SizedBox(height: 16),
+              GestureDetector(
                 onTap: () => Navigator.of(context).pop(true),
-                child: Text("YES"),
+                child: const Text("YES"),
               ),
             ],
           ),
@@ -218,11 +219,23 @@ class UtilsFlutter {
         validator: validacao,
         keyboardType: TextInputType.text,
         obscureText: obscure,
-        style: TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.black),
         decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
             labelText: label,
-            labelStyle: TextStyle(fontSize: 20.0, color: Colors.black),
+            labelStyle: const TextStyle(fontSize: 20.0, color: Colors.black),
             hintText: hint));
+  }
+
+  static Future<bool> checkInternetConnection() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+
+    if (connectivityResult == ConnectivityResult.none) {
+      Utils.MSG_Debug("false");
+      return false;// No internet connection
+    } else {
+      Utils.MSG_Debug("true");
+      return true; // Internet connection is available
+    }
   }
 }
