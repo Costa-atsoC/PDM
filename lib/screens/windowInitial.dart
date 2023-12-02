@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         selected: selected,
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white;
               }
@@ -72,18 +72,19 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white;
               }
-              return Theme.of(context)
+              return Theme
+                  .of(context)
                   .scaffoldBackgroundColor; // defer to the defaults
             },
           ),
         ),
         onPressed: () {
           setState(
-            () {
+                () {
               selected = !selected;
               UtilsFlutter.MSG(Ref_Management.GetDefinicao(
                   "TEXT_NEW_WINDOW_REGISTER",
@@ -99,7 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
               fontFamily: 'Lato',
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onPrimary),
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .onPrimary),
         ));
   }
 
@@ -110,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
         selected: selected,
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white;
               }
@@ -118,18 +122,19 @@ class _MyHomePageState extends State<MyHomePage> {
             },
           ),
           backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-            (Set<MaterialState> states) {
+                (Set<MaterialState> states) {
               if (states.contains(MaterialState.selected)) {
                 return Colors.white;
               }
-              return Theme.of(context)
+              return Theme
+                  .of(context)
                   .scaffoldBackgroundColor; // defer to the defaults
             },
           ),
         ),
         onPressed: () {
           setState(
-            () {
+                () {
               selected = !selected;
               UtilsFlutter.MSG(Ref_Management.GetDefinicao(
                   "TEXT_BUTTON_FORGOT_PASSWORD",
@@ -145,7 +150,10 @@ class _MyHomePageState extends State<MyHomePage> {
               fontFamily: 'Lato',
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onPrimary),
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .onPrimary),
         ));
   }
 
@@ -161,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //--------- Janela Home
   Future NavigateTo_Window_Home(context) async {
-    windowHome Jan = new windowHome(Ref_Management);
+    windowHome Jan = windowHome(Ref_Management);
     await Jan.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => Jan));
   }
@@ -185,7 +193,9 @@ class _MyHomePageState extends State<MyHomePage> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       home: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme
+            .of(context)
+            .scaffoldBackgroundColor,
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -210,7 +220,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         const SizedBox(
                           height:
-                              40, // meter isto responsivo e meter no management
+                          40, // meter isto responsivo e meter no management
                         ),
                         TextFormField(
                           controller: _email,
@@ -218,8 +228,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             icon: Icon(Icons.alternate_email),
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_10", "Email"),
-                            labelStyle: Theme.of(context).textTheme.titleSmall,
-                            enabledBorder: UnderlineInputBorder(
+                            labelStyle: Theme
+                                .of(context)
+                                .textTheme
+                                .titleSmall,
+                            enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                   width: 3.0), // Set the border color here
                             ),
@@ -229,7 +242,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   width: 3.0), // Set the border color here
                             ),
                           ),
-                          style: Theme.of(context).textTheme.titleSmall,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleSmall,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your email';
@@ -248,8 +264,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             icon: Icon(Icons.password_outlined),
                             labelText: Ref_Management.SETTINGS
                                 .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
-                            labelStyle: Theme.of(context).textTheme.titleSmall,
-                            enabledBorder: UnderlineInputBorder(
+                            labelStyle: Theme
+                                .of(context)
+                                .textTheme
+                                .titleSmall,
+                            enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(
                                   width: 3.0), // Set the border color here
                             ),
@@ -259,7 +278,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   width: 3.0), // Set the border color here
                             ),
                           ),
-                          style: Theme.of(context).textTheme.titleSmall,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .titleSmall,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter your password';
@@ -273,15 +295,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: ElevatedButton(
                             onPressed: () {
                               _signIn();
-                              if (_formKey.currentState!.validate()) {
-                              } else {
+                              if (_formKey.currentState!.validate()) {} else {
                                 Utils.MSG_Debug("ERROR");
                               }
                             },
                             child: Text(
                                 Ref_Management.SETTINGS.Get(
                                     "WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
-                                style: Theme.of(context).textTheme.titleLarge),
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .titleLarge),
                           ),
                         ),
                         Create_Button_New_Window_Register(),
@@ -306,20 +330,20 @@ class _MyHomePageState extends State<MyHomePage> {
     String password = _pass.text;
     String currentTime = Utils.currentTime();
 
-    User? user = await _auth.signInWithEmailAndPassword(email, password);
-    Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
+    try {
+      User? user = await _auth.signInWithEmailAndPassword(email, password);
+      Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
 
-    UserModel? userData = await userFirestore.getUserData(user.uid);
-    Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
-    Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
-    Ref_Management.Save_Shared_Preferences_STRING(
-        "USERNAME", userData.username);
-    Ref_Management.Save_Shared_Preferences_STRING(
-        "LOCATION", userData.location);
-    Ref_Management.Save_Shared_Preferences_STRING(
-        "REGDATE", userData.registerDate);
+      UserModel? userData = await userFirestore.getUserData(user.uid);
+      Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
+      Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
+      Ref_Management.Save_Shared_Preferences_STRING(
+          "USERNAME", userData.username);
+      Ref_Management.Save_Shared_Preferences_STRING(
+          "LOCATION", userData.location);
+      Ref_Management.Save_Shared_Preferences_STRING(
+          "REGDATE", userData.registerDate);
 
-    if (user != null) {
       Utils.MSG_Debug("User is signed");
       // saving the email! in the shared_preferences
       Ref_Management.Save_Shared_Preferences_STRING("TIME_EMAIL", currentTime);
@@ -329,8 +353,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _email.clear();
       _username.clear();
       _pass.clear();
-    } else {
-      Utils.MSG_Debug("ERROR");
+    } catch (e) {
+      // In case the user puts a wrong email or password
+      Utils.MSG_Debug("Sign-in failed: $e");
+      UtilsFlutter.MSG('Invalid email or password');
     }
   }
 }

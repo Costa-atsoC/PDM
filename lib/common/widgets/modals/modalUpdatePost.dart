@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ubi/windowHome.dart';
 import '../../../firebase_auth_implementation/models/post_model.dart';
 import '../../../firestore/post_firestore.dart';
 import '../../../firestore/user_firestore.dart';
@@ -27,14 +28,14 @@ class ModalUpdatePost extends StatefulWidget {
 
 class _ModalUpdatePostState extends State<ModalUpdatePost> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _totalSeatsController = TextEditingController();
-  TextEditingController _freeSeatsController = TextEditingController();
-  TextEditingController _locationController = TextEditingController();
-  TextEditingController _startLocationController = TextEditingController();
-  TextEditingController _endLocationController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _totalSeatsController = TextEditingController();
+  final TextEditingController _freeSeatsController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
+  final TextEditingController _startLocationController = TextEditingController();
+  final TextEditingController _endLocationController = TextEditingController();
 
   @override
   void initState() {
@@ -56,7 +57,7 @@ class _ModalUpdatePostState extends State<ModalUpdatePost> {
         child: Container(
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(16.0),
           topRight: Radius.circular(16.0),
         ),
@@ -72,7 +73,7 @@ class _ModalUpdatePostState extends State<ModalUpdatePost> {
                 TextFormField(
                   controller: _titleController,
                   validator: formValidator,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     icon: Icon(Icons.title),
                     labelText: "Title",
                   ),
@@ -82,7 +83,7 @@ class _ModalUpdatePostState extends State<ModalUpdatePost> {
                 TextFormField(
                   validator: formValidator,
                   controller: _descriptionController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     icon: Icon(Icons.description),
                     labelText: "Description",
                   ),
@@ -91,7 +92,7 @@ class _ModalUpdatePostState extends State<ModalUpdatePost> {
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: _locationController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     icon: Icon(Icons.location_on),
                     labelText: "Location",
                   ),
@@ -189,12 +190,19 @@ class _ModalUpdatePostState extends State<ModalUpdatePost> {
                         PostFirestore().updatePostData(updatedPost);
 
                         Navigator.pop(context); // Close the modal
+
                       }
 
                       // Update the post using your firestore method
                     }
                   },
-                  child: Text('Save'),
+                  child: const Text('Save'),
+                ),
+                const SizedBox(height: 5),
+                ElevatedButton(onPressed: () {
+                  Navigator.pop(context); // Close the modal
+                },
+                child: const Text('Cancel')
                 ),
               ],
             ),

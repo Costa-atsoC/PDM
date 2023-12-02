@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
+import 'package:ubi/screens/windowInitial.dart';
 
 import '../../firestore/user_firestore.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
@@ -92,8 +93,7 @@ class Estado_windowRegister extends State<windowRegister> {
 
   //--------- window Home
   Future NavigateTo_Window_Home(context) async {
-    windowHome win = new windowHome(Ref_Window.Ref_Management);
-    await win.Load();
+    MyHomePage win = MyHomePage(Ref_Window.Ref_Management, Ref_Window.Ref_Management.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
@@ -132,15 +132,15 @@ class Estado_windowRegister extends State<windowRegister> {
                         backgroundImage: AssetImage('assets/LOGO.png'),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     TextFormField(
                       controller: _email,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                       decoration: InputDecoration(
-                        icon: Icon(Icons.email), //icon of text field
+                        icon: const Icon(Icons.email), //icon of text field
                         iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_1", "WND_REGISTER_HINT_1 ??"),
@@ -155,9 +155,9 @@ class Estado_windowRegister extends State<windowRegister> {
                     TextFormField(
                       controller: _fullname,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                       decoration: InputDecoration(
-                        icon: Icon(Icons.drive_file_rename_outline),
+                        icon: const Icon(Icons.drive_file_rename_outline),
                         //icon of text field
                         iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
@@ -173,9 +173,9 @@ class Estado_windowRegister extends State<windowRegister> {
                     TextFormField(
                       controller: _username,
                       keyboardType: TextInputType.text,
-                      style: const TextStyle(color: Colors.white),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                       decoration: InputDecoration(
-                        icon: Icon(Icons.alternate_email),
+                        icon: const Icon(Icons.alternate_email),
                         //icon of text field
                         iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
@@ -192,8 +192,9 @@ class Estado_windowRegister extends State<windowRegister> {
                       controller: _pass,
                       obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
                           .Get("WND_REGISTER_OBSTEXT_3", "true")),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                       decoration: InputDecoration(
-                        icon: Icon(Icons.password), //icon of text field
+                        icon: const Icon(Icons.password), //icon of text field
                         iconColor: Theme.of(context).iconTheme.color,
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
                             "WND_REGISTER_HINT_3", "WND_REGISTER_HINT_3 ??"),
@@ -210,8 +211,9 @@ class Estado_windowRegister extends State<windowRegister> {
                       controller: _confirmPass,
                       obscureText: bool.parse(Ref_Window.Ref_Management.SETTINGS
                           .Get("WND_REGISTER_OBSTEXT_3", "true")),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
                       decoration: InputDecoration(
-                        icon: Icon(Icons.password_outlined),
+                        icon: const Icon(Icons.password_outlined),
                         iconColor: Theme.of(context).iconTheme.color,
                         //icon of text field
                         labelText: Ref_Window.Ref_Management.SETTINGS.Get(
@@ -280,7 +282,7 @@ class Estado_windowRegister extends State<windowRegister> {
           fullName: fullname,
           registerDate: currentTime,
           lastChangedDate: currentTime,
-          location: '??');
+          location: '????');
       await userFirestore.saveUserData(currentUser);
 
       Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL");

@@ -189,34 +189,27 @@ class UtilsFlutter {
   }
 
 //---------
-  static Object onBackPressed(BuildContext context) {
-    return showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit an App'),
-            actions: <Widget>[
-              GestureDetector(
-                onTap: () => Navigator.of(context).pop(false),
-                child: const Text("NO"),
-              ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () => Navigator.of(context).pop(true),
-                child: const Text("YES"),
-              ),
-            ],
+  Future<bool?> onBackPressed(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text('Do you want to exit the app?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("NO"),
           ),
-          const SizedBox(height: 16),
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(true),
+          const SizedBox(width: 16),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
             child: const Text("YES"),
           ),
         ],
       ),
-    ) ??
-        false;
+    );
   }
+
 
   // Ver: http://www.macoratti.net/19/10/flut_codeotm1.htm
   Widget textFieldGenerico(String label, String hint,
