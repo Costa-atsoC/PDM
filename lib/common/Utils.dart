@@ -184,8 +184,8 @@ class UtilsFlutter {
         backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0
-        //timeInSecForIos: 1
-        );
+      //timeInSecForIos: 1
+    );
   }
 
 //---------
@@ -207,7 +207,14 @@ class UtilsFlutter {
               ),
             ],
           ),
-        ) ??
+          const SizedBox(height: 16),
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(true),
+            child: const Text("YES"),
+          ),
+        ],
+      ),
+    ) ??
         false;
   }
 

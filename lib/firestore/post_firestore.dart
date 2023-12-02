@@ -35,6 +35,49 @@ class PostFirestore {
     }
   }
 
+  Future<void> updatePostData(PostModel post) async {
+    try {
+      if (post.pid != null && post.pid.isNotEmpty) {
+        await _firestore.collection('users').doc(post.uid).collection('posts').doc(
+          post.pid,
+        ).update(
+          {
+            'title': post.title,
+            'description': post.description,
+            'date': post.date,
+            'totalSeats': post.totalSeats,
+            'freeSeats': post.freeSeats,
+            'location': post.location,
+            'startLocation': post.startLocation,
+            'endLocation': post.endLocation,
+            'lastChangedDate': post.lastChangedDate,
+          },
+        );
+
+        Utils.MSG_Debug('Post with ID ${post.pid} updated successfully.');
+      } else {
+        Utils.MSG_Debug('Post ID is null or empty. Update failed.');
+      }
+    } catch (error) {
+      Utils.MSG_Debug('Error updating post data: $error');
+    }
+  }
+
+  Future<void> deletePost(String uid, String pid) async {
+    try {
+      // Delete the post document
+      await _firestore.collection('users').doc(uid).collection('posts').doc(pid).delete();
+
+      // Delete the corresponding likes document
+      await _firestore.collection('likes').doc('$pid' + '_' + '$uid').delete();
+
+      Utils.MSG_Debug('Post with ID $pid deleted successfully.');
+    } catch (error) {
+      Utils.MSG_Debug('Error deleting post: $error');
+    }
+  }
+
+
   Future<List<PostModel>> getUserPosts(String uid) async {
     List<PostModel> userPosts = [];
 
