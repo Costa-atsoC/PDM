@@ -157,7 +157,7 @@ class PostFirestore {
     }
 
     Utils.MSG_Debug('Fetching posts');
-    return allPosts;
+    return allPosts.reversed.toList();
   }
 
   Future<int> _updatePostLikesCount(String uid, String pid,

@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:ubi/common/Drawer.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
+import '../common/appTheme.dart';
 import '../database_help.dart';
 import '../firestore/post_firestore.dart';
 
@@ -298,11 +299,11 @@ class State_windowUserProfile extends State<windowUserProfile> {
 
     //Utils.MSG_Debug("$className: build");
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       home: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        drawer: CustomDrawer(Ref_Window.Ref_Management),
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
           title: Text(Ref_Window.Ref_Management.SETTINGS
               .Get("WND_PROFILE_TITLE_1", "User Profile")),
         ),
@@ -310,6 +311,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
+              //Profile Picture
               Center(
                 child: Container(
                   margin: const EdgeInsets.only(top: 20),
@@ -385,7 +387,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
               const SizedBox(
                 height: 10,
               ),
-              Container(
+              SizedBox(
+                height: MediaQuery.of(context).size.height/3,
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(),
@@ -430,6 +433,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     )),
                                 ),
                               );
+
                             },
                           ),
               )

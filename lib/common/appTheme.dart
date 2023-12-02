@@ -8,8 +8,8 @@ class AppTheme {
 
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    scaffoldBackgroundColor: Color.fromARGB(255, 245, 237, 225),
-    appBarTheme: AppBarTheme(
+    scaffoldBackgroundColor: const Color.fromARGB(255, 245, 237, 225),
+    appBarTheme: const AppBarTheme(
       color: Color.fromARGB(255, 35, 40, 56),
       titleTextStyle: TextStyle(
         fontFamily: 'Lato',
@@ -18,7 +18,7 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
       iconTheme: IconThemeData(
-        color: Color.fromARGB(255, 19, 40, 61),
+        color: Color.fromARGB(255, 255, 255, 255),
       ),
     ),
     colorScheme: const ColorScheme.light(
@@ -33,7 +33,7 @@ class AppTheme {
       color: Color.fromARGB(220, 255, 255, 250), // Primary color for cards// Secondary color for card shadows
     ),
     iconTheme: const IconThemeData(
-      color: Colors.white,
+      color: Color.fromARGB(255, 59, 60, 54),
     ),
     textTheme: const TextTheme(
       titleLarge: TextStyle(
