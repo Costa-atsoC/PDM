@@ -281,9 +281,9 @@ class Management {
   }
 
   //-------- WINDOW FUNCTIONS
-  Future NavigateTo_Window_User_Profile(context) async {
-    windowUserProfile win = new windowUserProfile(Management as Management);
-    await win.Load();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
-  }
+  // Future NavigateTo_Window_User_Profile(context) async {
+  //   windowUserProfile win = new windowUserProfile(Management as Management);
+  //   await win.Load();
+  //   Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  // }
 }

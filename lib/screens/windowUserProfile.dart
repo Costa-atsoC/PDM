@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:ubi/common/Drawer.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
+import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
@@ -17,8 +18,10 @@ class windowUserProfile extends StatefulWidget {
   final Management Ref_Management;
   int? ACCESS_WINDOW_PROFILE;
 
+  final UserModel user;
+
   //--------------
-  windowUserProfile(this.Ref_Management) {
+  windowUserProfile(this.Ref_Management, this.user) {
     windowTitle = "General Window";
     //Utils.MSG_Debug(windowTitle);
   }
@@ -84,13 +87,13 @@ class State_windowUserProfile extends State<windowUserProfile> {
     _refreshData();
   }
 
-  void NavigateTo_New_Window(context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                windowUserProfile(Ref_Window.Ref_Management)));
-  }
+  // void NavigateTo_New_Window(context) {
+  //   Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) =>
+  //               windowUserProfile(Ref_Window.Ref_Management)));
+  // }
 
   //--- database constants
   // All data
@@ -101,7 +104,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
 
   // This function is used to fetch all data from the database
   void _refreshData() async {
-    final List<PostModel> data = await PostFirestore().getUserPosts(Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1"));
+    final List<PostModel> data = await PostFirestore().getUserPosts(widget.user.uid);
     setState(() {
       userData.addAll(data);
       _isLoading = false;
@@ -336,7 +339,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_TITLE_1", "Nome"),
+                      widget.user.username,
                       style: const TextStyle(
                         fontSize: 35,
                         fontWeight: FontWeight.bold,
@@ -344,7 +347,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                       ),
                     ),
                     Text(
-                      Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOCATION", "?????"),
+                      widget.user.location,
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 25,
@@ -355,7 +358,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '@${Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_USERNAME", "username")}',
+                      widget.user.fullName,
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 20,
@@ -376,7 +379,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                     ),
                   ),
                   Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_REGDATE", "YYYY-MM-DD"),
+                    widget.user.registerDate,
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black,
@@ -388,7 +391,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                 height: 10,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height/3,
+                height: MediaQuery.of(context).size.height/3 - 30,
                 child: _isLoading
                     ? const Center(
                         child: CircularProgressIndicator(),
