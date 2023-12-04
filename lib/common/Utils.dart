@@ -1,10 +1,13 @@
 import 'dart:math';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+
+import 'Management.dart';
 
 class Utils {
   //--------- Uteis.Factorial(12);
@@ -31,7 +34,7 @@ class Utils {
     return str;
   }
 
-  static String currentTime(){
+  static String currentTime() {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
 
@@ -39,7 +42,7 @@ class Utils {
   }
 
   //For the creation of the user we need different date format
-  static String currentTimeUser(){
+  static String currentTimeUser() {
     DateTime now = DateTime.now();
 
     String formattedDate = '${now.year}-${now.month}-${now.day}';
@@ -54,6 +57,7 @@ class Utils {
 }
 
 class UtilsFlutter {
+
   static Future<void> Dialogo_1(BuildContext context, String Titulo,
       String Texto1, String Texto2, String Texto3, String texto_botao) async {
     return showDialog<void>(
@@ -139,6 +143,7 @@ class UtilsFlutter {
     );
   }
 
+
 //---------
   static void EnviarSMS(String message, List<String> recipents) async {
     /*
@@ -184,8 +189,8 @@ class UtilsFlutter {
         backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0
-      //timeInSecForIos: 1
-    );
+        //timeInSecForIos: 1
+        );
   }
 
 //---------
@@ -210,7 +215,6 @@ class UtilsFlutter {
     );
   }
 
-
   // Ver: http://www.macoratti.net/19/10/flut_codeotm1.htm
   Widget textFieldGenerico(String label, String hint,
       {bool obscure = false, controller, validacao}) {
@@ -232,7 +236,7 @@ class UtilsFlutter {
 
     if (connectivityResult == ConnectivityResult.none) {
       Utils.MSG_Debug("false");
-      return false;// No internet connection
+      return false; // No internet connection
     } else {
       Utils.MSG_Debug("true");
       return true; // Internet connection is available
