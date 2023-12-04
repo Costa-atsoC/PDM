@@ -343,6 +343,8 @@ class _MyHomePageState extends State<MyHomePage> {
           "LOCATION", userData.location);
       Ref_Management.Save_Shared_Preferences_STRING(
           "REGDATE", userData.registerDate);
+      Ref_Management.Save_Shared_Preferences_STRING(
+          "LASTDATE", userData.lastChangedDate);
 
       Utils.MSG_Debug("User is signed");
       // saving the email! in the shared_preferences

@@ -1,5 +1,5 @@
 class UserModel {
-  final String? uid;
+  final String uid;
   final String username;
   final String email;
   final String fullName;
@@ -15,7 +15,7 @@ class UserModel {
 //  final String password;
 
   const UserModel({
-    this.uid,
+    required this.uid,
     required this.email,
     required this.username,
     required this.fullName,

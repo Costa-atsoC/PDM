@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ubi/screens/windowInitial.dart';
 
+import '../firebase_auth_implementation/models/user_model.dart';
 import '../screens/windowSearch.dart';
 import '../screens/windowSettings.dart';
 import '../screens/windowUserProfile.dart';
@@ -23,9 +25,12 @@ class State_CustomDrawer extends State<CustomDrawer> {
   final CustomDrawer Ref_Window;
   String className = "";
 
+
   State_CustomDrawer(this.Ref_Window) : super() {
     className = "State_windowHome";
   }
+
+
 
   Future navigateToWindowSettings(context) async {
     windowSettings win = windowSettings(Ref_Window.Ref_Management);
@@ -34,7 +39,16 @@ class State_CustomDrawer extends State<CustomDrawer> {
   }
 
   Future navigateToWindowUserProfile(context) async {
-    windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management);
+    UserModel user = UserModel(
+      uid: Ref_Window.Ref_Management.SETTINGS.Get("UID", "-1"),
+      email: Ref_Window.Ref_Management.SETTINGS.Get("EMAIL", ""),
+      username: Ref_Window.Ref_Management.SETTINGS.Get("USERNAME", ""),
+      fullName: Ref_Window.Ref_Management.SETTINGS.Get("NAME", ""),
+      registerDate: Ref_Window.Ref_Management.SETTINGS.Get("REGDATE", ""),
+      lastChangedDate: Ref_Window.Ref_Management.SETTINGS.Get("LASTDATE", ""),
+      location: Ref_Window.Ref_Management.SETTINGS.Get("LOCATION", ""),
+    );
+    windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management, user);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }

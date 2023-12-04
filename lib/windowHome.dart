@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowPostForm.dart';
 import 'common/Drawer.dart';
@@ -274,10 +275,26 @@ class State_windowHome extends State<windowHome> {
                                                     const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
-                                                    const CircleAvatar(
-                                                      radius: 20,
-                                                      backgroundImage: AssetImage(
-                                                          'assets/PORSCHE_MAIN_2.jpeg'),
+                                                    //Click to go to that user profile
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        UserModel? userData = await userFirestore.getUserData(loadedPosts[index].uid);
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                windowUserProfile(
+                                                                  Ref_Window.Ref_Management,
+                                                                  userData!,
+                                                                ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: const CircleAvatar(
+                                                        radius: 20,
+                                                        backgroundImage: AssetImage(
+                                                            'assets/PORSCHE_MAIN_2.jpeg'),
+                                                      ),
                                                     ),
                                                     const SizedBox(width: 10),
                                                     Column(children: [ // passar isto para o getData, só porque é chato tar sempre a dar load
