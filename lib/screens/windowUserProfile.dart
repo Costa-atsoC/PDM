@@ -165,11 +165,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     controller: _titleController,
                     validator: formValidator,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.title), //icon of text field
-                      iconColor: Colors.white,
                       labelText: "Title", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Theme.of(context).textTheme.titleSmall?.color),
                     ),
                   ),
                   const SizedBox(
@@ -178,11 +177,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _descriptionController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.description), //icon of text field
-                      iconColor: Colors.white,
                       labelText: "Description", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Theme.of(context).textTheme.titleSmall?.color),
                     ),
                   ),
                   const SizedBox(
@@ -191,11 +189,11 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   TextFormField(
                     validator: formValidator,
                     controller: _dateController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       icon: Icon(Icons.calendar_today), //icon of text field
                       iconColor: Colors.white,
                       labelText: "Enter Date", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Theme.of(context).textTheme.titleSmall?.color),
                     ),
                     readOnly: true,
                     //set it true, so that user will not able to edit text
@@ -340,16 +338,16 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   children: [
                     Text(
                       widget.user.username,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 35,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.titleSmall?.color,
                       ),
                     ),
                     Text(
                       widget.user.location,
-                      style: const TextStyle(
-                        color: Colors.grey,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.titleSmall?.color,
                         fontSize: 25,
                       ),
                     ),
@@ -359,8 +357,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   children: [
                     Text(
                       widget.user.fullName,
-                      style: const TextStyle(
-                        color: Colors.grey,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.titleSmall?.color,
                         fontSize: 20,
                       ),
                     ),
@@ -372,10 +370,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
                 children: [
                   Text(
                     Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_MEM", "Member:"),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Theme.of(context).textTheme.titleSmall?.color,
                     ),
                   ),
                   Text(
