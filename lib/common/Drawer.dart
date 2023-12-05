@@ -109,11 +109,11 @@ class State_CustomDrawer extends State<CustomDrawer> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.input),
+            leading: const Icon(Icons.home),
             // TODO meter o logo da app
             title: Text(
               Ref_Window.Ref_Management.SETTINGS
-                  .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
+                  .Get("JNL_HOME_DRAWER_SUBTITLE_1", "HOME"),
             ),
             // adicionar ao management
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
