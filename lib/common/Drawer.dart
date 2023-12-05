@@ -9,6 +9,7 @@ import '../screens/windowSettings.dart';
 import '../screens/windowUserProfile.dart';
 import '../windowHome.dart';
 import 'Management.dart';
+import 'Utils.dart';
 
 class CustomDrawer extends StatefulWidget{
   final Management Ref_Management;
@@ -40,14 +41,15 @@ class State_CustomDrawer extends State<CustomDrawer> {
 
   Future navigateToWindowUserProfile(context) async {
     UserModel user = UserModel(
-      uid: Ref_Window.Ref_Management.SETTINGS.Get("UID", "-1"),
-      email: Ref_Window.Ref_Management.SETTINGS.Get("EMAIL", ""),
-      username: Ref_Window.Ref_Management.SETTINGS.Get("USERNAME", ""),
-      fullName: Ref_Window.Ref_Management.SETTINGS.Get("NAME", ""),
-      registerDate: Ref_Window.Ref_Management.SETTINGS.Get("REGDATE", ""),
-      lastChangedDate: Ref_Window.Ref_Management.SETTINGS.Get("LASTDATE", ""),
-      location: Ref_Window.Ref_Management.SETTINGS.Get("LOCATION", ""),
+      uid: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1"),
+      email: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_EMAIL", ""),
+      username: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_USERNAME", ""),
+      fullName: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_NAME", ""),
+      registerDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_REGDATE", ""),
+      lastChangedDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_LASTDATE", ""),
+      location: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOCATION", ""),
     );
+    Utils.MSG_Debug("User: " + user.uid);
     windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management, user);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
@@ -77,7 +79,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
               color: Theme.of(context).appBarTheme.backgroundColor,
               image: const DecorationImage(
                 fit: BoxFit.fill,
-                image: AssetImage('assets/images/cover.jpg'),
+                image: AssetImage('assets/niko.jpg'),
               ),
             ),
             child: Column(
