@@ -1,5 +1,7 @@
 class PostModel {
   final String uid;
+  final String userFullName;
+  final String username;
   final String pid;
   final String likes;
   final String title;
@@ -15,6 +17,8 @@ class PostModel {
 
   const PostModel({
     required this.uid,
+    required this.userFullName,
+    required this.username,
     required this.pid,
     required this.likes,
     required this.title,

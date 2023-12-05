@@ -11,6 +11,8 @@ class PostFirestore {
       await _firestore.collection('users').doc(uid).collection('posts').doc(
           post.pid).set({
         'uid': post.uid,
+        'userFullName' : post.userFullName,
+        'username' : post.username,
         'pid': post.pid,
         'likes': post.likes,
         'title': post.title,
@@ -98,6 +100,8 @@ class PostFirestore {
           var data = doc.data();
           PostModel post = PostModel(
             uid: data['uid'],
+            userFullName: data['userFullName'],
+            username: data['username'],
             pid: data['pid'],
             likes: data['likes'],
             title: data['title'],
@@ -137,6 +141,8 @@ class PostFirestore {
         var data = postDoc.data();
         PostModel post = PostModel(
           uid: data['uid'],
+          userFullName: data['userFullName'],
+          username: data['username'],
           pid: data['pid'],
           likes: data['likes'],
           title: data['title'],

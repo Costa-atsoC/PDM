@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../common/Management.dart';
 
-class JanelaGeral extends StatefulWidget {
-  final Gestao Ref_Gestao;
 
-  JanelaGeral(this.Ref_Gestao);
+class windowFeedback extends StatefulWidget {
+  final Management Ref_Management;
+
+  windowFeedback(this.Ref_Management);
+
+
+  //--------------
+  Future<void> Load() async {
+    //Utils.MSG_Debug(windowTitle + ":Load");
+    /*
+    ACCESS_WINDOW_PROFILE = await Ref_Management.Get_SharedPreferences_INT(
+        "WND_PROFILE_ACCESS_NUMBER");
+    Ref_Management.Save_Shared_Preferences_INT(
+        "WND_PROFILE_ACCESS_NUMBER", ACCESS_WINDOW_PROFILE! + 1);
+     */
+  }
 
   @override
-  _JanelaGeralState createState() => _JanelaGeralState();
+  _windowFeedbackState createState() => _windowFeedbackState();
 }
 
 
-class _JanelaGeralState extends State<JanelaGeral> {
+class _windowFeedbackState extends State<windowFeedback> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
