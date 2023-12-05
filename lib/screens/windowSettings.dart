@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'windowChangePassword.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
@@ -36,6 +37,8 @@ class windowSettings extends StatefulWidget {
 //----------------------------------------------------------------
 // ignore: camel_case_types
 class State_windowSettings extends State<windowSettings> {
+  String _selectedColor = "Light";
+  List<String> _colors = ["Dark", "Light"];
   bool valNotify1 = true;
   bool valNotify2 = false;
   bool valNotify3 = false;
@@ -65,6 +68,7 @@ class State_windowSettings extends State<windowSettings> {
       valNotify3 = newValue3;
     });
   }
+
 
   final windowSettings Ref_Window;
   String className = "";
@@ -115,79 +119,67 @@ class State_windowSettings extends State<windowSettings> {
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(className, style: const TextStyle(fontSize: 22)),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.secondary),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ),
-        body: Container(
-            padding: const EdgeInsets.all(10),
-            child: ListView(
-              children: [
-                const SizedBox(height: 40),
-                const Row(
-                  children: [
-                    Icon(
-                      Icons.person,
-                    ),
-                    SizedBox(width: 10),
-                    Text("Account",
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold))
-                  ],
-                ),
-                const Divider(height: 20, thickness: 1),
-                const SizedBox(height: 20),
-                buildAccountOption(context, "Change Password",
-                    actions: ['Yes', 'No']),
-                buildAccountOption(context, "Appearance",
-                    actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
-                const SizedBox(height: 40),
-                const Row(
-                  children: [
-                    Icon(Icons.volume_up_outlined),
-                    SizedBox(width: 10),
-                    Text("Notifications",
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold))
-                  ],
-                ),
-                const Divider(height: 20, thickness: 1),
-                const SizedBox(height: 10),
-                buildNotificationOption(
-                    "Notifications", valNotify1, onChangeFunction1),
-                buildNotificationOption(
-                    "Notifications", valNotify2, onChangeFunction2),
-                buildNotificationOption(
-                    "Notifications", valNotify3, onChangeFunction3),
-                const Divider(height: 20, thickness: 1),
-                const SizedBox(height: 10),
-                Center(
-                    child: Container(
-                  margin: const EdgeInsets.only(
-                      top: 10, left: 20, right: 20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      // padding: const EdgeInsets.symmetric(horizontal: 100),
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      "SIGN OUT",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                  ),
-                ))
-              ],
-            )),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(className, style: TextStyle(fontSize: 22)),
+        centerTitle: true,
       ),
+      body: Container(
+          padding: const EdgeInsets.all(10),
+          child: ListView(
+            children: [
+              SizedBox(height: 40),
+              Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                    color: Colors.blue,
+                  ),
+                  SizedBox(width: 10),
+                  Text("Account",
+                      style:
+                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                ],
+              ),
+              Divider(height: 20, thickness: 1),
+              SizedBox(height: 20),
+              buildAccountOption(context, "Change Password", actions: ['Yes', 'No']),
+              buildAccountOption(context, "Appearance", actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
+              SizedBox(height: 40),
+              Row(
+                children: [
+                  Icon(Icons.volume_up_outlined, color: Colors.blue),
+                  SizedBox(width: 10),
+                  Text("Notifications",
+                      style:
+                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                ],
+              ),
+              Divider(height: 20, thickness: 1),
+              SizedBox(height: 10),
+              buildNotificationOption(
+                  "Notifications", valNotify1, onChangeFunction1),
+              buildNotificationOption(
+                  "Notifications", valNotify2, onChangeFunction2),
+              buildNotificationOption(
+                  "Notifications", valNotify3, onChangeFunction3),
+              Center(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                  onPressed: () {},
+                  child: Text(
+                    "SIGN OUT",
+                    style: TextStyle(
+                        fontSize: 16, letterSpacing: 2.2, color: Colors.black),
+                  ),
+                ),
+              )
+            ],
+          )),
     );
   }
 
@@ -206,7 +198,7 @@ class State_windowSettings extends State<windowSettings> {
           Transform.scale(
             scale: 0.7,
             child: CupertinoSwitch(
-              activeColor: Theme.of(context).colorScheme.secondaryContainer,
+              activeColor: Colors.blue,
               trackColor: Colors.grey,
               value: value,
               onChanged: (bool newValue) {
@@ -219,79 +211,57 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 
-  GestureDetector buildAccountOption(BuildContext context, String title,
-      {List<String>? actions}) {
+  void changeDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          content: Container(
+            height: 250,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                for (var color in _colors)
+                  RadioListTile<String>(
+                    title: Text(color),
+                    value: color,
+                    groupValue: _selectedColor,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedColor = value!;
+                      });
+                      print(_selectedColor);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  GestureDetector buildAccountOption(BuildContext context, String title, {List<String>? actions}) {
     return GestureDetector(
       onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(title),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (actions != null && actions.isNotEmpty)
-                    for (var action in actions)
-                      ElevatedButton(
-                        onPressed: () {
-                          // Lógica para as ações do "Appearance"
-                          if (action == 'Device Theme') {
-                            // Lógica para 'Device Theme'
-                            Navigator.of(context).pop();
-                          } else if (action == 'Dark Theme') {
-                            // Lógica para 'Dark Theme'
-                            Navigator.of(context).pop();
-                          } else if (action == 'Light Theme') {
-                            // Lógica para 'Light Theme'
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        child: Text(action),
-                      )
-                  else
-                    Column(
-                      children: [
-                        RadioListTile<String>(
-                          title: Text('Device Theme'),
-                          value: 'Device Theme',
-                          groupValue: selectedOption,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedOption = value!;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        RadioListTile<String>(
-                          title: Text('Dark Theme'),
-                          value: 'Dark Theme',
-                          groupValue: selectedOption,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedOption = value!;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        RadioListTile<String>(
-                          title: Text('Light Theme'),
-                          value: 'Light Theme',
-                          groupValue: selectedOption,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedOption = value!;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                ],
-              ),
-            );
-          },
-        );
+        if (title == 'Change Password') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WindowChangePassword(Ref_Window.Ref_Management)), // Navega para WindowChangePassword
+          );
+        } else {
+          // Se houver outras opções de conta
+          showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                // Restante do seu código para outras opções...
+              );
+            },
+          );
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
@@ -306,8 +276,9 @@ class State_windowSettings extends State<windowSettings> {
                 color: Colors.grey[600],
               ),
             ),
-            const Icon(
+            Icon(
               Icons.arrow_forward_ios,
+              color: Colors.grey,
             ),
           ],
         ),
@@ -315,3 +286,5 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 }
+
+
