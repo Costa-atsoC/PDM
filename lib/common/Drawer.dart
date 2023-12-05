@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ubi/screens/windowInitial.dart';
 
 import '../firebase_auth_implementation/models/user_model.dart';
+import '../screens/windowFeedback.dart';
 import '../screens/windowSearch.dart';
 import '../screens/windowSettings.dart';
 import '../screens/windowUserProfile.dart';
@@ -64,6 +65,12 @@ class State_CustomDrawer extends State<CustomDrawer> {
 
   Future navigateToWindowInitial(context) async {
     MyHomePage win = MyHomePage(Ref_Window.Ref_Management, Ref_Window.Ref_Management.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
+  Future navigateToWindowFeedback(context) async {
+    windowFeedback win = windowFeedback(Ref_Window.Ref_Management);
+    await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
@@ -150,7 +157,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
             textColor: Theme.of(context).colorScheme.onPrimary,
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {navigateToWindowFeedback(context)},
           ),
           const SizedBox(
             height: 10,
