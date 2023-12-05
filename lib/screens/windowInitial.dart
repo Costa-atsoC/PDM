@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ubi/firestore/user_firestore.dart';
+import 'package:ubi/screens/windowForgotPassword.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
@@ -21,6 +22,8 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState(Ref_Management);
+
+  Load() {}
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -36,6 +39,11 @@ class _MyHomePageState extends State<MyHomePage> {
     _pass.dispose();
 
     super.dispose();
+  }
+
+  @override
+  void Load(){
+
   }
 
   bool selected = false;
@@ -108,53 +116,67 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget Create_Button_Forgot_Password() {
-    double TAM = double.parse(
+    double TAMButtonRegister = double.parse(
+        Ref_Management.GetDefinicao("TAMANHO_TEXTO_BTN_NEW_REGISTER", "10"));
+    double TAMButtonForgotPassword = double.parse(
         Ref_Management.GetDefinicao("SIZE_TEXT_BUTTON_FORGOT_PASSWORD", "10"));
+
     return SelectableButton(
-        selected: selected,
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.selected)) {
-                return Colors.white;
-              }
-              return null; // defer to the defaults
-            },
-          ),
-          backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.selected)) {
-                return Colors.white;
-              }
-              return Theme
-                  .of(context)
-                  .scaffoldBackgroundColor; // defer to the defaults
-            },
-          ),
+      selected: selected,
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected)) {
+              return Colors.white;
+            }
+            return null; // defer to the defaults
+          },
         ),
-        onPressed: () {
-          setState(
-                () {
-              selected = !selected;
-              UtilsFlutter.MSG(Ref_Management.GetDefinicao(
-                  "TEXT_BUTTON_FORGOT_PASSWORD",
-                  "Forgot the password?"));
-              // NavigateTo_Window_Forgot_Password(context);
-            },
-          );
-        },
-        child: Text(
-          Ref_Management.GetDefinicao(
-              "TEXT_BUTTON_FORGOT_PASSWORD", "Forgot the password?"),
-          style: TextStyle(
-              fontFamily: 'Lato',
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-              color: Theme
-                  .of(context)
-                  .colorScheme
-                  .onPrimary),
-        ));
+        backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+            if (states.contains(MaterialState.selected)) {
+              return Colors.white;
+            }
+            return Theme.of(context).scaffoldBackgroundColor;
+            // defer to the defaults
+          },
+        ),
+      ),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) {
+            return windowForgotPassword();
+          }),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SizedBox(width: 10), // Adjust the spacing as needed
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return windowForgotPassword();
+                  }),
+                );
+              },
+              child: Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// -----------------------------------

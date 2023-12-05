@@ -8,18 +8,18 @@ class AppTheme {
 
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
-    scaffoldBackgroundColor: const Color.fromARGB(255, 245, 237, 225),
+    //scaffoldBackgroundColor: const Color.fromARGB(255, 245, 237, 225),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 250, 249, 247),
     appBarTheme: const AppBarTheme(
-      color: Color.fromARGB(255, 35, 40, 56),
+      color: Color.fromARGB(255, 250, 249, 247),
+      // color: Color.fromARGB(255, 35, 40, 56),
       titleTextStyle: TextStyle(
         fontFamily: 'Lato',
         color: Colors.white,
         fontSize: 25.0,
         fontWeight: FontWeight.bold,
       ),
-      iconTheme: IconThemeData(
-        color: Color.fromARGB(255, 255, 255, 255),
-      ),
+
     ),
     colorScheme: const ColorScheme.light(
       primary: Color.fromARGB(255, 255, 255, 252),
