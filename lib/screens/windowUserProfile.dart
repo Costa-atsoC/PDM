@@ -18,11 +18,13 @@ class windowUserProfile extends StatefulWidget {
   final Management Ref_Management;
   int? ACCESS_WINDOW_PROFILE;
 
-  final UserModel user;
+  UserModel user;
 
   //--------------
   windowUserProfile(this.Ref_Management, this.user) {
     windowTitle = "General Window";
+    user = this.user;
+    Utils.MSG_Debug(user.uid);
     //Utils.MSG_Debug(windowTitle);
   }
 
@@ -418,23 +420,25 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                       width: 100,
                                       child: Row(
                                         children: [
-                                          IconButton(
-                                            icon: const Icon(Icons.edit),
-                                            onPressed: () =>
-                                                showMyForm(userData[index].pid),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(Icons.delete),
-                                            onPressed: () =>
-                                                deleteItem(
-                                                    userData[index].pid as int),
-                                          ),
+                                          userData[index].uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
+                                              ? IconButton(
+                                                  icon: const Icon(Icons.edit),
+                                                  onPressed: () =>
+                                                      showMyForm(userData[index].pid),
+                                                )
+                                              : const SizedBox(),
+                                          userData[index].uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
+                                              ? IconButton(
+                                                  icon: const Icon(Icons.delete),
+                                                  onPressed: () =>
+                                                      deleteItem(userData[index].pid as int),
+                                                )
+                                              : const SizedBox()
                                         ],
                                       ),
                                     )),
                                 ),
                               );
-
                             },
                           ),
               )

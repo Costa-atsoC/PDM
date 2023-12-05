@@ -356,14 +356,10 @@ class _MyHomePageState extends State<MyHomePage> {
       UserModel? userData = await userFirestore.getUserData(user.uid);
       Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
       Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "USERNAME", userData.username);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "LOCATION", userData.location);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "REGDATE", userData.registerDate);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "LASTDATE", userData.lastChangedDate);
+      Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
+      Ref_Management.Save_Shared_Preferences_STRING("LOCATION", userData.location);
+      Ref_Management.Save_Shared_Preferences_STRING("REGDATE", userData.registerDate);
+      Ref_Management.Save_Shared_Preferences_STRING("LASTDATE", userData.lastChangedDate);
 
       Utils.MSG_Debug("User is signed");
       // saving the email! in the shared_preferences

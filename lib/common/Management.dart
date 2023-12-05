@@ -192,6 +192,19 @@ class Management {
 
     String? REGISTERDATE = await Get_SharedPreferences_STRING('REGDATE');
     SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
+
+    //------------------------------------------------------//
+    //----------------- WINDOW Drawer-----------------------//
+    //------------------------------------------------------//
+
+    String? LASTDATE = await Get_SharedPreferences_STRING('LASTDATE');
+    SETTINGS.Add('WND_DRAWER_LASTDATE', LASTDATE!);
+
+    String? EMAIL = await Get_SharedPreferences_STRING('EMAIL');
+    SETTINGS.Add('WND_DRAWER_EMAIL', EMAIL!);
+
+    String? NAME = await Get_SharedPreferences_STRING('NAME');
+    SETTINGS.Add('WND_DRAWER_NAME', NAME!);
   }
 
   //--------------------------------------
