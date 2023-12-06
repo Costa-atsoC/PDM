@@ -18,7 +18,6 @@ import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
 import '../common/widgets/modals/modalUpdatePost.dart';
-import '../database_help.dart';
 import '../firestore/post_firestore.dart';
 
 //----------------------------------------------------------------
@@ -270,7 +269,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                   child: CircleAvatar(
                                     radius: 100,
                                     backgroundImage: AssetImage(
-                                        "assets/niko.jpg"),
+                                        "assets/PORSCHE_MAIN_2.jpeg"),
                                   ),
                                 ),
                               ],
@@ -368,7 +367,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(userData[index].date),
-                                          Text("from: ${userData[index].startLocation} to: ${userData[index].startLocation}"),
+                                          Text("from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
                                           Text(userData[index].freeSeats + "/"+ userData[index].totalSeats + " FREE SEATS"),
                                           Text(userData[index].description),
                                         ]),

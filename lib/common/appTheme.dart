@@ -9,10 +9,9 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     //scaffoldBackgroundColor: const Color.fromARGB(255, 245, 237, 225),
-    scaffoldBackgroundColor: const Color.fromARGB(255, 232, 220, 202),
-
+    scaffoldBackgroundColor: const Color.fromARGB(255, 250, 249, 247),
     appBarTheme: const AppBarTheme(
-      color: Color.fromARGB(255, 19, 40, 61),
+      color: Color.fromARGB(255, 250, 249, 247),
       // color: Color.fromARGB(255, 35, 40, 56),
       titleTextStyle: TextStyle(
         fontFamily: 'Lato',
@@ -22,8 +21,10 @@ class AppTheme {
       ),
     ),
     colorScheme: const ColorScheme.light(
+
       primary: Color.fromARGB(255, 19, 40, 61),
       onPrimary:Color.fromARGB(255, 59, 60, 54),
+
       secondary: Colors.white,
       onSecondary: Color.fromARGB(220, 35, 40, 56),
       primaryContainer: Color.fromARGB(255, 201, 128, 94),
@@ -76,7 +77,7 @@ class AppTheme {
         backgroundColor: const Color.fromARGB(255, 208, 166, 144),
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.circular(8.0), // Adjust the radius as needed
+          BorderRadius.circular(8.0), // Adjust the radius as needed
         ),
       ),
     ),
@@ -93,7 +94,7 @@ class AppTheme {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         minimumSize: const Size(double.infinity, 0),
         backgroundColor:
-            const Color.fromARGB(255, 208, 166, 144), // Adjust color as needed
+        const Color.fromARGB(255, 208, 166, 144), // Adjust color as needed
       ),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
@@ -167,7 +168,7 @@ class AppTheme {
         backgroundColor: const Color.fromARGB(255, 201, 128, 94),
         shape: RoundedRectangleBorder(
           borderRadius:
-              BorderRadius.circular(8.0), // Adjust the radius as needed
+          BorderRadius.circular(8.0), // Adjust the radius as needed
         ),
       ),
     ),
@@ -184,7 +185,7 @@ class AppTheme {
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         minimumSize: const Size(double.infinity, 0),
         backgroundColor:
-            const Color.fromARGB(255, 201, 128, 94), // Adjust color as needed
+        const Color.fromARGB(255, 201, 128, 94), // Adjust color as needed
       ),
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(

@@ -123,7 +123,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
                       return const SizedBox(
                         child: CircleAvatar(
                           radius: 30,
-                          backgroundImage: AssetImage("assets/niko.jpg"),
+                          backgroundImage: AssetImage("assets/PORSCHE_MAIN_2.jpeg"),
                         ),
                       );
                     },
