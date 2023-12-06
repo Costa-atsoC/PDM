@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:ubi/common/Drawer.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
@@ -10,7 +9,6 @@ import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
 import '../common/widgets/modals/modalUpdatePost.dart';
-import '../database_help.dart';
 import '../firestore/post_firestore.dart';
 
 //----------------------------------------------------------------
@@ -163,7 +161,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   ),
                   child: const CircleAvatar(
                     radius: 100,
-                    backgroundImage: AssetImage("assets/niko.jpg"),
+                    backgroundImage: AssetImage("assets/PORSCHE_MAIN_2.jpeg"),
                   ),
                 ),
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ubi/screens/windowDeleteAccount.dart';
 import 'windowChangePassword.dart';
 
 import '../common/Management.dart';
@@ -146,6 +147,7 @@ class State_windowSettings extends State<windowSettings> {
               SizedBox(height: 20),
               buildAccountOption(context, "Change Password", actions: ['Yes', 'No']),
               buildAccountOption(context, "Appearance", actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
+              buildAccountOption(context, "Delete Account", actions: []),
               SizedBox(height: 40),
               Row(
                 children: [
@@ -249,7 +251,12 @@ class State_windowSettings extends State<windowSettings> {
         if (title == 'Change Password') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WindowChangePassword(Ref_Window.Ref_Management)), // Navega para WindowChangePassword
+            MaterialPageRoute(builder: (context) => WindowChangePassword(Ref_Window.Ref_Management)),
+          );
+        } else if (title == 'Delete Account') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WindowDeleteAccount(Ref_Window.Ref_Management)),
           );
         } else {
           // Se houver outras opções de conta

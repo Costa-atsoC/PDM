@@ -86,7 +86,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
               color: Theme.of(context).appBarTheme.backgroundColor,
               image: const DecorationImage(
                 fit: BoxFit.fill,
-                image: AssetImage('assets/niko.jpg'),
+                image: AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
               ),
             ),
             child: Column(
