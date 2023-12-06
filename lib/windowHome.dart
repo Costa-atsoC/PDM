@@ -60,24 +60,48 @@ class windowHome extends StatefulWidget {
 // ignore: camel_case_types
 class State_windowHome extends State<windowHome> {
   PlatformFile? pickedFile;
+  UserFirestore userFirestore = UserFirestore();
+  PostFirestore postFirestore = PostFirestore();
 
   final windowHome Ref_Window;
   String className = "";
 
+  // ALL THESE METHODS ARE REFRESHED WHEN REFRESH METHODS ARE APPLIED
+  // STORES THE POSTS
   List<PostModel> loadedPosts = [];
+  // STORES THE LIKES IN THE MOMENT THE POSTS ARE LOADED
   List<int> localLikes = [];
-  List<String> loadedUsers = [];
+  // STORING THE USER DATA
+  List<UserModel> loadedUserProfiles = [];
+  // STORING THE PROFILE IMAGES
+  List<Map<String, dynamic>> loadedImages = [];
+
   bool _dataLoaded = false;
 
-  Future getData() async {
+  // FUNCTION TO REFRESH THE DATA / GET THE DATA IF IT'S THE FIRST INITIALIZATION
+  Future<void> getData() async {
     if (_dataLoaded) {
       return; // Skip fetching data if it's already loaded
     }
+
     try {
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
+
+      for (PostModel post in newPosts) {
+        UserModel? userProfile = await userFirestore.getUserData(post.uid);
+        loadedUserProfiles.add(userProfile!);
+
+        // Assuming loadImages returns a List<Map<String, dynamic>> for each user
+        List<Map<String, dynamic>> images = await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
+        final Map<String, dynamic> firstImage = images.first;
+        loadedImages.add(firstImage);
+      }
+
       setState(() {
         loadedPosts.clear(); // Clear the list before adding new data
         loadedPosts.addAll(newPosts);
+
+        // No need to clear loadedUserProfiles and loadedImages, they are updated above
         _isLoading = false; // Data has been loaded
         _dataLoaded = true; // Set the flag to true after loading data
       });
@@ -88,6 +112,7 @@ class State_windowHome extends State<windowHome> {
       });
     }
   }
+
 
   final formKey = GlobalKey<FormState>();
 
@@ -124,8 +149,8 @@ class State_windowHome extends State<windowHome> {
   void initState() {
     Utils.MSG_Debug("$className: initState");
     super.initState();
-    getData();
     myScroll();
+    getData();
   }
 
   void myScroll() async {
@@ -151,6 +176,8 @@ class State_windowHome extends State<windowHome> {
     });
   }
 
+
+
   void showBottomBar() {
     setState(() {
       _show = true;
@@ -166,8 +193,7 @@ class State_windowHome extends State<windowHome> {
   //------ END OF DATABASE
 
   bool _showAppbar = true; //this is to show app bar
-  final ScrollController _scrollBottomBarController =
-      ScrollController(); // set controller on scrolling
+  final ScrollController _scrollBottomBarController = ScrollController(); // set controller on scrolling
   bool isScrollingDown = false;
   final bool _showFab = true;
   bool _show = true;
@@ -188,8 +214,6 @@ class State_windowHome extends State<windowHome> {
   //--------------
   @override
   Widget build(BuildContext context) {
-    UserFirestore userFirestore = UserFirestore();
-    PostFirestore postFirestore = PostFirestore();
     Ref_Window.Ref_Management.Load();
 
     return MaterialApp(
@@ -289,15 +313,16 @@ class State_windowHome extends State<windowHome> {
                                                       //Click to go to that user profile
                                                       GestureDetector(
                                                         onTap: () async {
-                                                          UserModel? userData = await userFirestore.getUserData(loadedPosts[index].uid);
+                                                          // UserModel? userData = await userFirestore.getUserData(loadedPosts[index].uid);
                                                           Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                              builder: (context) => windowUserProfile(Ref_Window.Ref_Management, userData!),
+                                                              builder: (context) => windowUserProfile(Ref_Window.Ref_Management, loadedUserProfiles[index]),
                                                             ),
                                                           );
                                                         },
                                                         child: Expanded(
+                                                          /*
                                                           child: FutureBuilder(
                                                             future: Ref_Window.Ref_FirebaseStorage.loadImages(loadedPosts[index].uid),
                                                             builder: (context, snapshot) {
@@ -323,16 +348,15 @@ class State_windowHome extends State<windowHome> {
                                                                 }
                                                               }
 
-                                                              return const SizedBox(
+
+                                                           */
+
                                                                 child: CircleAvatar(
                                                                   radius: 20,
-                                                                  backgroundImage: AssetImage("assets/niko.jpg"),
+                                                                  backgroundImage: NetworkImage(loadedImages[index]['url']),
                                                                 ),
-                                                              );
-                                                            },
                                                           ),
                                                         ),
-                                                      ),
                                                       const SizedBox(width: 10),
                                                       Column(children: [
                                                         Text(loadedPosts[index]
