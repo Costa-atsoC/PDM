@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -259,7 +260,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                   child: CircleAvatar(
                                     radius: 100,
                                     backgroundImage: AssetImage(
-                                        "assets/niko.jpg"),
+                                        "assets/PORSCHE_MAIN_2.jpeg"),
                                   ),
                                 ),
                               ],
@@ -357,7 +358,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(userData[index].date),
-                                          Text("from: ${userData[index].startLocation} to: ${userData[index].startLocation}"),
+                                          Text("from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
                                           Text(userData[index].freeSeats + "/"+ userData[index].totalSeats + " FREE SEATS"),
                                           Text(userData[index].description),
                                         ]),

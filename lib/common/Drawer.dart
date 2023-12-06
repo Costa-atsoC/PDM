@@ -5,6 +5,7 @@ import 'package:ubi/screens/windowInitial.dart';
 
 import '../firebase_auth_implementation/models/user_model.dart';
 import '../firestore/firebase_storage.dart';
+import '../screens/windowFeedback.dart';
 import '../screens/windowSettings.dart';
 import '../screens/windowUserProfile.dart';
 import '../windowHome.dart';
@@ -122,7 +123,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
                       return const SizedBox(
                         child: CircleAvatar(
                           radius: 30,
-                          backgroundImage: AssetImage("assets/niko.jpg"),
+                          backgroundImage: AssetImage("assets/PORSCHE_MAIN_2.jpeg"),
                         ),
                       );
                     },
