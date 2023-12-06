@@ -4,16 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:ubi/screens/windowInitial.dart';
 
 import '../firebase_auth_implementation/models/user_model.dart';
-import '../screens/windowFeedback.dart';
-import '../screens/windowSearch.dart';
+import '../firestore/firebase_storage.dart';
 import '../screens/windowSettings.dart';
 import '../screens/windowUserProfile.dart';
 import '../windowHome.dart';
 import 'Management.dart';
-import 'Utils.dart';
 
 class CustomDrawer extends StatefulWidget{
   final Management Ref_Management;
+  final firebaseStorage Ref_FirebaseStorage = firebaseStorage();
 
   CustomDrawer(this.Ref_Management);
 
@@ -49,8 +48,9 @@ class State_CustomDrawer extends State<CustomDrawer> {
       registerDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_REGDATE", ""),
       lastChangedDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_LASTDATE", ""),
       location: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOCATION", ""),
+      image: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_IMAGE", ""),
     );
-    Utils.MSG_Debug("User: " + user.uid);
+
     windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management, user);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
@@ -93,16 +93,45 @@ class State_CustomDrawer extends State<CustomDrawer> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const CircleAvatar(
-                  radius: 30, // Tamanho do raio do círculo
-                  backgroundImage:
-                  AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
+                 Expanded(
+                  child: FutureBuilder(
+                    future: Ref_Window.Ref_FirebaseStorage.loadImages(Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.hasError) {
+                        return const Center(
+                          child: Text('Something went wrong!'),
+                        );
+                      } else if (snapshot.hasData) {
+                        final List<Map<String, dynamic>> images = snapshot.data ?? [];
+                        if (images.isNotEmpty) {
+                          final Map<String, dynamic> firstImage = images.first;
+
+                          return SizedBox(
+                            child: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(firstImage['url'])
+                            ),
+                          );
+                        }
+                      }
+
+                      return const SizedBox(
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundImage: AssetImage("assets/niko.jpg"),
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 const SizedBox(height: 10),
                 // Espaço entre a foto e o texto
                 Text(
-                  Ref_Window.Ref_Management.SETTINGS
-                      .Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
+                  Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
               ],

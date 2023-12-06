@@ -59,15 +59,15 @@ class MyApp extends StatelessWidget {
           String logged = appManagement.GetDefinicao("USERNAME", "null");
 
           //We are checking if the user has internet connection and if the user is logged in or not
-          //if (snapshot.hasData && snapshot.data!) {
-            if (logged != "null") {
+          if (snapshot.hasData && snapshot.data!) {
+             if (logged != "null") {
               initialScreen = windowHome(appManagement);
-            } else {
-              initialScreen = MyHomePage(appManagement, appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
-            }
-          // } else {
-          //   initialScreen = MyHomePage(appManagement, appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
-          // }
+             } else {
+               initialScreen = MyHomePage(appManagement, appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
+             }
+           } else {
+             initialScreen = MyHomePage(appManagement, appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
+           }
 
           return MaterialApp(
             title: 'RideWME',
