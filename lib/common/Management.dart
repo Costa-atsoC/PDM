@@ -205,6 +205,9 @@ class Management {
 
     String? NAME = await Get_SharedPreferences_STRING('NAME');
     SETTINGS.Add('WND_DRAWER_NAME', NAME!);
+
+    String? IMAGE = await Get_SharedPreferences_STRING('IMAGE');
+    SETTINGS.Add('WND_DRAWER_IMAGE', IMAGE!);
   }
 
   //--------------------------------------

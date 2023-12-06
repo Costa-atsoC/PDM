@@ -6,6 +6,7 @@ class UserModel {
   final String registerDate;
   final String lastChangedDate;
   final String location;
+  final String image;
   /*final String register_date;
   final String last_changed_date;
 
@@ -22,6 +23,7 @@ class UserModel {
     required this.registerDate,
     required this.lastChangedDate,
     required this.location,
+    required this.image,
     //required this.phoneNo,
   });
 /*

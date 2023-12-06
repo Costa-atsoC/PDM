@@ -9,9 +9,10 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     //scaffoldBackgroundColor: const Color.fromARGB(255, 245, 237, 225),
-    scaffoldBackgroundColor: const Color.fromARGB(255, 250, 249, 247),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 232, 220, 202),
+
     appBarTheme: const AppBarTheme(
-      color: Color.fromARGB(255, 250, 249, 247),
+      color: Color.fromARGB(255, 19, 40, 61),
       // color: Color.fromARGB(255, 35, 40, 56),
       titleTextStyle: TextStyle(
         fontFamily: 'Lato',
@@ -21,8 +22,8 @@ class AppTheme {
       ),
     ),
     colorScheme: const ColorScheme.light(
-      primary: Color.fromARGB(255, 255, 255, 252),
-      onPrimary: Color.fromARGB(255, 19, 40, 61),
+      primary: Color.fromARGB(255, 19, 40, 61),
+      onPrimary: Colors.white,
       secondary: Colors.white,
       onSecondary: Color.fromARGB(220, 35, 40, 56),
       primaryContainer: Color.fromARGB(255, 201, 128, 94),
