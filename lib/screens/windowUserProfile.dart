@@ -1,6 +1,6 @@
 import 'dart:io' as io;
-
 import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +15,7 @@ import 'package:ubi/firestore/firebase_storage.dart';
 import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
+import '../common/widgets/modals/modalUpdatePost.dart';
 import '../database_help.dart';
 import '../firestore/post_firestore.dart';
 
@@ -131,184 +132,12 @@ class State_windowUserProfile extends State<windowUserProfile> {
     return null;
   }
 
-  //------ Start of Database
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-
-  // This function will be triggered when the floating button is pressed
-  // It will also be triggered when you want to update an item
-  void showMyForm(String? id) async {
-    // id == null -> create new item
-    // id != null -> update an existing item
-    if (id != null) {
-      final existingData = userData.firstWhere((element) => element.uid == id);
-      _titleController.text = existingData.title;
-      _descriptionController.text = existingData.description;
-      _dateController.text = existingData.date;
-    } else {
-      _titleController.text = "";
-      _descriptionController.text = "";
-      _dateController.text = '';
-    }
-
-    showModalBottomSheet(
-        backgroundColor: const Color.fromARGB(255, 69, 78, 89),
-        context: context,
-        elevation: 5,
-        isDismissible: false,
-        isScrollControlled: true,
-        builder: (_) => Container(
-            padding: EdgeInsets.only(
-              top: 15,
-              left: 15,
-              right: 15,
-              // prevent the soft keyboard from covering the text fields
-              bottom: MediaQuery.of(context).viewInsets.bottom + 60,
-            ),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextFormField(
-                    controller: _titleController,
-                    validator: formValidator,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.title), //icon of text field
-                      iconColor: Colors.white,
-                      labelText: "Title", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.description), //icon of text field
-                      iconColor: Colors.white,
-                      labelText: "Description", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    validator: formValidator,
-                    controller: _dateController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.calendar_today), //icon of text field
-                      iconColor: Colors.white,
-                      labelText: "Enter Date", //label text of field
-                      labelStyle: TextStyle(color: Colors.white),
-                    ),
-                    readOnly: true,
-                    //set it true, so that user will not able to edit text
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          //DateTime.now() - not to allow to choose before today.
-                          lastDate: DateTime(2101));
-
-                      if (pickedDate != null) {
-                        print(
-                            pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
-                        String formattedDate =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        print(
-                            formattedDate); //formatted date output using intl package =>  2021-03-16
-                        //you can implement different kind of Date Format here according to your requirement
-
-                        setState(() {
-                          _dateController.text =
-                              formattedDate; //set output date to TextField value.
-                        });
-                      } else {
-                        print("Date is not selected");
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Cancel")),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            if (id == null) {
-                              await addItem();
-                            }
-
-                            if (id != null) {
-                              await updateItem(id as int);
-                            }
-
-                            // Clear the text fields
-                            setState(() {
-                              _titleController.text = '';
-                              _descriptionController.text = '';
-                              _dateController.text = '';
-                            });
-
-                            // Close the bottom sheet
-                            Navigator.pop(context);
-                            //_refreshData();
-                          }
-                          // Save new data
-                        },
-                        child: Text(id == null ? 'Add' : 'Update'),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            )));
-  }
-
-// Insert a new data to the database
-  Future<void> addItem() async {
-    await DatabaseHelper.createItem(1, _titleController.text,
-        _descriptionController.text, _dateController.text);
-    _refreshData();
-  }
-
-  // Update an existing data
-  Future<void> updateItem(int id) async {
-    await DatabaseHelper.updateItem(id, _titleController.text,
-        _descriptionController.text, _dateController.text);
-    _refreshData();
-  }
-
-  // Delete an item
-  void deleteItem(int id) async {
-    await DatabaseHelper.deleteItem(id);
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Successfully deleted!'), backgroundColor: Colors.green));
-    _refreshData();
-  }
-
   //--------------
   @override
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
+    String? currentUserUID =
+        FirebaseAuth.instance.currentUser?.uid;
 
     //Utils.MSG_Debug("$className: build");
     return MaterialApp(
@@ -458,16 +287,16 @@ class State_windowUserProfile extends State<windowUserProfile> {
 
                     Text(
                       widget.user.username,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 35,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).textTheme.titleSmall?.color,
                       ),
                     ),
                     Text(
                       widget.user.location,
-                      style: const TextStyle(
-                        color: Colors.grey,
+                      style: TextStyle(
+                        color: Theme.of(context).textTheme.titleSmall?.color,
                         fontSize: 25,
                       ),
                     ),
@@ -479,6 +308,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                       "@${widget.user.fullName}",
                       style: const TextStyle(
                         color: Colors.grey,
+
                         fontSize: 20,
                       ),
                     ),
@@ -490,17 +320,17 @@ class State_windowUserProfile extends State<windowUserProfile> {
                 children: [
                   Text(
                     Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_MEM", "Member:"),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Theme.of(context).textTheme.titleSmall?.color,
                     ),
                   ),
                   Text(
                     widget.user.registerDate,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
-                      color: Colors.black,
+                      color: Theme.of(context).textTheme.titleSmall?.color,
                     ),
                   )
                 ],
@@ -522,34 +352,80 @@ class State_windowUserProfile extends State<windowUserProfile> {
                               return Hero(
                                 tag: 'postHero${userData[index].pid}',
                                 child: Card(
-                                  color: index % 2 == 0
-                                    ? Colors.blue
-                                    : Colors.blue[200],
-                                  //margin: const EdgeInsets.all(15),
                                   child: ListTile(
                                     title: Text(userData[index].title),
                                     subtitle: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(userData[index].date),
+                                          Text("from: ${userData[index].startLocation} to: ${userData[index].startLocation}"),
+                                          Text(userData[index].freeSeats + "/"+ userData[index].totalSeats + " FREE SEATS"),
                                           Text(userData[index].description),
                                         ]),
                                     trailing: SizedBox(
                                       width: 100,
                                       child: Row(
                                         children: [
-                                          userData[index].uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
+                                          userData[index].uid == currentUserUID
                                               ? IconButton(
                                                   icon: const Icon(Icons.edit),
-                                                  onPressed: () =>
-                                                      showMyForm(userData[index].pid),
+                                            onPressed: () async {
+                                              ModalUpdatePost.show(
+                                                  context,
+                                                  userData[
+                                                  index]);
+                                              setState(() {});
+                                            },
+
                                                 )
                                               : const SizedBox(),
-                                          userData[index].uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
+                                          userData[index].uid == currentUserUID
                                               ? IconButton(
-                                                  icon: const Icon(Icons.delete),
-                                                  onPressed: () =>
-                                                      deleteItem(userData[index].pid as int),
+                                                  icon: const Icon(Icons.delete, color: Colors.redAccent,),
+                                            onPressed: () {
+                                              // Show a confirmation dialog
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext
+                                                context) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        'Confirm Delete'),
+                                                    content: const Text(
+                                                        'Are you sure you want to delete this post?'),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        onPressed:
+                                                            () {
+                                                          Navigator.of(
+                                                              context)
+                                                              .pop(); // Close the dialog
+                                                        },
+                                                        child: const Text(
+                                                            'Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed:
+                                                            () {
+                                                          // Close the dialog and delete the post
+                                                          Navigator.of(
+                                                              context)
+                                                              .pop();
+                                                          PostFirestore().deletePost(
+                                                              currentUserUID!,
+                                                              userData[index]
+                                                                  .pid);
+                                                          //MISSING THE REFRESH!!
+                                                        },
+                                                        child: const Text(
+                                                            'Delete'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
                                                 )
                                               : const SizedBox()
                                         ],

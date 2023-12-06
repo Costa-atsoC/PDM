@@ -68,6 +68,12 @@ class State_CustomDrawer extends State<CustomDrawer> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
+  Future navigateToWindowFeedback(context) async {
+    windowFeedback win = windowFeedback(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -132,11 +138,11 @@ class State_CustomDrawer extends State<CustomDrawer> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.input),
+            leading: const Icon(Icons.home),
             // TODO meter o logo da app
             title: Text(
               Ref_Window.Ref_Management.SETTINGS
-                  .Get("JNL_HOME_DRAWER_SUBTITLE_1", "WELCOME"),
+                  .Get("JNL_HOME_DRAWER_SUBTITLE_1", "HOME"),
             ),
             // adicionar ao management
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
@@ -180,7 +186,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
             textColor: Theme.of(context).colorScheme.onPrimary,
-            onTap: () => {Navigator.of(context).pop()},
+            onTap: () => {navigateToWindowFeedback(context)},
           ),
           const SizedBox(
             height: 10,

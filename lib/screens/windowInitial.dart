@@ -167,10 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text(
                 'Forgot Password?',
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
           ],

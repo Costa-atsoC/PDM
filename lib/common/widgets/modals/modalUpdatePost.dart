@@ -174,6 +174,8 @@ class _ModalUpdatePostState extends State<ModalUpdatePost> {
                       } else {
                         PostModel updatedPost = PostModel(
                           uid: widget.post.uid,
+                          userFullName: widget.post.userFullName,
+                          username: widget.post.username,
                           pid: widget.post.pid,
                           likes: widget.post.likes,
                           title: _titleController.text,

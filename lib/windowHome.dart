@@ -64,21 +64,11 @@ class State_windowHome extends State<windowHome> {
   final windowHome Ref_Window;
   String className = "";
 
-  // PARA FOTOS, IMPLEMENTAR NO PERFIL!
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
-
-    setState(() {
-      pickedFile = result.files.first;
-    });
-  }
-
   List<PostModel> loadedPosts = [];
   List<int> localLikes = [];
+  List<String> loadedUsers = [];
   bool _dataLoaded = false;
 
-  // Updated getData method
   Future getData() async {
     if (_dataLoaded) {
       return; // Skip fetching data if it's already loaded
@@ -137,17 +127,6 @@ class State_windowHome extends State<windowHome> {
     getData();
     myScroll();
   }
-
-/*
-  void showMyForm(int? id) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => PostForm(Ref_Window.Ref_Management)),
-    );
-  }
-
- */
 
   void myScroll() async {
     _scrollBottomBarController.addListener(() {
@@ -218,26 +197,29 @@ class State_windowHome extends State<windowHome> {
         darkTheme: AppTheme.darkTheme,
         home: Scaffold(
             drawer: CustomDrawer(Ref_Window.Ref_Management),
-            appBar: _showAppbar
-                ? AppBar(
-                    title: Text(Ref_Window.Ref_Management.SETTINGS
-                        .Get("JNL_HOME_TITLE_1", "")),
-                    actions: [
-                      IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: () async {
-                          setState(() {
-                            _dataLoaded = false;
-                          });
-                          await getData();
-                        },
-                      ),
-                    ],
-                  )
-                : PreferredSize(
-                    child: Container(),
-                    preferredSize: Size(0.0, 0.0),
-                  ),
+            appBar: PreferredSize(
+              preferredSize:
+                  Size.fromHeight(_showAppbar ? kToolbarHeight + 30 : 0.0),
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 200),
+                height: _showAppbar ? kToolbarHeight + 30 : 0.0,
+                child: AppBar(
+                  title: Text(Ref_Window.Ref_Management.SETTINGS
+                      .Get("JNL_HOME_TITLE_1", "")),
+                  actions: [
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () async {
+                        setState(() {
+                          _dataLoaded = false;
+                        });
+                        await getData();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
             body: RefreshIndicator(onRefresh: () async {
               setState(() {
                 _dataLoaded = false;
@@ -353,70 +335,10 @@ class State_windowHome extends State<windowHome> {
                                                       ),
                                                       const SizedBox(width: 10),
                                                       Column(children: [
-                                                        // passar isto para o getData, só porque é chato tar sempre a dar load
-                                                        FutureBuilder<String>(
-                                                          future: userFirestore
-                                                              .getUserAttribute(
-                                                            loadedPosts[index]
-                                                                .uid,
-                                                            'username',
-                                                          ),
-                                                          builder: (context,
-                                                              userSnapshot) {
-                                                            if (userSnapshot
-                                                                    .connectionState ==
-                                                                ConnectionState
-                                                                    .waiting) {
-                                                              return const Text(
-                                                                  "User: Loading...");
-                                                            } else if (userSnapshot
-                                                                .hasError) {
-                                                              return const Text(
-                                                                  "User: Error loading user data");
-                                                            } else {
-                                                              String username =
-                                                                  userSnapshot
-                                                                          .data ??
-                                                                      "Unknown";
-                                                              return Text(
-                                                                  "@$username");
-                                                            }
-                                                          },
-                                                        ),
-                                                        FutureBuilder<String>(
-                                                          future: userFirestore
-                                                              .getUserAttribute(
-                                                            loadedPosts[index]
-                                                                .uid,
-                                                            'fullName',
-                                                          ),
-                                                          builder: (context,
-                                                              userSnapshot) {
-                                                            if (userSnapshot
-                                                                    .connectionState ==
-                                                                ConnectionState
-                                                                    .waiting) {
-                                                              return const Text(
-                                                                  "User: Loading...");
-                                                            } else if (userSnapshot
-                                                                .hasError) {
-                                                              return const Text(
-                                                                  "User: Error loading user data");
-                                                            } else {
-                                                              String fullName =
-                                                                  userSnapshot
-                                                                          .data ??
-                                                                      "Unknown";
-                                                              return Text(
-                                                                fullName,
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .titleSmall,
-                                                              );
-                                                            }
-                                                          },
-                                                        ),
+                                                        Text(loadedPosts[index]
+                                                            .userFullName),
+                                                        Text(loadedPosts[index]
+                                                            .username),
                                                       ]),
                                                       const Spacer(),
                                                       Text(loadedPosts[index]

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/windowHome.dart';
 import 'package:uuid/uuid.dart';
 import '../../../firebase_auth_implementation/models/post_model.dart';
@@ -45,6 +46,9 @@ class _ModalNewPostState extends State<ModalNewPost> {
 
   @override
   Widget build(BuildContext context) {
+    UserFirestore userFirestore = UserFirestore();
+    PostFirestore postFirestore = PostFirestore();
+
     return SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
@@ -164,27 +168,38 @@ class _ModalNewPostState extends State<ModalNewPost> {
                               int.parse(_freeSeatsController.text)) {
                             _freeSeatsController.text = "0";
                           } else {
-                            PostModel newPost = PostModel(
-                              uid: FirebaseAuth.instance.currentUser!.uid,
-                              pid: const Uuid().v4(),
-                              likes: '0',
-                              title: _titleController.text,
-                              description: _descriptionController.text,
-                              date: _dateController.text,
-                              totalSeats: _totalSeatsController.text,
-                              freeSeats: _freeSeatsController.text,
-                              location: _locationController.text,
-                              startLocation: _startLocationController.text,
-                              endLocation: _endLocationController.text,
-                              registerDate: Utils.currentTime(),
-                              lastChangedDate: Utils.currentTime(),
-                            );
+                            String currentUID = FirebaseAuth.instance.currentUser!.uid;
+                            userFirestore.getUserData(currentUID).then((UserModel? currentUser) {
+                              // Use currentUser as needed
+                              if (currentUser != null) {
+                                PostModel newPost = PostModel(
+                                  uid: FirebaseAuth.instance.currentUser!.uid,
+                                  userFullName: currentUser.fullName,
+                                  username: currentUser.username,
+                                  pid: const Uuid().v4(),
+                                  likes: '0',
+                                  title: _titleController.text,
+                                  description: _descriptionController.text,
+                                  date: _dateController.text,
+                                  totalSeats: _totalSeatsController.text,
+                                  freeSeats: _freeSeatsController.text,
+                                  location: _locationController.text,
+                                  startLocation: _startLocationController.text,
+                                  endLocation: _endLocationController.text,
+                                  registerDate: Utils.currentTime(),
+                                  lastChangedDate: Utils.currentTime(),
+                                );
 
-                            String? uid = FirebaseAuth.instance.currentUser
-                                ?.uid; // may fix the problem of creating the post and then it appears with another user UID
+                                PostFirestore().savePostData(newPost, currentUID);
+                                Navigator.pop(context); // Close the modal
+                              } else {
+                                print("User data not found");
+                              }
+                            }).catchError((e) {
+                              // Handle any potential errors
+                              print("Error retrieving user data: $e");
+                            });
 
-                            await PostFirestore().savePostData(newPost, uid!);
-                            Navigator.pop(context); // Close the modal
 
                           }
 
