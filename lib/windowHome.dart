@@ -359,13 +359,27 @@ class State_windowHome extends State<windowHome> {
                                                             .start,
                                                     children: [
                                                       Text(
-                                                          "Date: ${loadedPosts[index].date}"),
+                                                        "Date: ${loadedPosts[index].date}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .labelLarge,
+                                                      ),
                                                       Text(
-                                                          "Description: ${loadedPosts[index].description}"),
+                                                        "From: ${loadedPosts[index].startLocation} \nTo: ${loadedPosts[index].endLocation} ",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .labelLarge,
+                                                      ),
                                                       Text(
-                                                          "Location: ${loadedPosts[index].location}"),
+                                                        "Description: ${loadedPosts[index].description}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .labelLarge,
+                                                      ),
                                                       Text(
-                                                          "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}"),
+                                                        "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}",
+                                                        style: Theme.of(context).textTheme.labelLarge,
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
