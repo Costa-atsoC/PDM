@@ -1,9 +1,16 @@
+import 'dart:io' as io;
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ubi/common/Drawer.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
+import 'package:path/path.dart' as path;
+import 'package:ubi/firestore/firebase_storage.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
@@ -16,6 +23,7 @@ import '../firestore/post_firestore.dart';
 class windowUserProfile extends StatefulWidget {
   String windowTitle = "";
   final Management Ref_Management;
+  final firebaseStorage Ref_FirebaseStorage = firebaseStorage();
   int? ACCESS_WINDOW_PROFILE;
 
   UserModel user;
@@ -24,7 +32,6 @@ class windowUserProfile extends StatefulWidget {
   windowUserProfile(this.Ref_Management, this.user) {
     windowTitle = "General Window";
     user = this.user;
-    Utils.MSG_Debug(user.uid);
     //Utils.MSG_Debug(windowTitle);
   }
 
@@ -96,6 +103,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
   //           builder: (context) =>
   //               windowUserProfile(Ref_Window.Ref_Management)));
   // }
+
 
   //--- database constants
   // All data
@@ -322,24 +330,132 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+
                   ),
-                  child: const CircleAvatar(
-                    radius: 100,
-                    backgroundImage: AssetImage("assets/niko.jpg"),
+                  child: Expanded(
+                    child: FutureBuilder(
+                      future: Ref_Window.Ref_FirebaseStorage.loadImages(widget.user.uid),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return const Center(
+                            child: Text('Something went wrong!'),
+                          );
+                        } else if (snapshot.hasData) {
+                          final List<Map<String, dynamic>> images = snapshot.data ?? [];
+                          if (images.isNotEmpty) {
+                            final Map<String, dynamic> firstImage = images.first;
+
+                            if(widget.user.uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")){
+                              return SizedBox(
+                                width: 200,
+                                height: 200,
+                                child:
+                                Stack(
+                                  children: <Widget>[
+                                    Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                                color: Colors.blue,
+                                                borderRadius: BorderRadius.circular(100)
+                                            ),
+                                            child: ElevatedButton.icon(
+                                              icon: const Icon(
+                                                  Icons.add_a_photo_sharp),
+                                              onPressed: () {
+                                                Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
+                                              },
+                                              label: const Text(""),
+                                            )
+                                        )
+                                    ),
+                                    SizedBox(
+                                      width: 200,
+                                      height: 200,
+                                      child: CircleAvatar(
+                                        radius: 100,
+                                            backgroundImage: NetworkImage(firstImage['url']),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: CircleAvatar(
+                                radius: 100,
+                                backgroundImage: NetworkImage(firstImage['url'])
+                              ),
+                            );
+                          }
+                        }
+                        if(widget.user.uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")){
+                          return SizedBox(
+                            width: 200,
+                            height: 200,
+                            child:
+                            Stack(
+                              children: <Widget>[
+                                Align(
+                                    alignment: Alignment.topRight,
+                                    child: Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            color: Colors.blue,
+                                            borderRadius: BorderRadius.circular(
+                                                100)
+                                        ),
+                                        child: ElevatedButton.icon(
+                                          icon: const Icon(
+                                              Icons.add_a_photo_sharp),
+                                          onPressed: () {
+                                            Ref_Window.Ref_FirebaseStorage.upload(
+                                                "gallery", widget.user.uid);
+                                          },
+                                          label: const Text(""),
+                                        )
+                                    )
+                                ),
+                                const SizedBox(
+                                  width: 200,
+                                  height: 200,
+                                  child: CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage: AssetImage(
+                                        "assets/niko.jpg"),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                      }
+                          return const SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: CircleAvatar(
+                              radius: 100,
+                              backgroundImage: AssetImage(
+                                  "assets/niko.jpg"),
+                            ),
+                          );
+                      },
+                    ),
                   ),
                 ),
-              ),
+      ),
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+
                     Text(
                       widget.user.username,
                       style: const TextStyle(
@@ -360,7 +476,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.user.fullName,
+                      "@${widget.user.fullName}",
                       style: const TextStyle(
                         color: Colors.grey,
                         fontSize: 20,

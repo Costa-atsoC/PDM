@@ -124,6 +124,7 @@ class PostFirestore {
     return userPosts;
   }
 
+
   Future<List<PostModel>> getAllPosts() async {
     List<PostModel> allPosts = [];
 

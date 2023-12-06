@@ -18,7 +18,8 @@ class UserFirestore {
           'fullName': user.fullName,
           'registerDate' : user.registerDate,
           'lastChangedDate' : user.lastChangedDate,
-          'location': 'null'
+          'location': user.location,
+          'image': user.image,
         })
         .then((value) => Utils.MSG_Debug("User $id Added"))
         .catchError((error) => Utils.MSG_Debug("Failed to add user: $error"));
@@ -39,6 +40,7 @@ class UserFirestore {
           registerDate: userDoc['registerDate'],
           lastChangedDate: userDoc['lastChangedDate'],
           location: userDoc['location'],
+          image: userDoc['image'],
         );
       } else {
         Utils.MSG_Debug("User with UID $uid not found");
@@ -67,6 +69,30 @@ class UserFirestore {
     } catch (error) {
       Utils.MSG_Debug("Error getting user data: $error");
       return "??";
+    }
+  }
+
+  Future<void> updateUserData(UserModel user) async {
+    try {
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      String currTime = Utils.currentTimeUser();
+
+      users
+          .doc(user.uid)
+          .update({
+            'uid': user.uid,
+            'email': user.email,
+            'username': user.username,
+            'fullName': user.fullName,
+            'registerDate' : user.registerDate,
+            'lastChangedDate' : currTime,
+            'location': user.location,
+            'image': user.image,
+          })
+          .then((value) => Utils.MSG_Debug("User $user.uid Updated"))
+          .catchError((error) => Utils.MSG_Debug("Failed to update user: $error"));
+    } catch (error) {
+      Utils.MSG_Debug("Error updating user data: $error");
     }
   }
 }

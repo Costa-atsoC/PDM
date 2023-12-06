@@ -302,7 +302,8 @@ class Estado_windowRegister extends State<windowRegister> {
           fullName: fullname,
           registerDate: currentTime,
           lastChangedDate: currentTime,
-          location: '????');
+          location: '????',
+          image: 'assets/LOGO.png',);
       await userFirestore.saveUserData(currentUser);
 
       Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL");

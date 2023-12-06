@@ -5,17 +5,16 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
-import 'package:ubi/screens/windowPostForm.dart';
 import 'common/Drawer.dart';
 import 'common/widgets/modals/modalNewPost.dart';
 import 'common/widgets/modals/modalUpdatePost.dart';
 
-import 'package:ubi/screens/windowSettings.dart';
 import 'common/Management.dart';
 import 'common/Utils.dart';
 import 'common/appTheme.dart';
 import 'common/widgets/modals/modalPostViewer.dart';
 import 'firebase_auth_implementation/models/post_model.dart';
+import 'firestore/firebase_storage.dart';
 import 'firestore/post_firestore.dart';
 import 'screens/windowSearch.dart';
 import 'screens/windowUserProfile.dart';
@@ -26,6 +25,7 @@ class windowHome extends StatefulWidget {
   String windowTitle = "";
   final Management Ref_Management;
   final storage = FirebaseStorage.instance; // firestore
+  final firebaseStorage Ref_FirebaseStorage = firebaseStorage();
   int? ACCESS_WINDOW_HOME;
 
   //--------------
@@ -307,30 +307,48 @@ class State_windowHome extends State<windowHome> {
                                                       //Click to go to that user profile
                                                       GestureDetector(
                                                         onTap: () async {
-                                                          UserModel? userData =
-                                                              await userFirestore
-                                                                  .getUserData(
-                                                                      loadedPosts[
-                                                                              index]
-                                                                          .uid);
+                                                          UserModel? userData = await userFirestore.getUserData(loadedPosts[index].uid);
                                                           Navigator.push(
                                                             context,
                                                             MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  windowUserProfile(
-                                                                Ref_Window
-                                                                    .Ref_Management,
-                                                                userData!,
-                                                              ),
+                                                              builder: (context) => windowUserProfile(Ref_Window.Ref_Management, userData!),
                                                             ),
                                                           );
                                                         },
-                                                        child:
-                                                            const CircleAvatar(
-                                                          radius: 20,
-                                                          backgroundImage:
-                                                              AssetImage(
-                                                                  'assets/PORSCHE_MAIN_2.jpeg'),
+                                                        child: Expanded(
+                                                          child: FutureBuilder(
+                                                            future: Ref_Window.Ref_FirebaseStorage.loadImages(loadedPosts[index].uid),
+                                                            builder: (context, snapshot) {
+                                                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                                                return const Center(
+                                                                  child: CircularProgressIndicator(),
+                                                                );
+                                                              } else if (snapshot.hasError) {
+                                                                return const Center(
+                                                                  child: Text('Something went wrong!'),
+                                                                );
+                                                              } else if (snapshot.hasData) {
+                                                                final List<Map<String, dynamic>> images = snapshot.data ?? [];
+                                                                if (images.isNotEmpty) {
+                                                                  final Map<String, dynamic> firstImage = images.first;
+
+                                                                  return SizedBox(
+                                                                    child: CircleAvatar(
+                                                                        radius: 20,
+                                                                        backgroundImage: NetworkImage(firstImage['url'])
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              }
+
+                                                              return const SizedBox(
+                                                                child: CircleAvatar(
+                                                                  radius: 20,
+                                                                  backgroundImage: AssetImage("assets/niko.jpg"),
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
                                                       const SizedBox(width: 10),
