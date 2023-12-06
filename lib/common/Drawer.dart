@@ -147,7 +147,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
             ),
             // adicionar ao management
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.onPrimary,
+            textColor: Theme.of(context).colorScheme.secondary,
             onTap: () => {navigateToWindowHome(context)},
           ),
           const SizedBox(
@@ -160,7 +160,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
                   .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.onPrimary,
+            textColor: Theme.of(context).colorScheme.secondary,
             onTap: () => {navigateToWindowUserProfile(context)},
           ),
           const SizedBox(
@@ -173,7 +173,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
                   .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.onPrimary,
+            textColor: Theme.of(context).colorScheme.secondary,
             onTap: () => {navigateToWindowSettings(context)},
           ),
           const SizedBox(
@@ -186,7 +186,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
                   .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.onPrimary,
+            textColor: Theme.of(context).colorScheme.secondary,
             onTap: () => {navigateToWindowFeedback(context)},
           ),
           const SizedBox(
@@ -213,21 +213,15 @@ class State_CustomDrawer extends State<CustomDrawer> {
                         Ref_Window.Ref_Management.SETTINGS
                             .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
                         textAlign: TextAlign.center,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge
+                        style: Theme.of(context).textTheme.titleLarge
                             ?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .secondaryContainer,
+                              color: Theme.of(context).colorScheme.secondaryContainer,
                         ),
                       ),
                     ),
                     onTap: () => {
-                      Ref_Window.Ref_Management.Delete_Shared_Preferences(
-                          "EMAIL"),
-                      Ref_Window.Ref_Management.Delete_Shared_Preferences(
-                          "NAME"),
+                      Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL"),
+                      Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME"),
                       FirebaseAuth.instance.signOut(),
                       Navigator.of(context).pop(),
                       navigateToWindowInitial(context)

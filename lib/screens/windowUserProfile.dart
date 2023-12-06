@@ -12,6 +12,7 @@ import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:path/path.dart' as path;
 import 'package:ubi/firestore/firebase_storage.dart';
+import '../common/widgets/modals/modalUpdateUser.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
@@ -136,9 +137,18 @@ class State_windowUserProfile extends State<windowUserProfile> {
   @override
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
-    String? currentUserUID =
-        FirebaseAuth.instance.currentUser?.uid;
+    String? currentUserUID = FirebaseAuth.instance.currentUser?.uid;
 
+    Widget userAction = const SizedBox.shrink();
+    if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
+      userAction = IconButton(
+        icon: const Icon(Icons.settings),
+        color: Colors.white,
+        onPressed: () {
+          modalUpdateUser.show(context, widget.user);
+        },
+      );
+    }
     //Utils.MSG_Debug("$className: build");
     return MaterialApp(
       theme: AppTheme.lightTheme,
@@ -146,8 +156,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
       home: Scaffold(
         drawer: CustomDrawer(Ref_Window.Ref_Management),
         appBar: AppBar(
-          title: Text(Ref_Window.Ref_Management.SETTINGS
-              .Get("WND_PROFILE_TITLE_1", "User Profile")),
+          title: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_PROFILE_TITLE_1", "User Profile")),
+          actions: [ userAction ],
         ),
         body: Padding(
           padding: const EdgeInsets.all(10),
@@ -159,7 +169,6 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-
                   ),
                   child: Expanded(
                     child: FutureBuilder(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -146,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) {
-            return windowForgotPassword();
+            return const windowForgotPassword();
           }),
         );
       },
@@ -155,7 +157,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            SizedBox(width: 10), // Adjust the spacing as needed
+            const SizedBox(width: 10), // Adjust the spacing as needed
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -211,132 +213,143 @@ class _MyHomePageState extends State<MyHomePage> {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      home: Scaffold(
-        backgroundColor: Theme
-            .of(context)
-            .scaffoldBackgroundColor,
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.only(left: 0.0, right: 0.0),
-              child: Center(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(140),
-                          ),
-                          child: const CircleAvatar(
-                            radius: 100,
-                            backgroundColor: Color.fromARGB(0, 0, 0, 0),
-                            backgroundImage: AssetImage('assets/LOGO.png'),
-                          ),
-                        ),
-                        const SizedBox(
-                          height:
-                          40, // meter isto responsivo e meter no management
-                        ),
-                        TextFormField(
-                          controller: _email,
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.alternate_email),
-                            labelText: Ref_Management.SETTINGS
-                                .Get("WND_LOGIN_HINT_10", "Email"),
-                            labelStyle: Theme
-                                .of(context)
-                                .textTheme
-                                .titleSmall,
-                            enabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 3.0), // Set the border color here
-                            ),
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent,
-                                  width: 3.0), // Set the border color here
-                            ),
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleSmall,
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        TextFormField(
-                          controller: _pass,
-                          obscureText: bool.parse(Ref_Management.SETTINGS
-                              .Get("WND_REGISTER_OBSTEXT_3", "true")),
-                          decoration: InputDecoration(
-                            icon: Icon(Icons.password_outlined),
-                            labelText: Ref_Management.SETTINGS
-                                .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
-                            labelStyle: Theme
-                                .of(context)
-                                .textTheme
-                                .titleSmall,
-                            enabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 3.0), // Set the border color here
-                            ),
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.blueAccent,
-                                  width: 3.0), // Set the border color here
-                            ),
-                          ),
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .titleSmall,
-                          validator: (String? value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }
-                            return null;
-                          },
-                        ),
-                        Create_Button_Forgot_Password(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              _signIn();
-                              if (_formKey.currentState!.validate()) {} else {
-                                Utils.MSG_Debug("ERROR");
-                              }
-                            },
-                            child: Text(
-                                Ref_Management.SETTINGS.Get(
-                                    "WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleLarge),
-                          ),
-                        ),
-                        Create_Button_New_Window_Register(),
-                      ],
-                    ),
-                  ),
-                ),
+        home: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/background.jpg"),
+                fit: BoxFit.cover,
               ),
             ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              decoration: BoxDecoration(color: Colors.white.withOpacity(0.0)
           ),
-        ),
+          child: Center(
+           child: SingleChildScrollView(
+           child: Container(
+             margin: const EdgeInsets.only(left: 0.0, right: 0.0),
+             child: Center(
+               child: Container(
+                 margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                 child: Form(
+                   key: _formKey,
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: <Widget>[
+                       Container(
+                         decoration: BoxDecoration(
+                           borderRadius: BorderRadius.circular(140),
+                         ),
+                         child: const CircleAvatar(
+                           radius: 100,
+                           backgroundColor: Color.fromARGB(0, 0, 0, 0),
+                           backgroundImage: AssetImage('assets/LOGO.png'),
+                         ),
+                       ),
+                       const SizedBox(
+                         height:
+                         40, // meter isto responsivo e meter no management
+                       ),
+                       TextFormField(
+                         controller: _email,
+                         decoration: InputDecoration(
+                           icon: Icon(Icons.alternate_email),
+                           labelText: Ref_Management.SETTINGS
+                               .Get("WND_LOGIN_HINT_10", "Email"),
+                           labelStyle: Theme
+                               .of(context)
+                               .textTheme
+                               .titleSmall,
+                           enabledBorder: const UnderlineInputBorder(
+                             borderSide: BorderSide(
+                                 width: 3.0), // Set the border color here
+                           ),
+                           focusedBorder: const UnderlineInputBorder(
+                             borderSide: BorderSide(color: Colors.blueAccent,width: 3.0), // Set the border color here
+                           ),
+                         ),
+                         style: Theme
+                             .of(context)
+                             .textTheme
+                             .titleSmall,
+                         validator: (String? value) {
+                           if (value == null || value.isEmpty) {
+                             return 'Please enter your email';
+                           }
+                           return null;
+                         },
+                       ),
+                       const SizedBox(
+                         height: 5,
+                       ),
+                       TextFormField(
+                         controller: _pass,
+                         obscureText: bool.parse(Ref_Management.SETTINGS
+                             .Get("WND_REGISTER_OBSTEXT_3", "true")),
+                         decoration: InputDecoration(
+                           icon: Icon(Icons.password_outlined),
+                           labelText: Ref_Management.SETTINGS
+                               .Get("WND_LOGIN_HINT_2", "WND_LOGIN_HINT_2 ??"),
+                           labelStyle: Theme
+                               .of(context)
+                               .textTheme
+                               .titleSmall,
+                           enabledBorder: const UnderlineInputBorder(
+                             borderSide: BorderSide(
+                                 width: 3.0), // Set the border color here
+                           ),
+                           focusedBorder: const UnderlineInputBorder(
+                             borderSide: BorderSide(
+                                 color: Colors.blueAccent,
+                                 width: 3.0), // Set the border color here
+                           ),
+                         ),
+                         style: Theme
+                             .of(context)
+                             .textTheme
+                             .titleSmall,
+                         validator: (String? value) {
+                           if (value == null || value.isEmpty) {
+                             return 'Please enter your password';
+                           }
+                           return null;
+                         },
+                       ),
+                       Create_Button_Forgot_Password(),
+                       Padding(
+                         padding: const EdgeInsets.symmetric(vertical: 16.0),
+                         child: ElevatedButton(
+                           onPressed: () {
+                             _signIn();
+                             if (_formKey.currentState!.validate()) {} else {
+                               Utils.MSG_Debug("ERROR");
+                             }
+                           },
+                           child: Text(
+                               Ref_Management.SETTINGS.Get(
+                                   "WND_LOGIN_BTN_1", "WND_LOGIN_BTN_1 ??"),
+                               style: Theme
+                                   .of(context)
+                                   .textTheme
+                                   .titleLarge),
+                         ),
+                       ),
+                       Create_Button_New_Window_Register(),
+                     ],
+                   ),
+                 ),
+               ),
+             ),
+           ),
+         ),
+       ),
       ),
+        ),
+    ),
+    ),
     );
   }
 
