@@ -2,16 +2,45 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/appTheme.dart';
+import '../common/Management.dart';
+import '../common/Utils.dart';
 
-class windowForgotPassword extends StatefulWidget{
-  const windowForgotPassword({Key? key}) : super(key: key);
+class windowForgotPassword extends StatefulWidget {
+  String windowTitle = "";
+  final Management Ref_Management;
 
+  //--------------
+  windowForgotPassword(this.Ref_Management) {
+    windowTitle = "Register";
+    Utils.MSG_Debug(windowTitle);
+  }
+
+  //--------------
+  Future<void> Load() async {
+    Utils.MSG_Debug(windowTitle + ":Load");
+  }
+
+  //--------------
   @override
-  State<windowForgotPassword> createState() => _windowForgotPasswordState();
+  State<StatefulWidget> createState() {
+    Utils.MSG_Debug(windowTitle + ":createState");
+    return _windowForgotPasswordState(this);
+  }
 }
 
 class _windowForgotPasswordState extends State<windowForgotPassword> {
   final _emailController = TextEditingController();
+
+  final windowForgotPassword Ref_Window;
+
+  String className = "";
+
+  //--------------
+  _windowForgotPasswordState(this.Ref_Window) : super() {
+    className = Ref_Window.Ref_Management.SETTINGS
+        .Get("WND_FORGOT_PASSWORD_TITLE_1", "WND_REGISTER_HINT_1 ??");
+    Utils.MSG_Debug("$className: createState");
+  }
 
   @override
   void dispose() {
@@ -19,7 +48,7 @@ class _windowForgotPasswordState extends State<windowForgotPassword> {
     super.dispose();
   }
 
-  Future passwordReset() async{
+  Future passwordReset() async {
     try {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text.trim());
@@ -27,11 +56,13 @@ class _windowForgotPasswordState extends State<windowForgotPassword> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text('Password reset link sent! Check your email'),
+            content: Text(Ref_Window.Ref_Management.SETTINGS.Get(
+                "WND_FORGOT_PASSWORD_TITLE_2",
+                "WND_FORGOT_PASSWORD_TITLE_2 ??")),
           );
         },
       );
-    } on FirebaseAuthException catch (e){
+    } on FirebaseAuthException catch (e) {
       print(e);
       showDialog(
         context: context,
@@ -47,18 +78,17 @@ class _windowForgotPasswordState extends State<windowForgotPassword> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      home:Scaffold(
-      appBar: AppBar(
-      ),
-      body:Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: Scaffold(
+          appBar: AppBar(),
+          body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: Text(
-                'Enter Your Email and we will send you a password reset link',
+                Ref_Window.Ref_Management.SETTINGS.Get(
+                    "WND_FORGOT_PASSWORD_TITLE_2",
+                    "WND_FORGOT_PASSWORD_TITLE_2 ??"),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
@@ -86,15 +116,19 @@ class _windowForgotPasswordState extends State<windowForgotPassword> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
-
-            MaterialButton(
-              onPressed: passwordReset,
-              child: Text('Reset Password'),
-              color: Colors.deepPurple[200],
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ElevatedButton(
+                onPressed: passwordReset,
+                child: Text(
+                    Ref_Window.Ref_Management.SETTINGS.Get(
+                        "WND_FORGOT_PASSWORD_BTN_1_TEXT",
+                        "WND_FORGOT_PASSWORD_BTN_1_TEXT ??"),
+                    style: Theme.of(context).textTheme.titleLarge),
+              ),
             ),
-          ]
-      ),
-    ));
+          ]),
+        ));
   }
 }

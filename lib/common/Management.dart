@@ -96,6 +96,9 @@ class Management {
     //----------------- WINDOW HOME ------------------------//
     //------------------------------------------------------//
 
+    //--------- ANIMATION
+    SETTINGS.Add("WND_HOME_ANIMATION_DURATION_1", "200"); // in ms
+
     //--------- TEXT
     SETTINGS.Add("WND_HOME_TITLE_1", "");
     SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
@@ -148,12 +151,21 @@ class Management {
       SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
     }
 
-    //--------- FIM DA JANELA HOME
+    //------------------------------------------------------//
+    //--------------- WINDOW FORGOT PASSWORD----------------//
+    //------------------------------------------------------//
+    SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_1", "Go Back");
+    SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_1_SIZE", "15");
+    SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_1_ICON", "RideWME");
 
-    //------------------------------------------------------//
-    //----------------- WINDOW HOME ------------------------//
-    //------------------------------------------------------//
-    SETTINGS.Add("WND_PROFILE_TITLE_1", "User Profile");
+    SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_2",
+        "Enter your Email and we will send you a password reset link");
+    SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_2_SIZE", "15");
+    SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_2_ICON", "RideWME");
+
+    SETTINGS.Add("WND_FORGOT_PASSWORD_BTN_1_TEXT",
+        "RESET PASSWORD");
+    SETTINGS.Add("WND_FORGOT_PASSWORD_BTN_1_TEXT_SIZE", "15");
 
     //--------- FUNÇÕES
     int? NUMERO_ACESSOS = await Get_SharedPreferences_INT('NUMERO_ACESSOS');
@@ -174,7 +186,7 @@ class Management {
     //----------------- WINDOW PROFILE----------------------//
     //------------------------------------------------------//
 
-    if(FULL_NAME != null){
+    if (FULL_NAME != null) {
       SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
     }
 
@@ -193,7 +205,7 @@ class Management {
     SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
 
     //------------------------------------------------------//
-    //----------------- WINDOW Drawer-----------------------//
+    //-------------------- DRAWER --------------------------//
     //------------------------------------------------------//
 
     String? LASTDATE = await Get_SharedPreferences_STRING('LASTDATE');
@@ -295,10 +307,10 @@ class Management {
     return Resposta_Servidor;
   }
 
-  //-------- WINDOW FUNCTIONS
-  // Future NavigateTo_Window_User_Profile(context) async {
-  //   windowUserProfile win = new windowUserProfile(Management as Management);
-  //   await win.Load();
-  //   Navigator.push(context, MaterialPageRoute(builder: (context) => win));
-  // }
+//-------- WINDOW FUNCTIONS
+// Future NavigateTo_Window_User_Profile(context) async {
+//   windowUserProfile win = new windowUserProfile(Management as Management);
+//   await win.Load();
+//   Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+// }
 }

@@ -86,22 +86,36 @@ class State_windowHome extends State<windowHome> {
 
     try {
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
+      Map<int, List<Map<String, dynamic>>> postImagesMap = {}; // Map to store images by post index
 
-      for (PostModel post in newPosts) {
+      for (int i = 0; i < newPosts.length; i++) {
+        PostModel post = newPosts[i];
         UserModel? userProfile = await userFirestore.getUserData(post.uid);
         loadedUserProfiles.add(userProfile!);
-
-        // Assuming loadImages returns a List<Map<String, dynamic>> for each user
+        
         List<Map<String, dynamic>> images = await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
-        final Map<String, dynamic> firstImage = images.first;
-        loadedImages.add(firstImage);
+
+        // Add images to the map using the post index as the key
+        postImagesMap[i] = images;
+
+        if (images.isNotEmpty) {
+          Map<String, dynamic> firstImage = images.first;
+          loadedImages.add(firstImage);
+        }
       }
 
       setState(() {
         loadedPosts.clear(); // Clear the list before adding new data
         loadedPosts.addAll(newPosts);
 
-        // No need to clear loadedUserProfiles and loadedImages, they are updated above
+        // Store images by post index
+        loadedImages.clear();
+        for (int i = 0; i < newPosts.length; i++) {
+          List<Map<String, dynamic>> images = postImagesMap[i] ?? [];
+          loadedImages.addAll(images);
+        }
+
+        // No need to clear loadedUserProfiles, it is updated above
         _isLoading = false; // Data has been loaded
         _dataLoaded = true; // Set the flag to true after loading data
       });
@@ -112,6 +126,7 @@ class State_windowHome extends State<windowHome> {
       });
     }
   }
+
 
 
   final formKey = GlobalKey<FormState>();
@@ -225,10 +240,11 @@ class State_windowHome extends State<windowHome> {
               preferredSize:
                   Size.fromHeight(_showAppbar ? kToolbarHeight + 30 : 0.0),
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 200),
+                duration: Duration(milliseconds: int.parse(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_ANIMATION_DURATION_1", "200"))), // added to the Management
                 height: _showAppbar ? kToolbarHeight + 30 : 0.0,
                 child: AppBar(
-                  title: Text(Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_TITLE_1", "")),
+                  title: Text(Ref_Window.Ref_Management.SETTINGS
+                      .Get("WND_HOME_TITLE_1", "")),
                   actions: [
                     IconButton(
                       icon: const Icon(Icons.refresh),
@@ -354,9 +370,14 @@ class State_windowHome extends State<windowHome> {
                                                           ),
                                                         ),
                                                       const SizedBox(width: 10),
-                                                      Column(children: [
-                                                        Text(loadedPosts[index].userFullName),
-                                                        Text("@${loadedPosts[index].username}"),
+                                                      Column(
+
+                                                          children: [
+                                                        Text(loadedPosts[index]
+                                                            .userFullName, style: Theme.of(context).textTheme.titleSmall,),
+                                                        Text("@${loadedPosts[index]
+                                                            .username}", style: Theme.of(context).textTheme.labelLarge),
+
                                                       ]),
                                                       const Spacer(),
                                                       Text(loadedPosts[index].registerDate)

@@ -7,13 +7,11 @@ class UserModel {
   final String lastChangedDate;
   final String location;
   final String image;
+  final String online;
   /*final String register_date;
   final String last_changed_date;
-
-   */
-
-  //final String phoneNo;
-//  final String password;
+  final String phoneNo;
+  final String password;*/
 
   const UserModel({
     required this.uid,
@@ -24,6 +22,7 @@ class UserModel {
     required this.lastChangedDate,
     required this.location,
     required this.image,
+    required this.online,
     //required this.phoneNo,
   });
 /*
