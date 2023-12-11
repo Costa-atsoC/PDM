@@ -377,7 +377,6 @@ class State_windowHome extends State<windowHome> {
                                                             .userFullName, style: Theme.of(context).textTheme.titleSmall,),
                                                         Text("@${loadedPosts[index]
                                                             .username}", style: Theme.of(context).textTheme.labelLarge),
-
                                                       ]),
                                                       const Spacer(),
                                                       Text(loadedPosts[index].registerDate)
