@@ -303,15 +303,12 @@ class State_windowHome extends State<windowHome> {
                                       }
                                       return GestureDetector(
                                         onTap: () {
-                                          modalPost.show(
-                                              context, loadedPosts[index]);
+                                          modalPost.show(context, loadedPosts[index]);
                                         },
                                         child: Hero(
-                                          tag:
-                                              'postHero${loadedPosts[index].pid}',
+                                          tag: 'postHero${loadedPosts[index].pid}',
                                           child: Card(
-                                            shape:
-                                                const ContinuousRectangleBorder(
+                                            shape: const ContinuousRectangleBorder(
                                               borderRadius: BorderRadius.zero,
                                             ),
                                             elevation: 0,
@@ -382,17 +379,14 @@ class State_windowHome extends State<windowHome> {
                                                             .username}", style: Theme.of(context).textTheme.labelLarge),
                                                       ]),
                                                       const Spacer(),
-                                                      Text(loadedPosts[index]
-                                                          .registerDate)
+                                                      Text(loadedPosts[index].registerDate)
                                                     ],
                                                   ),
                                                 ),
                                                 ListTile(
                                                   title: Text(
                                                     loadedPosts[index].title,
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .titleMedium,
+                                                    style: Theme.of(context).textTheme.titleMedium,
                                                   ),
                                                   subtitle: Column(
                                                     crossAxisAlignment:
@@ -428,61 +422,39 @@ class State_windowHome extends State<windowHome> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    if (currentUserUID ==
-                                                        loadedPosts[index]
-                                                            .uid) ...[
+                                                    if (currentUserUID == loadedPosts[index].uid)
+                                                        ...[
                                                       IconButton(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        icon: const Icon(
-                                                            Icons.edit),
+                                                        color: Theme.of(context).colorScheme.onPrimary,
+                                                        icon: const Icon(Icons.edit),
                                                         onPressed: () async {
-                                                          ModalUpdatePost.show(
-                                                              context,
-                                                              loadedPosts[
-                                                                  index]);
+                                                          ModalUpdatePost.show(context,loadedPosts[index]);
                                                           setState(() {});
                                                         },
                                                       ),
                                                       IconButton(
                                                         color: Colors.red[300],
-                                                        icon: const Icon(
-                                                            Icons.delete),
+                                                        icon: const Icon(Icons.delete),
                                                         onPressed: () {
                                                           // Show a confirmation dialog
                                                           showDialog(
                                                             context: context,
-                                                            builder:
-                                                                (BuildContext
-                                                                    context) {
+                                                            builder:(BuildContext context) {
                                                               return AlertDialog(
-                                                                title: const Text(
-                                                                    'Confirm Delete'),
-                                                                content: const Text(
-                                                                    'Are you sure you want to delete this post?'),
+                                                                title: const Text('Confirm Delete'),
+                                                                content: const Text('Are you sure you want to delete this post?'),
                                                                 actions: <Widget>[
                                                                   TextButton(
-                                                                    onPressed:
-                                                                        () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop(); // Close the dialog
+                                                                    onPressed:() {
+                                                                      Navigator.of(context).pop(); // Close the dialog
                                                                     },
-                                                                    child: const Text(
-                                                                        'Cancel'),
+                                                                    child: const Text('Cancel'),
                                                                   ),
                                                                   TextButton(
-                                                                    onPressed:
-                                                                        () {
+                                                                    onPressed:() {
                                                                       // Close the dialog and delete the post
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                      PostFirestore().deletePost(
-                                                                          currentUserUID!,
-                                                                          loadedPosts[index]
-                                                                              .pid);
+                                                                      Navigator.of(context).pop();
+                                                                      PostFirestore().deletePost(currentUserUID!, loadedPosts[index].pid);
                                                                       //MISSING THE REFRESH!!
                                                                     },
                                                                     child: const Text(
@@ -496,70 +468,42 @@ class State_windowHome extends State<windowHome> {
                                                       ),
                                                     ] else ...[
                                                       Text(
-                                                        localLikes[index]
-                                                            .toString(),
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .titleMedium,
+                                                        localLikes[index].toString(),
+                                                        style: Theme.of(context).textTheme.titleMedium,
                                                       ),
                                                       IconButton(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        icon:
-                                                            FutureBuilder<bool>(
-                                                          future: postFirestore
-                                                              .getIsLikedStatus(
-                                                                  currentUserUID!,
-                                                                  loadedPosts[
-                                                                      index]),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            if (snapshot
-                                                                    .connectionState ==
-                                                                ConnectionState
-                                                                    .waiting) {
+                                                        color: Theme.of(context).colorScheme.onPrimary,
+                                                        icon:FutureBuilder<bool>(
+                                                          future: postFirestore.getIsLikedStatus(currentUserUID!, loadedPosts[index]),
+
+                                                          builder: (context,snapshot) {
+                                                            if (snapshot.connectionState == ConnectionState.waiting) {
                                                               // If still loading, you can show a loading indicator or default icon
-                                                              return const Icon(
-                                                                  Icons
-                                                                      .thumb_up_alt_outlined);
-                                                            } else if (snapshot
-                                                                .hasError) {
+                                                              return const Icon(Icons.thumb_up_alt_outlined);
+                                                            } else if (snapshot.hasError) {
                                                               // Handle error
-                                                              Utils.MSG_Debug(
-                                                                  'Error checking like status: ${snapshot.error}');
-                                                              return const Icon(
-                                                                  Icons
-                                                                      .thumb_up_alt_outlined);
+                                                              Utils.MSG_Debug('Error checking like status: ${snapshot.error}');
+
+                                                              return const Icon(Icons.thumb_up_alt_outlined);
                                                             } else {
                                                               // Determine the appropriate icon based on the like status
-                                                              return snapshot
-                                                                          .data ??
-                                                                      false
+                                                              return snapshot.data ?? false
                                                                   ? Icon(
-                                                                      Icons
-                                                                          .thumb_up_alt,
-                                                                      color: Theme.of(
-                                                                              context)
-                                                                          .colorScheme
-                                                                          .secondaryContainer)
-                                                                  : const Icon(Icons
-                                                                      .thumb_up_alt_outlined);
+                                                                      Icons.thumb_up_alt,
+                                                                      color: Theme.of(context).colorScheme.secondaryContainer
+                                                                  )
+                                                                  : const Icon(Icons.thumb_up_alt_outlined);
                                                             }
                                                           },
                                                         ),
                                                         onPressed: () async {
                                                           // Replace with your logic to get the current user's UID
-                                                          PostFirestore
-                                                              postManager =
-                                                              PostFirestore();
+                                                          PostFirestore postManager = PostFirestore();
 
                                                           int updatedLikes =
-                                                              await postManager
-                                                                  .toggleLikePost(
+                                                              await postManager.toggleLikePost(
                                                                       currentUserUID!,
-                                                                      loadedPosts[
-                                                                          index]);
+                                                                      loadedPosts[index]);
 
                                                           setState(() {
                                                             localLikes[index] =
@@ -628,7 +572,7 @@ class State_windowHome extends State<windowHome> {
               height: _show ? bottomBarHeight : 0,
               child: Row(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     width: 10.0, // Adjust the margin value as needed
                   ),
                   IconButton(

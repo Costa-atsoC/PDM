@@ -117,7 +117,6 @@ class _windowFeedbackState extends State<windowFeedback> {
       ],
     );
   }
-
   Widget _buildReportProblemSection() {
     return Scaffold(
       body: Padding(

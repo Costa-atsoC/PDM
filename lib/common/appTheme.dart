@@ -21,19 +21,20 @@ class AppTheme {
       ),
     ),
     colorScheme: const ColorScheme.light(
-      primary: Color.fromARGB(255, 255, 255, 252),
-      onPrimary: Color.fromARGB(255, 19, 40, 61),
+
+      primary: Color.fromARGB(255, 19, 40, 61),
+      onPrimary:Color.fromARGB(255, 59, 60, 54),
+
       secondary: Colors.white,
       onSecondary: Color.fromARGB(220, 35, 40, 56),
       primaryContainer: Color.fromARGB(255, 201, 128, 94),
       secondaryContainer: Color.fromARGB(255, 201, 128, 94),
     ),
     cardTheme: const CardTheme(
-      color: Color.fromARGB(220, 255, 255,
-          250), // Primary color for cards// Secondary color for card shadows
+      color: Color.fromARGB(220, 255, 255, 250), // Primary color for cards// Secondary color for card shadows
     ),
     iconTheme: const IconThemeData(
-      color: Color.fromARGB(255, 59, 60, 54),
+      color: Colors.white,
     ),
     textTheme: const TextTheme(
       titleLarge: TextStyle(
