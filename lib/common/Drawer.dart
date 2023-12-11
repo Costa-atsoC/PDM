@@ -50,6 +50,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
       lastChangedDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_LASTDATE", ""),
       location: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOCATION", ""),
       image: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_IMAGE", ""),
+      online: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_ONLINE", ""),
     );
 
     windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management, user);

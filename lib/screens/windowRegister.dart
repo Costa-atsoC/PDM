@@ -176,7 +176,6 @@ class Estado_windowRegister extends State<windowRegister> {
                             }
                           },
                         ),
-
                         TextFormField(
                           controller: _username,
                           keyboardType: TextInputType.text,
@@ -296,14 +295,16 @@ class Estado_windowRegister extends State<windowRegister> {
 
       // Now you can use the user ID as needed
       UserModel currentUser = UserModel(
-          uid: uid,
-          email: email,
-          username: username,
-          fullName: fullname,
-          registerDate: currentTime,
-          lastChangedDate: currentTime,
-          location: '????',
-          image: 'assets/LOGO.png',);
+        uid: uid,
+        email: email,
+        username: username,
+        fullName: fullname,
+        registerDate: currentTime,
+        lastChangedDate: currentTime,
+        location: '????',
+        image: 'assets/LOGO.png',
+        online: '0',
+      );
       await userFirestore.saveUserData(currentUser);
 
       Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL");

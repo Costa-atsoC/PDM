@@ -146,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) {
-            return windowForgotPassword();
+            return windowForgotPassword(Ref_Management);
           }),
         );
       },
@@ -161,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) {
-                    return windowForgotPassword();
+                    return windowForgotPassword(Ref_Management);
                   }),
                 );
               },
@@ -354,6 +354,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
 
       UserModel? userData = await userFirestore.getUserData(user.uid);
+
       Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
       Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
       Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
