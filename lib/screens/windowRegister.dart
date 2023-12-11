@@ -145,9 +145,7 @@ class Estado_windowRegister extends State<windowRegister> {
                           decoration: InputDecoration(
                             icon: const Icon(Icons.email), //icon of text field
                             iconColor: Theme.of(context).iconTheme.color,
-                            labelText: Ref_Window.Ref_Management.SETTINGS.Get(
-                                "WND_REGISTER_HINT_1",
-                                "WND_REGISTER_HINT_1 ??"),
+                            labelText: Ref_Window.Ref_Management.SETTINGS.Get("WND_REGISTER_HINT_1","WND_REGISTER_HINT_1 ??"),
                             labelStyle: Theme.of(context).textTheme.titleSmall,
                           ),
                           validator: (String? value) {
@@ -185,15 +183,14 @@ class Estado_windowRegister extends State<windowRegister> {
                             icon: const Icon(Icons.alternate_email),
                             //icon of text field
                             iconColor: Theme.of(context).iconTheme.color,
-                            labelText: Ref_Window.Ref_Management.SETTINGS.Get(
-                                "WND_REGISTER_HINT_2",
-                                "WND_REGISTER_HINT_2 ??"),
+                            labelText: Ref_Window.Ref_Management.SETTINGS.Get("WND_REGISTER_HINT_2","WND_REGISTER_HINT_2 ??"),
                             labelStyle: Theme.of(context).textTheme.titleSmall,
                           ),
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter some text';
                             }
+                            return null;
                           },
                         ),
                         TextFormField(

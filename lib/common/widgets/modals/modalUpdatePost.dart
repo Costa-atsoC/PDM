@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:ubi/windowHome.dart';
 import '../../../firebase_auth_implementation/models/post_model.dart';
 import '../../../firestore/post_firestore.dart';
-import '../../../firestore/user_firestore.dart';
 import '../../Utils.dart';
 
 class ModalUpdatePost extends StatefulWidget {
