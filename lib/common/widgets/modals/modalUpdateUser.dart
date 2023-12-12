@@ -29,6 +29,7 @@ class modalUpdateUser extends StatefulWidget {
 }
 
 class modalUpdateUserState extends State<modalUpdateUser> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _fullnameController = TextEditingController();
@@ -50,6 +51,7 @@ class modalUpdateUserState extends State<modalUpdateUser> {
 
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
         child: Container(
           decoration: BoxDecoration(
@@ -120,10 +122,19 @@ class modalUpdateUserState extends State<modalUpdateUser> {
                               lastChangedDate: Utils.currentTimeUser(),
                               location: _locationController.text,
                               image: widget.user.image,
+                              online: "1",
+                              lastLogInDate: widget.user.lastLogInDate,
+                              lastSignOutDate: widget.user.lastSignOutDate,
                             );
                             UserFirestore().updateUserData(updatedUser);
 
+                            // IMPLEMENTAR METODO PARA GUARDAR NAS SHARED PREFERNCES TUDO ISTO (O QUE FOR RELEVANTE ALIAS)
+
                             Navigator.pop(context); // Close the modal
+
+                          setState(() {
+
+                          });
 
 
 

@@ -216,12 +216,15 @@ class _MyHomePageState extends State<MyHomePage> {
         home: Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           body: Container(
-            decoration: const BoxDecoration(
+            /*decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/background.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
+
+             */
+            //color: Theme.of(context).scaffoldBackgroundColor,
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(
@@ -367,6 +370,20 @@ class _MyHomePageState extends State<MyHomePage> {
       Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
 
       UserModel? userData = await userFirestore.getUserData(user.uid);
+      UserModel userUpdated = UserModel(
+        uid: userData!.uid,
+        email: userData!.email,
+        username: userData!.username,
+        fullName: userData!.fullName,
+        registerDate: userData!.registerDate,
+        lastChangedDate: userData!.lastChangedDate,
+        location: userData!.location,
+        image: userData!.image,
+        online: "1",
+        lastLogInDate: currentTime,
+        lastSignOutDate: userData!.lastSignOutDate,
+      );
+      userFirestore.updateUserData(userUpdated);
 
       Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
       Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
@@ -375,8 +392,11 @@ class _MyHomePageState extends State<MyHomePage> {
       Ref_Management.Save_Shared_Preferences_STRING("REGDATE", userData.registerDate);
       Ref_Management.Save_Shared_Preferences_STRING("LASTDATE", userData.lastChangedDate);
       Ref_Management.Save_Shared_Preferences_STRING("IMAGE", userData.image);
+      Ref_Management.Save_Shared_Preferences_STRING("LOGINDATE", userData.lastLogInDate);
+      Ref_Management.Save_Shared_Preferences_STRING("LOGINDATE_FORMATED", Utils.currentTimeUser());
+      Ref_Management.Save_Shared_Preferences_STRING("SIGNOUTDATE", userData.lastSignOutDate);
 
-      Utils.MSG_Debug("User is signed");
+      //Utils.MSG_Debug("User is signed");
       // saving the email! in the shared_preferences
       Ref_Management.Save_Shared_Preferences_STRING("TIME_EMAIL", currentTime);
 
