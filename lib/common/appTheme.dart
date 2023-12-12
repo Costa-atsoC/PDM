@@ -11,7 +11,7 @@ class AppTheme {
     //scaffoldBackgroundColor: const Color.fromARGB(255, 245, 237, 225),
     scaffoldBackgroundColor: const Color.fromARGB(255, 250, 249, 247),
     appBarTheme: const AppBarTheme(
-      color: Color.fromARGB(255, 250, 249, 247),
+      color: Color.fromARGB(255, 234, 234, 230),
       // color: Color.fromARGB(255, 35, 40, 56),
       titleTextStyle: TextStyle(
         fontFamily: 'Lato',
@@ -31,7 +31,7 @@ class AppTheme {
       secondaryContainer: Color.fromARGB(255, 201, 128, 94),
     ),
     cardTheme: const CardTheme(
-      color: Color.fromARGB(220, 255, 255, 250), // Primary color for cards// Secondary color for card shadows
+      color: Color.fromARGB(255, 234, 234, 230), // Primary color for cards// Secondary color for card shadows
     ),
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -132,7 +132,7 @@ class AppTheme {
       titleLarge: TextStyle(
         fontFamily: 'Lato',
         color: Color.fromARGB(255, 255, 255, 255),
-        fontSize: 30.0,
+        fontSize: 25.0,
         fontWeight: FontWeight.bold,
       ),
       titleMedium: TextStyle(

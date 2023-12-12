@@ -61,8 +61,10 @@ class MyApp extends StatelessWidget {
         } else {
           Widget initialScreen;
 
-          String logged = appManagement.GetDefinicao("USERNAME", "null");
-
+          initialScreen = MyHomePage(appManagement,
+              appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
+          //String logged = appManagement.GetDefinicao("USERNAME", "null");
+/*
           if (snapshot.hasData && snapshot.data!) {
             if (logged != "null") {
               initialScreen = windowHome(appManagement);
@@ -74,6 +76,8 @@ class MyApp extends StatelessWidget {
             initialScreen = MyHomePage(appManagement,
                 appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
           }
+
+ */
 
           return MaterialApp(
             title: 'RideWME',

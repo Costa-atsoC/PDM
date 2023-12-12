@@ -8,6 +8,8 @@ class UserModel {
   final String location;
   final String image;
   final String online;
+  final String lastLogInDate;
+  final String lastSignOutDate;
   /*final String register_date;
   final String last_changed_date;
   final String phoneNo;
@@ -19,10 +21,12 @@ class UserModel {
     required this.username,
     required this.fullName,
     required this.registerDate,
-    required this.lastChangedDate,
     required this.location,
     required this.image,
     required this.online,
+    required this.lastChangedDate,
+    required this.lastLogInDate,
+    required this.lastSignOutDate,
     //required this.phoneNo,
   });
 /*

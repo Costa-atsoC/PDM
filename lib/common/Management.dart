@@ -204,6 +204,14 @@ class Management {
     String? REGISTERDATE = await Get_SharedPreferences_STRING('REGDATE');
     SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
 
+    String? LOGINDATE = await Get_SharedPreferences_STRING('LOGINDATE_FORMATED');
+    SETTINGS.Add('WND_USER_PROFILE_LOGIN_DATE', LOGINDATE!);
+
+    SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Last seen: ");
+
+    String? SIGNOUTDATE = await Get_SharedPreferences_STRING('SIGNOUTDATE');
+    SETTINGS.Add('WND_USER_PROFILE_SIGNOUT_DATE', SIGNOUTDATE!);
+
     //------------------------------------------------------//
     //-------------------- DRAWER --------------------------//
     //------------------------------------------------------//

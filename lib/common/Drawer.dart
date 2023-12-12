@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ubi/firestore/user_firestore.dart';
+import 'package:ubi/main.dart';
 import 'package:ubi/screens/windowInitial.dart';
 
 import '../firebase_auth_implementation/models/user_model.dart';
@@ -10,10 +12,12 @@ import '../screens/windowSettings.dart';
 import '../screens/windowUserProfile.dart';
 import '../windowHome.dart';
 import 'Management.dart';
+import 'Utils.dart';
 
 class CustomDrawer extends StatefulWidget{
   final Management Ref_Management;
   final firebaseStorage Ref_FirebaseStorage = firebaseStorage();
+  final UserFirestore userFirestore = UserFirestore();
 
   CustomDrawer(this.Ref_Management);
 
@@ -41,6 +45,8 @@ class State_CustomDrawer extends State<CustomDrawer> {
   }
 
   Future navigateToWindowUserProfile(context) async {
+    Ref_Window.Ref_Management.Load();
+
     UserModel user = UserModel(
       uid: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1"),
       email: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_EMAIL", ""),
@@ -51,6 +57,8 @@ class State_CustomDrawer extends State<CustomDrawer> {
       location: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOCATION", ""),
       image: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_IMAGE", ""),
       online: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_ONLINE", ""),
+      lastLogInDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOGIN_DATE", ""),
+      lastSignOutDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_SIGNOUT_DATE", ""),
     );
 
     windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management, user);
@@ -78,6 +86,8 @@ class State_CustomDrawer extends State<CustomDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    Ref_Window.Ref_Management.Load();
+
     return Drawer(
       backgroundColor: Theme.of(context).colorScheme.primary,
       child: ListView(
@@ -220,12 +230,32 @@ class State_CustomDrawer extends State<CustomDrawer> {
                         ),
                       ),
                     ),
-                    onTap: () => {
-                      Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL"),
-                      Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME"),
-                      FirebaseAuth.instance.signOut(),
-                      Navigator.of(context).pop(),
-                      navigateToWindowInitial(context)
+                    onTap: () async {
+                      await Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL");
+                      await Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME");
+
+                      UserModel? userData = await userFirestore.getUserData(FirebaseAuth.instance.currentUser!.uid);
+                      UserModel userUpdated = UserModel(
+                        uid: userData!.uid,
+                        email: userData!.email,
+                        username: userData!.username,
+                        fullName: userData!.fullName,
+                        registerDate: userData!.registerDate,
+                        lastChangedDate: userData!.lastChangedDate,
+                        location: userData!.location,
+                        image: userData!.image,
+                        online: "0",
+                        lastLogInDate: userData!.lastLogInDate,
+                        lastSignOutDate: Utils.currentTime(),
+                      );
+
+                      if (userData != null) {
+                        await userFirestore.updateUserData(userUpdated);
+                      }
+
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.of(context).pop();
+                      navigateToWindowInitial(context);
                     },
                   ),
                 ),

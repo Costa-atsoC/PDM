@@ -301,6 +301,8 @@ class Estado_windowRegister extends State<windowRegister> {
         location: '????',
         image: 'assets/LOGO.png',
         online: '0',
+        lastLogInDate: 'null',
+        lastSignOutDate: 'null',
       );
       await userFirestore.saveUserData(currentUser);
 

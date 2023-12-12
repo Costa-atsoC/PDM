@@ -85,13 +85,16 @@ class State_windowHome extends State<windowHome> {
     }
 
     try {
+      loadedUserProfiles.clear();
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
+      List<UserModel> newUsers = [];
       Map<int, List<Map<String, dynamic>>> postImagesMap = {}; // Map to store images by post index
 
       for (int i = 0; i < newPosts.length; i++) {
         PostModel post = newPosts[i];
         UserModel? userProfile = await userFirestore.getUserData(post.uid);
-        loadedUserProfiles.add(userProfile!);
+        Utils.MSG_Debug(userProfile!.fullName);
+        newUsers.add(userProfile!);
         
         List<Map<String, dynamic>> images = await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
 
@@ -108,12 +111,17 @@ class State_windowHome extends State<windowHome> {
         loadedPosts.clear(); // Clear the list before adding new data
         loadedPosts.addAll(newPosts);
 
+        loadedUserProfiles.clear();
+        loadedUserProfiles.addAll(newUsers);
+
         // Store images by post index
         loadedImages.clear();
         for (int i = 0; i < newPosts.length; i++) {
           List<Map<String, dynamic>> images = postImagesMap[i] ?? [];
           loadedImages.addAll(images);
         }
+
+
 
         // No need to clear loadedUserProfiles, it is updated above
         _isLoading = false; // Data has been loaded

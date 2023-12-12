@@ -16,11 +16,13 @@ class UserFirestore {
           'email': user.email,
           'username': user.username,
           'fullName': user.fullName,
-          'registerDate' : user.registerDate,
-          'lastChangedDate' : user.lastChangedDate,
+          'registerDate': user.registerDate,
+          'lastChangedDate': user.lastChangedDate,
           'location': user.location,
           'image': user.image,
           'online': user.online,
+          'lastLogInDate': user.lastLogInDate,
+          'lastSignOutDate': user.lastSignOutDate,
         })
         .then((value) => Utils.MSG_Debug("User $id Added"))
         .catchError((error) => Utils.MSG_Debug("Failed to add user: $error"));
@@ -43,6 +45,8 @@ class UserFirestore {
           location: userDoc['location'],
           image: userDoc['image'],
           online: userDoc['online'],
+          lastLogInDate: userDoc['lastLogInDate'],
+          lastSignOutDate: userDoc['lastSignOutDate'],
         );
       } else {
         Utils.MSG_Debug("User with UID $uid not found");
@@ -76,7 +80,8 @@ class UserFirestore {
 
   Future<void> updateUserData(UserModel user) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
       String currTime = Utils.currentTimeUser();
 
       users
@@ -86,14 +91,17 @@ class UserFirestore {
             'email': user.email,
             'username': user.username,
             'fullName': user.fullName,
-            'registerDate' : user.registerDate,
-            'lastChangedDate' : currTime,
+            'registerDate': user.registerDate,
+            'lastChangedDate': currTime,
             'location': user.location,
             'image': user.image,
             'online': user.online,
+            'lastLogInDate': user.lastLogInDate,
+            'lastSignOutDate': user.lastSignOutDate,
           })
           .then((value) => Utils.MSG_Debug("User $user.uid Updated"))
-          .catchError((error) => Utils.MSG_Debug("Failed to update user: $error"));
+          .catchError(
+              (error) => Utils.MSG_Debug("Failed to update user: $error"));
     } catch (error) {
       Utils.MSG_Debug("Error updating user data: $error");
     }
@@ -101,47 +109,69 @@ class UserFirestore {
 
   Future<void> updateUserOnline(UserModel user, bool type) async {
     try {
-      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
       String currTime = Utils.currentTimeUser();
 
-      if(type){
+      if (type) {
         users
             .doc(user.uid)
             .update({
-          'uid': user.uid,
-          'email': user.email,
-          'username': user.username,
-          'fullName': user.fullName,
-          'registerDate' : user.registerDate,
-          'lastChangedDate' : currTime,
-          'location': user.location,
-          'image': user.image,
-          'online': "1",
-        })
+              'uid': user.uid,
+              'email': user.email,
+              'username': user.username,
+              'fullName': user.fullName,
+              'registerDate': user.registerDate,
+              'lastChangedDate': currTime,
+              'location': user.location,
+              'image': user.image,
+              'online': "1",
+              'lastLogInDate': user.lastLogInDate,
+              'lastSignOutDate': user.lastSignOutDate,
+            })
             .then((value) => Utils.MSG_Debug("User ${user.uid} Updated"))
-            .catchError((error) => Utils.MSG_Debug("Failed to update user: $error"));
-      }
-      else{
+            .catchError(
+                (error) => Utils.MSG_Debug("Failed to update user: $error"));
+      } else {
         users
             .doc(user.uid)
             .update({
-          'uid': user.uid,
-          'email': user.email,
-          'username': user.username,
-          'fullName': user.fullName,
-          'registerDate' : user.registerDate,
-          'lastChangedDate' : currTime,
-          'location': user.location,
-          'image': user.image,
-          'online': "0",
-        })
+              'uid': user.uid,
+              'email': user.email,
+              'username': user.username,
+              'fullName': user.fullName,
+              'registerDate': user.registerDate,
+              'lastChangedDate': currTime,
+              'location': user.location,
+              'image': user.image,
+              'online': "0",
+              'lastLogInDate': user.lastLogInDate,
+              'lastSignOutDate': user.lastSignOutDate,
+            })
             .then((value) => Utils.MSG_Debug("User ${user.uid} Updated"))
-            .catchError((error) => Utils.MSG_Debug("Failed to update user: $error"));
+            .catchError(
+                (error) => Utils.MSG_Debug("Failed to update user: $error"));
       }
-
-
     } catch (error) {
       Utils.MSG_Debug("Error updating user data: $error");
     }
   }
+
+  Future<bool> isUserOnline(UserModel user) async {
+    try {
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+      DocumentSnapshot userDoc = await users.doc(user.uid).get();
+
+      if (userDoc.exists) {
+        return userDoc['online'] == "1";
+      } else {
+        Utils.MSG_Debug("User with UID ${user.uid} not found");
+        return false; // Assuming offline if user not found
+      }
+    } catch (error) {
+      Utils.MSG_Debug("Error checking user online status: $error");
+      return false; // Assume offline in case of an error
+    }
+  }
+
 }
