@@ -2,13 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubi/common/Management.dart';
+import 'package:ubi/screens/windowInitial.dart';
 
 /*
 FALTA APAGAR TODOS OS POSTS DESTE USER, TODOS OS SEUS LIKES, etc...
  */
 
 class WindowDeleteAccount extends StatefulWidget {
-  const WindowDeleteAccount(Management ref_management, {Key? key}) : super(key: key);
+  final Management refManagement;
+
+  const WindowDeleteAccount(this.refManagement, {Key? key}) : super(key: key);
 
   @override
   State<WindowDeleteAccount> createState() => _WindowDeleteAccountState();
@@ -30,13 +33,18 @@ class _WindowDeleteAccountState extends State<WindowDeleteAccount> {
 
         await user.reauthenticateWithCredential(credential);
         await user.delete();
-        // substituir pela função do Management
+
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.remove('email');
-        Navigator.pushReplacementNamed(context, 'screens/windowInitial.dart');
-        // Perform actions after account deletion
-        // For example:
-        // Navigator.of(context).pushReplacementNamed('/home');
+
+        // Navegar para MyHomePage após a exclusão da conta
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(widget.refManagement, 'Your Title'),
+          ),
+        );
+
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   content: Text('User Account Deleted'),
         // ));
