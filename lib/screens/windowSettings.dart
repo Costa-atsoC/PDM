@@ -147,6 +147,7 @@ class State_windowSettings extends State<windowSettings> {
               SizedBox(height: 20),
               buildAccountOption(context, "Change Password", actions: ['Yes', 'No']),
               buildAccountOption(context, "Appearance", actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
+              buildAccountOption(context, "Language", actions: []),
               buildAccountOption(context, "Delete Account", actions: []),
               SizedBox(height: 40),
               Row(
