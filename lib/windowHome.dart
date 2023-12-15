@@ -85,7 +85,6 @@ class State_windowHome extends State<windowHome> {
     }
 
     try {
-      loadedUserProfiles.clear();
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
       List<UserModel> newUsers = [];
       Map<int, List<Map<String, dynamic>>> postImagesMap = {}; // Map to store images by post index
@@ -97,8 +96,6 @@ class State_windowHome extends State<windowHome> {
         newUsers.add(userProfile!);
         
         List<Map<String, dynamic>> images = await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
-
-        // Add images to the map using the post index as the key
         postImagesMap[i] = images;
 
         if (images.isNotEmpty) {
@@ -121,9 +118,6 @@ class State_windowHome extends State<windowHome> {
           loadedImages.addAll(images);
         }
 
-
-
-        // No need to clear loadedUserProfiles, it is updated above
         _isLoading = false; // Data has been loaded
         _dataLoaded = true; // Set the flag to true after loading data
       });
@@ -311,7 +305,7 @@ class State_windowHome extends State<windowHome> {
                                       }
                                       return GestureDetector(
                                         onTap: () {
-                                          modalPost.show(context, loadedPosts[index]);
+                                          modalPost.show(context, loadedPosts[index], loadedUserProfiles[index], loadedImages[index]);
                                         },
                                         child: Hero(
                                           tag: 'postHero${loadedPosts[index].pid}',

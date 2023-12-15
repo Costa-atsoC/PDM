@@ -98,6 +98,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
   void initState() {
     //Utils.MSG_Debug("$className: initState");
     super.initState();
+    Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_WND_PROFILE");
     _refreshData();
   }
 
@@ -185,8 +186,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
+                          return Center(
+                            child: CircularProgressIndicator(color: Theme.of(context).iconTheme.color,),
                           );
                         } else if (snapshot.hasError) {
                           return const Center(
@@ -466,6 +467,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                                     icon:
                                                         const Icon(Icons.edit),
                                                     onPressed: () async {
+                                                      Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_UPDATE_POST");
                                                       ModalUpdatePost.show(
                                                           context,
                                                           userData[index]);
@@ -482,6 +484,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                                     ),
                                                     onPressed: () {
                                                       // Show a confirmation dialog
+                                                      Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_DELETE_POST");
                                                       showDialog(
                                                         context: context,
                                                         builder: (BuildContext

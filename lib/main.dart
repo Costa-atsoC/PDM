@@ -47,7 +47,6 @@ Future<bool> checkInternetConnection() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
-
   @override
   Widget build(BuildContext context) {
     Management appManagement = Management("APP-RideWME");
@@ -57,34 +56,45 @@ class MyApp extends StatelessWidget {
       future: checkInternetConnection(),
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          // Simulate a delay of 2 seconds (adjust as needed)
+          return FutureBuilder<void>(
+            future: Future.delayed(Duration(seconds: 2)),
+            builder: (BuildContext context, AsyncSnapshot<void> delaySnapshot) {
+              if (delaySnapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else {
+                // Continue with your logic after the delay
+                Widget initialScreen = MyHomePage(
+                  appManagement,
+                  appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"),
+                );
+
+                return MaterialApp(
+                  title: 'RideWME',
+                  theme: AppTheme.lightTheme,
+                  darkTheme: AppTheme.darkTheme,
+                  home: MyAppWrapper(
+                    initialScreen: initialScreen,
+                    appManagement: appManagement,
+                  ),
+                );
+              }
+            },
+          );
         } else {
-          Widget initialScreen;
-
-          initialScreen = MyHomePage(appManagement,
-              appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
-          //String logged = appManagement.GetDefinicao("USERNAME", "null");
-/*
-          if (snapshot.hasData && snapshot.data!) {
-            if (logged != "null") {
-              initialScreen = windowHome(appManagement);
-            } else {
-              initialScreen = MyHomePage(appManagement,
-                  appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
-            }
-          } else {
-            initialScreen = MyHomePage(appManagement,
-                appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
-          }
-
- */
+          Widget initialScreen = MyHomePage(
+            appManagement,
+            appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"),
+          );
 
           return MaterialApp(
             title: 'RideWME',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             home: MyAppWrapper(
-                initialScreen: initialScreen, appManagement: appManagement),
+              initialScreen: initialScreen,
+              appManagement: appManagement,
+            ),
           );
         }
       },
@@ -113,13 +123,16 @@ class _MyAppWrapperState extends State<MyAppWrapper>
 
     // Use Future.microtask to schedule the asynchronous operation
     Future.microtask(() async {
-      UserModel? user = await userFirestore
-          .getUserData(FirebaseAuth.instance.currentUser!.uid);
-      if (user != null) {
-        userFirestore.updateUserOnline(user, true);
+      // Check if currentUser is not null before accessing uid
+      if (FirebaseAuth.instance.currentUser != null) {
+        UserModel? user = await userFirestore.getUserData(FirebaseAuth.instance.currentUser!.uid);
+        if (user != null) {
+          userFirestore.updateUserOnline(user, true);
+        }
       }
     });
   }
+
 
   @override
   void dispose() {
