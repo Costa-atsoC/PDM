@@ -245,9 +245,12 @@ class State_windowSearch extends State<windowSearch> {
                                   }
                                   return GestureDetector(
                                     onTap: () {
-                                      modalPost.show(
-                                          context, loadedPosts[index]);
+                                     /* modalPost.show(
+                                          context, loadedPosts[index], loaded);
                                     },
+
+                                      */
+                                     Utils.MSG_Debug("TEST");},
                                     child: Hero(
                                       tag: 'postHero${loadedPosts[index].pid}',
                                       child: Card(

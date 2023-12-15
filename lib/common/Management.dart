@@ -39,6 +39,23 @@ class Management {
 
   //--------------------------------------
   Future<void> Load() async {
+
+    String? LANGUAGE = await Get_SharedPreferences_STRING('LANGUAGE');
+    if (LANGUAGE != null) {
+      if(LANGUAGE == "PT"){
+
+      }
+      else if(LANGUAGE == "EN"){
+
+      }
+    }
+    else {
+      LANGUAGE = "EN";
+    }
+
+
+
+
     //------------------------------------------------------//
     //------------------ WINDOW MAIN -----------------------//
     //------------------------------------------------------//
@@ -57,6 +74,9 @@ class Management {
     SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD", "20");
 
     SETTINGS.Add("WND_LOGIN_BTN_1", "LOGIN");
+
+    SETTINGS.Add("WND_LOGIN_TEXT_FORGOT_PASSWORD", "Forgot Password?");
+    SETTINGS.Add("SIZE_WND_LOGIN_TEXT_FORGOT_PASSWORD", "20");
 
     SETTINGS.Add("TEXT_NEW_WINDOW_REGISTER", "Register Page");
     SETTINGS.Add(
@@ -168,6 +188,7 @@ class Management {
     SETTINGS.Add("WND_FORGOT_PASSWORD_BTN_1_TEXT_SIZE", "15");
 
     //--------- FUNÇÕES
+    // esta função guarda o número de acessos ao Management!!
     int? NUMERO_ACESSOS = await Get_SharedPreferences_INT('NUMERO_ACESSOS');
     if (NUMERO_ACESSOS != null) {
       //NUMERO_ACESSOS++;
@@ -241,6 +262,17 @@ class Management {
 
   //--------------------------------------
   //--------------------------------------
+  void saveNumAccess(String TAG) async{
+    int? numAccess = await Get_SharedPreferences_INT(TAG);
+    if (numAccess == null){
+      Save_Shared_Preferences_INT(TAG, 1);
+    }
+    if (numAccess != null) {
+      Save_Shared_Preferences_INT(TAG, numAccess + 1);
+      Utils.MSG_Debug('$TAG -> $numAccess');
+    }
+  }
+
   //--------------------------------------
   Future<int?> Get_SharedPreferences_INT(String TAG) async {
     final SharedPreferences pfs = await prefs;
