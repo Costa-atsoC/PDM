@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:ubi/common/appTheme.dart';
 
 import '../common/Management.dart';
 
@@ -356,9 +357,11 @@ class _windowFeedbackState extends State<windowFeedback> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home:Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue[900], // Cor da AppBar
         title: const Text("FeedBack"),
       ),
       body: (_currentIndex == 0
@@ -367,7 +370,7 @@ class _windowFeedbackState extends State<windowFeedback> {
           ? _buildReportProblemSection()
           : _buildRatingSection())),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue, // Cor da BottomNavigationBar
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -389,6 +392,6 @@ class _windowFeedbackState extends State<windowFeedback> {
           ),
         ],
       ),
-    );
+    ));
   }
 }
