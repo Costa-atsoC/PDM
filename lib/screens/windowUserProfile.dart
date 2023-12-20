@@ -163,8 +163,11 @@ class State_windowUserProfile extends State<windowUserProfile> {
       home: Scaffold(
         drawer: CustomDrawer(Ref_Window.Ref_Management),
         appBar: AppBar(
-          title: Text(Ref_Window.Ref_Management.SETTINGS
-              .Get("WND_PROFILE_TITLE_1", "User Profile"), style: Theme.of(context).textTheme.titleMedium,),
+          title: Text(
+            Ref_Window.Ref_Management.SETTINGS
+                .Get("WND_PROFILE_TITLE_1", "User Profile"),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           actions: [userAction],
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         ),
@@ -187,7 +190,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Center(
-                            child: CircularProgressIndicator(color: Theme.of(context).iconTheme.color,),
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).iconTheme.color,
+                            ),
                           );
                         } else if (snapshot.hasError) {
                           return const Center(
@@ -199,22 +204,47 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           if (images.isNotEmpty) {
                             final Map<String, dynamic> firstImage =
                                 images.first;
-
                             if (widget.user.uid ==
                                 Ref_Window.Ref_Management.SETTINGS
                                     .Get("WND_USER_PROFILE_UID", "-1")) {
-                              return SizedBox(
-                                width: 200,
-                                height: 200,
-                                child: Stack(
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      radius: 100,
-                                      backgroundImage: NetworkImage(firstImage['url']),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                        child:  Container(
+                              return GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20.0),
+                                        ),
+                                        child: ClipOval(
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            width: 300, // You can adjust the width as needed
+                                            height: 300, // You can adjust the height as needed
+                                            child:
+                                            CircleAvatar(
+                                              backgroundColor: Colors.transparent,
+                                            radius: 100,
+                                            backgroundImage: NetworkImage(firstImage['url']),
+                                          ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 200,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      CircleAvatar(
+                                        radius: 100,
+                                        backgroundImage: NetworkImage(firstImage['url']),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.topRight,
+                                        child: Container(
                                           width: 50,
                                           height: 50,
                                           decoration: BoxDecoration(
@@ -222,83 +252,79 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                             shape: BoxShape.circle,
                                           ),
                                           child: ElevatedButton.icon(
-                                            icon: Icon(Icons.add_a_photo_sharp, size: 40, color: Theme.of(context).scaffoldBackgroundColor),
+                                            icon: Icon(Icons.add_a_photo_sharp,
+                                                size: 40,
+                                                color: Theme.of(context).scaffoldBackgroundColor),
                                             onPressed: () {
                                               Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
                                             },
                                             label: const Text(""),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                                              backgroundColor:
+                                              Theme.of(context).colorScheme.inversePrimary,
                                               shadowColor: Colors.transparent,
                                               padding: EdgeInsets.only(left: 2, bottom: 2),
                                             ),
                                           ),
                                         ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.bottomLeft,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(17.0), // Add padding to move the button to the right
-                                        child: Tooltip(
-                                          message: isOnline ? 'Online' : 'Last Seen',
-                                          child: Container(
-                                            width: 30,
-                                            height: 30,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: isOnline ? Colors.green : Colors.grey,
-                                            ),
-                                          ),
-                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              );
-
-                            }
-                            return SizedBox(
-                                width: 200,
-                                height: 200,
-                                child: Stack(children: [
-                                  CircleAvatar(
-                                      radius: 100,
-                                      backgroundImage:
-                                          NetworkImage(firstImage['url'])),
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        color: Colors.transparent, // Set the container to be transparent
-                                        width: 100,
-                                        height: 100,
-                                      ),
-                                      Positioned(
-                                        left: 0, // Align the circle to the left
-                                        top: 0, // Align the circle to the top
-                                        child: Tooltip(
-                                          message: isOnline ? 'Online' : 'Last Seen',
-                                          child: Container(
-                                            width: 20, // Set the width of the circle
-                                            height: 20, // Set the height of the circle
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: isOnline ? Colors.green : Colors.grey, // Use green for online, grey for offline
+                                      Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          // Add padding to move the button to the right
+                                          child: Tooltip(
+                                            message: isOnline ? 'Online' : 'Last Seen',
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: isOnline ? Colors.green : Colors.grey,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    width: 200,
-                                    height: 200,
-                                    child: CircleAvatar(
-                                      radius: 100,
-                                      backgroundImage:
-                                          NetworkImage(firstImage['url']),
+                                ),
+                              );
+                            }
+                            return SizedBox(
+                              width: 200,
+                              height: 200,
+                              child: Stack(
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage:
+                                    NetworkImage(firstImage['url']),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      // Add padding to move the button to the right
+                                      child: Tooltip(
+                                        message:
+                                        isOnline ? 'Online' : 'Last Seen',
+                                        child: Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: isOnline
+                                                ? Colors.green
+                                                : Colors.grey,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ]));
+                                ],
+                              ),
+                            );
                           }
                         }
                         if (widget.user.uid ==
@@ -309,34 +335,55 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             height: 200,
                             child: Stack(
                               children: <Widget>[
+                                CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
+                                ),
                                 Align(
                                   alignment: Alignment.topRight,
                                   child: Container(
                                     width: 50,
                                     height: 50,
                                     decoration: BoxDecoration(
-                                      color:
-                                          isOnline ? Colors.green : Colors.grey,
-                                      // Use green for online, grey for offline
-                                      borderRadius: BorderRadius.circular(180),
+                                      color: Colors.transparent,
+                                      shape: BoxShape.circle,
                                     ),
                                     child: ElevatedButton.icon(
-                                      icon: const Icon(Icons.add_a_photo_sharp),
+                                      icon: Icon(Icons.add_a_photo_sharp,
+                                          size: 40,
+                                          color: Theme.of(context).scaffoldBackgroundColor),
                                       onPressed: () {
-                                        Ref_Window.Ref_FirebaseStorage.upload(
-                                            "gallery", widget.user.uid);
+                                        Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
                                       },
                                       label: const Text(""),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                        Theme.of(context).colorScheme.inversePrimary,
+                                        shadowColor: Colors.transparent,
+                                        padding: EdgeInsets.only(left: 2, bottom: 2),
+                                      ),
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 200,
-                                  height: 200,
-                                  child: CircleAvatar(
-                                    radius: 100,
-                                    backgroundImage: AssetImage(
-                                        "assets/PORSCHE_MAIN_2.jpeg"),
+                                Align(
+                                  alignment: Alignment.bottomLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    // Add padding to move the button to the right
+                                    child: Tooltip(
+                                      message:
+                                      isOnline ? 'Online' : 'Last Seen',
+                                      child: Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: isOnline
+                                              ? Colors.green
+                                              : Colors.grey,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -348,7 +395,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           height: 200,
                           child: CircleAvatar(
                             radius: 100,
-                            backgroundImage: AssetImage("assets/niko.jpg"),
+                            backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
                           ),
                         );
                       },
@@ -416,13 +463,23 @@ class State_windowUserProfile extends State<windowUserProfile> {
                       color: Theme.of(context).textTheme.titleSmall?.color,
                     ),
                   ),
-                  Text(
-                    widget.user.lastLogInDate,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).textTheme.titleSmall?.color,
+                  SizedBox(width: 10), // Add some spacing between the texts
+                  if (isOnline)
+                    Text(
+                      "Online",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.green, // Set the color for online status
+                      ),
                     ),
-                  )
+                  if (!isOnline)
+                    Text(
+                      widget.user.lastLogInDate,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).textTheme.titleSmall?.color,
+                      ),
+                    ),
                 ],
               ),
               const SizedBox(
@@ -467,7 +524,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                                     icon:
                                                         const Icon(Icons.edit),
                                                     onPressed: () async {
-                                                      Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_UPDATE_POST");
+                                                      Ref_Window.Ref_Management
+                                                          .saveNumAccess(
+                                                              "NUM_ACCESS_BTN_UPDATE_POST");
                                                       ModalUpdatePost.show(
                                                           context,
                                                           userData[index]);
@@ -484,7 +543,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                                     ),
                                                     onPressed: () {
                                                       // Show a confirmation dialog
-                                                      Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_DELETE_POST");
+                                                      Ref_Window.Ref_Management
+                                                          .saveNumAccess(
+                                                              "NUM_ACCESS_BTN_DELETE_POST");
                                                       showDialog(
                                                         context: context,
                                                         builder: (BuildContext

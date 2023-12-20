@@ -147,7 +147,7 @@ class Estado_windowRegister extends State<windowRegister> {
                     children: [
                       Text(
                         Ref_Window.Ref_Management.SETTINGS.Get(
-                            "WND_REGISTER_TERMS_CONDITIONS_TITLE",
+                            "WND_REGISTER_TERMS_CONDITIONS_TITLE_2",
                             'By using our carpooling service, you agree to the following terms and conditions:'),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
@@ -217,7 +217,10 @@ class Estado_windowRegister extends State<windowRegister> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('Close'),
+                    child: Text( Ref_Window.Ref_Management.SETTINGS.Get(
+                      "WND_REGISTER_TERMS_CONDITIONS_BTN_1",
+                      'Close',
+                    ),),
                   ),
                 ],
               );
@@ -308,15 +311,20 @@ class Estado_windowRegister extends State<windowRegister> {
                                               AssetImage('assets/LOGO.png'),
                                         ),
                                       ),
-                                      Text("Create a RideWithME account",
+                                      Text(Ref_Window
+                                          .Ref_Management.SETTINGS
+                                          .Get("WND_REGISTER_TITLE_1",
+                                          "Create a RideWithME account"),
                                           style: TextStyle(
                                               fontSize: Theme.of(context)
                                                   .textTheme
                                                   .titleLarge
                                                   ?.fontSize,
                                               fontWeight: FontWeight.bold)),
-                                      Text(
-                                        "Start your journey Carpooling or being Carpooled now!",
+                                      Text(Ref_Window
+                                          .Ref_Management.SETTINGS
+                                          .Get("WND_REGISTER_SUBTITLE_1",
+                                          "Start your journey Carpooling or being Carpooled now!"),
                                         style: TextStyle(
                                           fontSize: Theme.of(context)
                                               .textTheme
@@ -517,8 +525,11 @@ class Estado_windowRegister extends State<windowRegister> {
                                               ),
                                         ),
                                       ),
-                                      Text(
+                                      Text(Ref_Window
+                                          .Ref_Management.SETTINGS
+                                          .Get("WND_REGISTER_TERMS_CONDITIONS_TITLE_1",
                                           "By creating an account, you are accepting the"),
+                                         ),
                                       createButtonTermsConditions(),
                                     ],
                                   ),

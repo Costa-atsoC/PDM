@@ -116,7 +116,7 @@ class AppTheme {
     ),
     colorScheme: const ColorScheme.dark(
       primary: Color.fromARGB(255, 35, 40, 56),
-      onPrimary: Color.fromARGB(255, 255, 255, 252),
+      onPrimary: Color.fromARGB(255, 234, 234, 230),
       secondary: Colors.white,
       onSecondary: Color.fromARGB(220, 33, 65, 101),
       primaryContainer: Color.fromARGB(220, 232, 71, 71),

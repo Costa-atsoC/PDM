@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
+import 'package:ubi/screens/windowNotifications.dart';
 import 'common/Drawer.dart';
 import 'common/widgets/modals/modalNewPost.dart';
 import 'common/widgets/modals/modalUpdatePost.dart';
@@ -62,6 +63,7 @@ class State_windowHome extends State<windowHome> {
   PlatformFile? pickedFile;
   UserFirestore userFirestore = UserFirestore();
   PostFirestore postFirestore = PostFirestore();
+  final formKey = GlobalKey<FormState>();
 
   final windowHome Ref_Window;
   String className = "";
@@ -69,14 +71,18 @@ class State_windowHome extends State<windowHome> {
   // ALL THESE METHODS ARE REFRESHED WHEN REFRESH METHODS ARE APPLIED
   // STORES THE POSTS
   List<PostModel> loadedPosts = [];
+
   // STORES THE LIKES IN THE MOMENT THE POSTS ARE LOADED
   List<int> localLikes = [];
+
   // STORING THE USER DATA
   List<UserModel> loadedUserProfiles = [];
+
   // STORING THE PROFILE IMAGES
   List<Map<String, dynamic>> loadedImages = [];
 
   bool _dataLoaded = false;
+  bool _isLoading = true;
 
   // FUNCTION TO REFRESH THE DATA / GET THE DATA IF IT'S THE FIRST INITIALIZATION
   Future<void> getData() async {
@@ -87,15 +93,17 @@ class State_windowHome extends State<windowHome> {
     try {
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
       List<UserModel> newUsers = [];
-      Map<int, List<Map<String, dynamic>>> postImagesMap = {}; // Map to store images by post index
+      Map<int, List<Map<String, dynamic>>> postImagesMap =
+          {}; // Map to store images by post index
 
       for (int i = 0; i < newPosts.length; i++) {
         PostModel post = newPosts[i];
         UserModel? userProfile = await userFirestore.getUserData(post.uid);
         Utils.MSG_Debug(userProfile!.fullName);
         newUsers.add(userProfile!);
-        
-        List<Map<String, dynamic>> images = await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
+
+        List<Map<String, dynamic>> images =
+            await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
         postImagesMap[i] = images;
 
         if (images.isNotEmpty) {
@@ -129,12 +137,6 @@ class State_windowHome extends State<windowHome> {
     }
   }
 
-
-
-  final formKey = GlobalKey<FormState>();
-
-  bool _isLoading = true;
-
   //--------------
   State_windowHome(this.Ref_Window) : super() {
     className = "State_windowHome";
@@ -143,7 +145,6 @@ class State_windowHome extends State<windowHome> {
   //--------------
   @override
   void dispose() {
-    _scrollBottomBarController.removeListener(() {});
     super.dispose();
   }
 
@@ -166,64 +167,22 @@ class State_windowHome extends State<windowHome> {
   void initState() {
     Utils.MSG_Debug("$className: initState");
     super.initState();
-    myScroll();
     getData();
   }
 
-  void myScroll() async {
-    _scrollBottomBarController.addListener(() {
-      if (_scrollBottomBarController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (!isScrollingDown) {
-          isScrollingDown = true;
-          _showAppbar = false;
-          //_show = false;
-          hideBottomBar();
-        }
-      }
-      if (_scrollBottomBarController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (isScrollingDown) {
-          isScrollingDown = false;
-          _showAppbar = true;
-          //_show = true;
-          showBottomBar();
-        }
-      }
-    });
-  }
-
-
-
-  void showBottomBar() {
-    setState(() {
-      _show = true;
-    });
-  }
-
-  void hideBottomBar() {
-    setState(() {
-      _show = false;
-    });
-  }
-
-  //------ END OF DATABASE
-
-  bool _showAppbar = true; //this is to show app bar
-  final ScrollController _scrollBottomBarController = ScrollController(); // set controller on scrolling
-  bool isScrollingDown = false;
-  final bool _showFab = true;
-  bool _show = true;
-  double bottomBarHeight = 60; // set bottom bar height
-  final Duration _animationDuration = Duration(milliseconds: 200);
-
   final FloatingActionButtonLocation _fabLocation =
-      FloatingActionButtonLocation.endDocked;
+      FloatingActionButtonLocation.miniEndDocked;
 
   //-------------
 
   Future navigateToWindowSearch(context) async {
     windowSearch win = windowSearch(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  } //-------------
+
+  Future navigateToWindowNotifications(context) async {
+    windowNotifications win = windowNotifications(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -232,364 +191,473 @@ class State_windowHome extends State<windowHome> {
   @override
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
+    PostFirestore postManager = PostFirestore();
 
-    return MaterialApp(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        home: Scaffold(
-            drawer: CustomDrawer(Ref_Window.Ref_Management),
-            appBar: PreferredSize(
-              preferredSize:
-                  Size.fromHeight(_showAppbar ? kToolbarHeight + 30 : 0.0),
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: int.parse(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_ANIMATION_DURATION_1", "200"))), // added to the Management
-                height: _showAppbar ? kToolbarHeight + 30 : 0.0,
-                child: AppBar(
-                  title: Text(Ref_Window.Ref_Management.SETTINGS
-                      .Get("WND_HOME_TITLE_1", "")),
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: () async {
-                        setState(() {
-                          _dataLoaded = false;
-                        });
-                        await getData();
-                      },
-                    ),
-                  ],
-                ),
+    // usamos o pop scope para não ser possível voltar do home para o login
+    return PopScope(
+        canPop: false,
+        child: MaterialApp(
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            home: Scaffold(
+              drawer: CustomDrawer(Ref_Window.Ref_Management),
+              appBar: AppBar(
+                title: Text(Ref_Window.Ref_Management.SETTINGS
+                    .Get("WND_HOME_TITLE_1", "")),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () async {
+                      setState(() {
+                        _dataLoaded = false;
+                      });
+                      await getData();
+                    },
+                  ),
+                ],
               ),
-            ),
-            body: RefreshIndicator(onRefresh: () async {
-              setState(() {
-                _dataLoaded = false;
-              });
-              await getData();
-            }, child: Builder(builder: (BuildContext context) {
-              return FutureBuilder(
-                future: _dataLoaded ? null : getData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Color.fromARGB(255, 19, 40, 61),
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    Utils.MSG_Debug("Error: ${snapshot.error}");
-                    return const Center(
-                      child: Text("Error loading data"),
-                    );
-                  } else {
-                    String? currentUserUID =
-                        FirebaseAuth.instance.currentUser?.uid;
+              body: RefreshIndicator(onRefresh: () async {
+                setState(() {
+                  _dataLoaded = false;
+                });
+                await getData();
+              }, child: Builder(builder: (BuildContext context) {
+                return FutureBuilder(
+                  future: _dataLoaded ? null : getData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      Utils.MSG_Debug("Error: ${snapshot.error}");
+                      return Center(
+                        child: Text(Ref_Window.Ref_Management.SETTINGS.Get(
+                            "WND_HOME_ERROR_DATA_TEXT",
+                            "WND_HOME_ERROR_DATA_TEXT ??")),
+                      );
+                    } else {
+                      String? currentUserUID =
+                          FirebaseAuth.instance.currentUser?.uid;
 
-                    return Container(
-                        child: _isLoading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : loadedPosts.isEmpty
-                                ? Center(
-                                    child: Text(Ref_Window
-                                        .Ref_Management.SETTINGS
-                                        .Get("JNL_HOME_TITLE_1", "No Posts !")))
-                                : ListView.builder(
-                                    controller: _scrollBottomBarController,
-                                    itemCount: loadedPosts.length,
-                                    itemBuilder: (context, index) {
-                                      if (localLikes.length <= index) {
-                                        localLikes.add(int.parse(
-                                            loadedPosts[index].likes));
-                                      }
-                                      return GestureDetector(
-                                        onTap: () {
-                                          modalPost.show(context, loadedPosts[index], loadedUserProfiles[index], loadedImages[index]);
-                                        },
-                                        child: Hero(
-                                          tag: 'postHero${loadedPosts[index].pid}',
-                                          child: Card(
-                                            shape: const ContinuousRectangleBorder(
-                                              borderRadius: BorderRadius.zero,
-                                            ),
-                                            elevation: 0,
-                                            // Set elevation to 0 to remove the shadow
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      //Click to go to that user profile
-                                                      GestureDetector(
-                                                        onTap: () async {
-                                                          // UserModel? userData = await userFirestore.getUserData(loadedPosts[index].uid);
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => windowUserProfile(Ref_Window.Ref_Management, loadedUserProfiles[index]),
+                      return Container(
+                          child: _isLoading
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : loadedPosts.isEmpty
+                                  ? Center(
+                                      child: Text(Ref_Window
+                                          .Ref_Management.SETTINGS
+                                          .Get("JNL_HOME_NO_POSTS_TEXT",
+                                              "JNL_HOME_NO_POSTS_TEXT ??")))
+                                  : ListView.builder(
+                                      itemCount: loadedPosts.length,
+                                      itemBuilder: (context, index) {
+                                        if (localLikes.length <= index) {
+                                          localLikes.add(int.parse(
+                                              loadedPosts[index].likes));
+                                        }
+                                        return GestureDetector(
+                                          onTap: () {
+                                            modalPost.show(
+                                                context,
+                                                loadedPosts[index],
+                                                loadedUserProfiles[index],
+                                                loadedImages[index]);
+                                          },
+                                          child: Hero(
+                                            tag:
+                                                'postHero${loadedPosts[index].pid}',
+                                            child: Card(
+                                              shape:
+                                                  const ContinuousRectangleBorder(
+                                                borderRadius: BorderRadius.zero,
+                                              ),
+                                              elevation: 0,
+                                              // Set elevation to 0 to remove the shadow
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        // click to go to that user profile
+                                                        GestureDetector(
+                                                          onTap: () async {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) => windowUserProfile(
+                                                                    Ref_Window
+                                                                        .Ref_Management,
+                                                                    loadedUserProfiles[
+                                                                        index]),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Expanded(
+                                                            child: CircleAvatar(
+                                                              radius: 20,
+                                                              backgroundImage:
+                                                                  NetworkImage(
+                                                                      loadedImages[
+                                                                              index]
+                                                                          [
+                                                                          'url']),
                                                             ),
-                                                          );
-                                                        },
-                                                        child: Expanded(
-                                                          /*
-                                                          child: FutureBuilder(
-                                                            future: Ref_Window.Ref_FirebaseStorage.loadImages(loadedPosts[index].uid),
-                                                            builder: (context, snapshot) {
-                                                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                                                return const Center(
-                                                                  child: CircularProgressIndicator(),
-                                                                );
-                                                              } else if (snapshot.hasError) {
-                                                                return const Center(
-                                                                  child: Text('Something went wrong!'),
-                                                                );
-                                                              } else if (snapshot.hasData) {
-                                                                final List<Map<String, dynamic>> images = snapshot.data ?? [];
-                                                                if (images.isNotEmpty) {
-                                                                  final Map<String, dynamic> firstImage = images.first;
-
-                                                                  return SizedBox(
-                                                                    child: CircleAvatar(
-                                                                        radius: 20,
-                                                                        backgroundImage: NetworkImage(firstImage['url'])
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              }
-
-
-                                                           */
-
-                                                                child: CircleAvatar(
-                                                                  radius: 20,
-                                                                  backgroundImage: NetworkImage(loadedImages[index]['url']),
-                                                                ),
                                                           ),
                                                         ),
-                                                      const SizedBox(width: 10),
-                                                      Column(
-
-                                                          children: [
-                                                        Text(loadedPosts[index]
-                                                            .userFullName, style: Theme.of(context).textTheme.titleSmall,),
-                                                        Text("@${loadedPosts[index]
-                                                            .username}", style: Theme.of(context).textTheme.labelLarge),
-                                                      ]),
-                                                      const Spacer(),
-                                                      Text(loadedPosts[index].registerDate)
-                                                    ],
+                                                        const SizedBox(
+                                                            width: 10),
+                                                        Column(children: [
+                                                          Text(
+                                                            loadedPosts[index]
+                                                                .userFullName,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .titleSmall,
+                                                          ),
+                                                          Text(
+                                                              "@${loadedPosts[index].username}",
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .labelLarge),
+                                                        ]),
+                                                        const Spacer(),
+                                                        Text(Utils
+                                                            .formatTimeDifference(
+                                                                loadedPosts[
+                                                                        index]
+                                                                    .registerDate))
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                                ListTile(
-                                                  title: Text(
-                                                    loadedPosts[index].title,
-                                                    style: Theme.of(context).textTheme.titleMedium,
+                                                  ListTile(
+                                                    title: Text(
+                                                      loadedPosts[index].title,
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .titleMedium,
+                                                    ),
+                                                    subtitle: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DATE_TEXT_LABEL", "Date: ")}${loadedPosts[index].date}",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .labelLarge,
+                                                        ),
+                                                        Text(
+                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FROM_TEXT_LABEL", "From: ")}${loadedPosts[index].startLocation} \n${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_TO_TEXT_LABEL", "To ")}${loadedPosts[index].endLocation} ",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .labelLarge,
+                                                        ),
+                                                        Text(
+                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DESCRIPTION_TEXT_LABEL", "Description: ")}${loadedPosts[index].description}",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .labelLarge,
+                                                        ),
+                                                        Text(
+                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FREE_SEATS_TEXT_LABEL", "Free Seats: ")}${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}",
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .labelLarge,
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                  subtitle: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
-                                                      Text(
-                                                        "Date: ${loadedPosts[index].date}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .labelLarge,
-                                                      ),
-                                                      Text(
-                                                        "From: ${loadedPosts[index].startLocation} \nTo: ${loadedPosts[index].endLocation} ",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .labelLarge,
-                                                      ),
-                                                      Text(
-                                                        "Description: ${loadedPosts[index].description}",
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .labelLarge,
-                                                      ),
-                                                      Text(
-                                                        "Free Seats: ${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}",
-                                                        style: Theme.of(context).textTheme.labelLarge,
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    if (currentUserUID == loadedPosts[index].uid)
-                                                        ...[
-                                                      IconButton(
-                                                        color: Theme.of(context).colorScheme.onPrimary,
-                                                        icon: const Icon(Icons.edit),
-                                                        onPressed: () async {
-                                                          ModalUpdatePost.show(context,loadedPosts[index]);
-                                                          setState(() {});
-                                                        },
-                                                      ),
-                                                      IconButton(
-                                                        color: Colors.red[300],
-                                                        icon: const Icon(Icons.delete),
-                                                        onPressed: () {
-                                                          // Show a confirmation dialog
-                                                          showDialog(
-                                                            context: context,
-                                                            builder:(BuildContext context) {
-                                                              return AlertDialog(
-                                                                title: const Text('Confirm Delete'),
-                                                                content: const Text('Are you sure you want to delete this post?'),
-                                                                actions: <Widget>[
-                                                                  TextButton(
-                                                                    onPressed:() {
-                                                                      Navigator.of(context).pop(); // Close the dialog
-                                                                    },
-                                                                    child: const Text('Cancel'),
-                                                                  ),
-                                                                  TextButton(
-                                                                    onPressed:() {
-                                                                      // Close the dialog and delete the post
-                                                                      Navigator.of(context).pop();
-                                                                      PostFirestore().deletePost(currentUserUID!, loadedPosts[index].pid);
-                                                                      //MISSING THE REFRESH!!
-                                                                    },
-                                                                    child: const Text(
-                                                                        'Delete'),
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            },
-                                                          );
-                                                        },
-                                                      ),
-                                                    ] else ...[
-                                                      Text(
-                                                        localLikes[index].toString(),
-                                                        style: Theme.of(context).textTheme.titleMedium,
-                                                      ),
-                                                      IconButton(
-                                                        color: Theme.of(context).colorScheme.onPrimary,
-                                                        icon:FutureBuilder<bool>(
-                                                          future: postFirestore.getIsLikedStatus(currentUserUID!, loadedPosts[index]),
-
-                                                          builder: (context,snapshot) {
-                                                            if (snapshot.connectionState == ConnectionState.waiting) {
-                                                              // If still loading, you can show a loading indicator or default icon
-                                                              return const Icon(Icons.thumb_up_alt_outlined);
-                                                            } else if (snapshot.hasError) {
-                                                              // Handle error
-                                                              Utils.MSG_Debug('Error checking like status: ${snapshot.error}');
-
-                                                              return const Icon(Icons.thumb_up_alt_outlined);
-                                                            } else {
-                                                              // Determine the appropriate icon based on the like status
-                                                              return snapshot.data ?? false
-                                                                  ? Icon(
-                                                                      Icons.thumb_up_alt,
-                                                                      color: Theme.of(context).colorScheme.secondaryContainer
-                                                                  )
-                                                                  : const Icon(Icons.thumb_up_alt_outlined);
-                                                            }
+                                                      if (currentUserUID ==
+                                                          loadedPosts[index]
+                                                              .uid) ...[
+                                                        IconButton(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                          icon: const Icon(
+                                                              Icons.edit),
+                                                          onPressed: () async {
+                                                            ModalUpdatePost
+                                                                .show(
+                                                                    context,
+                                                                    loadedPosts[
+                                                                        index]);
+                                                            setState(() {});
                                                           },
                                                         ),
-                                                        onPressed: () async {
-                                                          // Replace with your logic to get the current user's UID
-                                                          PostFirestore postManager = PostFirestore();
+                                                        IconButton(
+                                                          color:
+                                                              Colors.red[300],
+                                                          icon: const Icon(
+                                                              Icons.delete),
+                                                          onPressed: () {
+                                                            // Show a confirmation dialog
+                                                            showDialog(
+                                                              context: context,
+                                                              builder:
+                                                                  (BuildContext
+                                                                      context) {
+                                                                return AlertDialog(
+                                                                  title: Text(Ref_Window
+                                                                      .Ref_Management
+                                                                      .SETTINGS
+                                                                      .Get(
+                                                                          "WND_HOME_POST_DELETE_TEXT_LABEL_1",
+                                                                          "Confirm delete")),
+                                                                  content: Text(Ref_Window
+                                                                      .Ref_Management
+                                                                      .SETTINGS
+                                                                      .Get(
+                                                                          "WND_HOME_POST_DELETE_TEXT_LABEL_2",
+                                                                          "Are you sure you want to delete this post?")),
+                                                                  actions: <Widget>[
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop(); // Close the dialog
+                                                                      },
+                                                                      child: Text(Ref_Window
+                                                                          .Ref_Management
+                                                                          .SETTINGS
+                                                                          .Get(
+                                                                              "WND_HOME_POST_DELETE_TEXT_LABEL_3",
+                                                                              "Cancel")),
+                                                                    ),
+                                                                    TextButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        // Close the dialog and delete the post
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        PostFirestore().deletePost(
+                                                                            currentUserUID!,
+                                                                            loadedPosts[index].pid);
+                                                                        setState(
+                                                                            () {});
+                                                                        //MISSING THE REFRESH!!
+                                                                      },
+                                                                      child: Text(Ref_Window
+                                                                          .Ref_Management
+                                                                          .SETTINGS
+                                                                          .Get(
+                                                                              "WND_HOME_POST_DELETE_TEXT_LABEL_4",
+                                                                              "Delete")),
+                                                                    ),
+                                                                  ],
+                                                                );
+                                                              },
+                                                            );
+                                                          },
+                                                        ),
+                                                      ] else ...[
+                                                        Text(
+                                                          localLikes[index]
+                                                              .toString(),
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .titleMedium,
+                                                        ),
+                                                        IconButton(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                          icon: FutureBuilder<
+                                                              bool>(
+                                                            future: postFirestore
+                                                                .getIsLikedStatus(
+                                                                    currentUserUID!,
+                                                                    loadedPosts[
+                                                                        index]),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              if (snapshot
+                                                                      .connectionState ==
+                                                                  ConnectionState
+                                                                      .waiting) {
+                                                                // If still loading, you can show a loading indicator or default icon
+                                                                return const Icon(
+                                                                    Icons
+                                                                        .thumb_up_alt_outlined);
+                                                              } else if (snapshot
+                                                                  .hasError) {
+                                                                // Handle error
+                                                                Utils.MSG_Debug(
+                                                                    'Error checking like status: ${snapshot.error}');
 
-                                                          int updatedLikes =
-                                                              await postManager.toggleLikePost(
-                                                                      currentUserUID!,
-                                                                      loadedPosts[index]);
+                                                                return const Icon(
+                                                                    Icons
+                                                                        .thumb_up_alt_outlined);
+                                                              } else {
+                                                                // Determine the appropriate icon based on the like status
+                                                                return snapshot
+                                                                            .data ??
+                                                                        false
+                                                                    ? Icon(
+                                                                        Icons
+                                                                            .thumb_up_alt,
+                                                                        color: Theme.of(context)
+                                                                            .colorScheme
+                                                                            .secondaryContainer)
+                                                                    : const Icon(
+                                                                        Icons
+                                                                            .thumb_up_alt_outlined);
+                                                              }
+                                                            },
+                                                          ),
+                                                          onPressed: () async {
+                                                            // Replace with your logic to get the current user's UID
 
-                                                          setState(() {
-                                                            localLikes[index] =
-                                                                updatedLikes;
-                                                          });
-                                                        },
-                                                      ),
+                                                            int updatedLikes = await postManager
+                                                                .toggleActionPost(
+                                                                    currentUserUID!,
+                                                                    loadedPosts[
+                                                                        index],
+                                                                    2);
+
+                                                            setState(() {
+                                                              localLikes[
+                                                                      index] =
+                                                                  updatedLikes;
+                                                            });
+                                                          },
+                                                        ),
+                                                        IconButton(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                          icon: const Icon(
+                                                              Icons.message),
+                                                          onPressed: () {
+                                                            // Handle message functionality
+                                                          },
+                                                        ),
+                                                        IconButton(
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .onPrimary,
+                                                          icon: const Icon(Icons
+                                                              .waving_hand),
+                                                          onPressed: () async {
+                                                            await postManager
+                                                                .toggleActionPost(
+                                                                    currentUserUID!,
+                                                                    loadedPosts[
+                                                                        index],
+                                                                    0);
+                                                            Utils.MSG_Debug(
+                                                                "CARPOOL REQUESTED");
+                                                          },
+                                                        ),
+                                                      ],
                                                       IconButton(
                                                         color: Theme.of(context)
                                                             .colorScheme
                                                             .onPrimary,
                                                         icon: const Icon(
-                                                            Icons.message),
+                                                            Icons.share),
                                                         onPressed: () {
                                                           // Handle message functionality
                                                         },
                                                       ),
                                                     ],
-                                                    IconButton(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onPrimary,
-                                                      icon: const Icon(
-                                                          Icons.share),
-                                                      onPressed: () {
-                                                        // Handle message functionality
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ));
-                  }
-                },
-              );
-            })),
-            floatingActionButton: _showFab
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    // Add your desired margin
-                    child: Container(
-                      width: 70.0,
-                      height: 70.0,
-                      child: FloatingActionButton(
-                        onPressed: () => ModalNewPost.show(context),
-                        splashColor: Colors.white,
-                        tooltip: 'Create',
-                        shape: const CircleBorder(),
-                        child: const Icon(
-                          Icons.add,
-                          size: 33.0,
-                          color: Colors.white,
-                        ),
-                      ),
+                                        );
+                                      },
+                                    ));
+                    }
+                  },
+                );
+              })),
+              floatingActionButton: Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                // Add your desired margin
+                child: Container(
+                  width: 70.0,
+                  height: 70.0,
+                  child: FloatingActionButton(
+                    onPressed: () => ModalNewPost.show(context),
+                    splashColor: Colors.white,
+                    tooltip: 'Create',
+                    shape: const CircleBorder(),
+                    child: const Icon(
+                      Icons.add,
+                      size: 33.0,
+                      color: Colors.white,
                     ),
-                  )
-                : null,
-            floatingActionButtonLocation: _fabLocation,
-            bottomNavigationBar: AnimatedContainer(
-              duration: _animationDuration,
-              height: _show ? bottomBarHeight : 0,
-              child: Row(
-                children: <Widget>[
-                  const SizedBox(
-                    width: 10.0, // Adjust the margin value as needed
                   ),
-                  IconButton(
-                    tooltip: 'Search',
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      navigateToWindowSearch(context);
-                    },
-                  ),
-                  IconButton(
-                    tooltip: 'Notifications',
-                    icon: const Icon(Icons.notifications),
-                    onPressed: () {},
-                  ),
-                ],
+                ),
+              ),
+              floatingActionButtonLocation: _fabLocation,
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.only(right: 100.0),
+                // Adjust the margin as needed
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // Adjust the spacing as needed
+                  children: <Widget>[
+                    IconButton(
+                      tooltip: 'Search',
+                      icon: const Icon(
+                        Icons.search_rounded,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        navigateToWindowSearch(context);
+                      },
+                    ),
+                    IconButton(
+                      tooltip: 'Home',
+                      icon: const Icon(
+                        Icons.home,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                      },
+                    ),
+                    IconButton(
+                      tooltip: 'Notifications',
+                      icon: const Icon(
+                        Icons.notifications,
+                        size: 35,
+                      ),
+                      onPressed: () {
+                        navigateToWindowNotifications(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
             )));
   }
