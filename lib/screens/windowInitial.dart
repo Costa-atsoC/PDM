@@ -43,9 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isLoggedIn = false;
 
   List<UserModel> loadedUserProfiles = []; // STORING THE USER DATA
-
   List<Map<String, dynamic>> loadedImages = []; // STORING THE PROFILE IMAGES
-
   bool _isPasswordHidden = true; // hide the password
 
   @override
@@ -57,9 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    _username.dispose();
     _pass.dispose();
-
     super.dispose();
   }
 
@@ -69,7 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool selected = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // _formKey
   final TextEditingController _email = TextEditingController();
-  final TextEditingController _username = TextEditingController();
   final TextEditingController _pass = TextEditingController();
   final FirebaseAuthService _auth = FirebaseAuthService();
 
@@ -124,8 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget Create_Button_Forgot_Password() {
-    double TAMButtonRegister = double.parse(
-        Ref_Management.GetDefinicao("TAMANHO_TEXTO_BTN_NEW_REGISTER", "10"));
     double TAMButtonForgotPassword = double.parse(
         Ref_Management.GetDefinicao("SIZE_TEXT_BUTTON_FORGOT_PASSWORD", "10"));
 
@@ -173,8 +166,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   }),
                 );
               },
-              child: Text(
-                'Forgot Password?',
+              child: Text(Ref_Management.GetDefinicao("WND_LOGIN_BTN_2", "Forgot Password?"),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
@@ -347,7 +339,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               // aqui meter um Text que diz welcome back caso o user tenha o seu UID nas preferencias
                               Text(
                                 _dataLoaded && _isLoggedIn
-                                    ? "Welcome back, ${loadedUserProfiles[0].fullName}!"
+                                    ? "${Ref_Management.SETTINGS.Get(
+                                    "WND_LOGIN_TITLE_1_TEXT_LOGGED",
+                                    "Welcome back, ")}${loadedUserProfiles[0].fullName}!"
                                     : Ref_Management.SETTINGS.Get(
                                         "WND_LOGIN_TITLE_1_TEXT",
                                         "Greetings! Welcome to RideWithME!"),
@@ -374,7 +368,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 decoration: InputDecoration(
                                   icon: Icon(Icons.alternate_email),
                                   labelText: Ref_Management.SETTINGS
-                                      .Get("WND_LOGIN_HINT_10", "Email"),
+                                      .Get("WND_LOGIN_HINT_1", "Email"),
                                   labelStyle:
                                       Theme.of(context).textTheme.titleSmall,
                                   enabledBorder: const UnderlineInputBorder(
@@ -392,7 +386,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: Theme.of(context).textTheme.titleSmall,
                                 validator: (String? value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter your email';
+                                    return Ref_Management.SETTINGS
+                                        .Get("WND_LOGIN_HINT_1_WARNING", "Please enter your email");
                                   }
                                   return null;
                                 },
@@ -437,7 +432,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: Theme.of(context).textTheme.titleSmall,
                                 validator: (String? value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter your password';
+                                    return Ref_Management.SETTINGS
+                                        .Get("WND_LOGIN_HINT_2_WARNING", "Please enter your password");
                                   }
                                   return null;
                                 },
@@ -459,32 +455,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                             if (value != null) {
                                               setState(() {
                                                 isChecked = value;
-                                                if (value) {
-                                                  if (Ref_Management
-                                                          .Get_SharedPreferences_STRING(
-                                                              "REMEMBER_ME_DATE") ==
-                                                      null) {
-                                                    Ref_Management
-                                                        .Save_Shared_Preferences_STRING(
-                                                            "REMEMBER_ME_DATE",
-                                                            Utils
-                                                                .currentTimeUser());
-                                                    Ref_Management
-                                                        .Save_Shared_Preferences_STRING(
-                                                            "REMEMBER_ME_STATUS",
-                                                            "1");
-                                                  } else {
-                                                    Ref_Management
-                                                        .Save_Shared_Preferences_STRING(
-                                                            "REMEMBER_ME_STATUS",
-                                                            "1");
-                                                  }
-                                                } else {
-                                                  Ref_Management
-                                                      .Save_Shared_Preferences_STRING(
-                                                          "REMEMBER_ME_STATUS",
-                                                          "0");
-                                                }
                                               });
                                             }
                                           },
@@ -564,6 +534,33 @@ class _MyHomePageState extends State<MyHomePage> {
       );
       userFirestore.updateUserData(userUpdated);
 
+      if (isChecked!) {
+        if (Ref_Management
+            .Get_SharedPreferences_STRING(
+            "REMEMBER_ME_DATE") ==
+            null) {
+          Ref_Management
+              .Save_Shared_Preferences_STRING(
+              "REMEMBER_ME_DATE",
+              Utils
+                  .currentTimeUser());
+          Ref_Management
+              .Save_Shared_Preferences_STRING(
+              "REMEMBER_ME_STATUS",
+              "1");
+        } else {
+          Ref_Management
+              .Save_Shared_Preferences_STRING(
+              "REMEMBER_ME_STATUS",
+              "1");
+        }
+      } else {
+        Ref_Management
+            .Save_Shared_Preferences_STRING(
+            "REMEMBER_ME_STATUS",
+            "0");
+      }
+
       Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
       Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
       Ref_Management.Save_Shared_Preferences_STRING(
@@ -592,7 +589,6 @@ class _MyHomePageState extends State<MyHomePage> {
       //else if(Ref_Management.Get_SharedPreferences_STRING("TIME_EMAIL") == "??") aqui implementar a logica para comparar as datas do login
       NavigateTo_Window_Home(context);
       _email.clear();
-      _username.clear();
       _pass.clear();
     } catch (e) {
       // In case the user puts a wrong email or password

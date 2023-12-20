@@ -50,6 +50,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Management appManagement = Management("APP-RideWME");
+    if(appManagement.Get_SharedPreferences_STRING("LANGUAGE") == null){
+      appManagement.Save_Shared_Preferences_STRING("LANGUAGE", "EN");
+    }
     appManagement.Load();
 
     return FutureBuilder<bool>(
@@ -58,7 +61,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Simulate a delay of 2 seconds (adjust as needed)
           return FutureBuilder<void>(
-            future: Future.delayed(Duration(seconds: 2)),
+            future: Future.delayed(Duration(seconds: 20)),
             builder: (BuildContext context, AsyncSnapshot<void> delaySnapshot) {
               if (delaySnapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();

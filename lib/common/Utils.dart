@@ -36,10 +36,10 @@ class Utils {
 
   static String currentTime() {
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat('kk:mm:ss \n EEE d MMM').format(now);
-
+    String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSS').format(now);
     return formattedDate;
   }
+
 
   //For the creation of the user we need different date format
   static String currentTimeUser() {
@@ -50,6 +50,33 @@ class Utils {
     return formattedDate;
   }
 
+  static String formatTimeDifference(String postDate) {
+    // Update the format pattern to match the input date string
+    DateFormat inputFormat = DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSS');
+
+    DateTime postDateTime = inputFormat.parse(postDate);
+
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(postDateTime);
+
+    if (difference.inDays > 0) {
+      Utils.MSG_Debug("${difference.inDays}");
+      return '${difference.inDays} ${difference.inDays == 1 ? 'day' : 'days'} ago';
+    } else if (difference.inMinutes >= 60) {
+      int hours = (difference.inMinutes / 60).floor();
+      Utils.MSG_Debug("$hours hours");
+      return '$hours ${hours == 1 ? 'hour' : 'hours'} ago';
+    } else {
+      Utils.MSG_Debug("${difference.inMinutes}");
+      if(difference.inMinutes < 1){
+        return '<1 minute ago';
+      }
+      return '${difference.inMinutes} ${difference.inMinutes == 1 ? 'minute' : 'minutes'} ago';
+    }
+  }
+
+
+
 //--------------------------------------
 //--------------------------------------
 //--------------------------------------
@@ -57,7 +84,6 @@ class Utils {
 }
 
 class UtilsFlutter {
-
   static Future<void> Dialogo_1(BuildContext context, String Titulo,
       String Texto1, String Texto2, String Texto3, String texto_botao) async {
     return showDialog<void>(
@@ -235,10 +261,10 @@ class UtilsFlutter {
     var connectivityResult = await (Connectivity().checkConnectivity());
 
     if (connectivityResult == ConnectivityResult.none) {
-      Utils.MSG_Debug("false");
+      Utils.MSG_Debug("false - no internet");
       return false; // No internet connection
     } else {
-      Utils.MSG_Debug("true");
+      Utils.MSG_Debug("true - successful connection with the internet");
       return true; // Internet connection is available
     }
   }

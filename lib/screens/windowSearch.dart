@@ -407,10 +407,10 @@ class State_windowSearch extends State<windowSearch> {
 
                                                       int updatedLikes =
                                                           await postManager
-                                                              .toggleLikePost(
+                                                              .toggleActionPost(
                                                                   currentUserUID!,
                                                                   loadedPosts[
-                                                                      index]);
+                                                                      index], 2);
 
                                                       setState(() {
                                                         localLikes[index] =

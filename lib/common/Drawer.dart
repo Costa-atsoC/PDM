@@ -14,7 +14,7 @@ import '../windowHome.dart';
 import 'Management.dart';
 import 'Utils.dart';
 
-class CustomDrawer extends StatefulWidget{
+class CustomDrawer extends StatefulWidget {
   final Management Ref_Management;
   final firebaseStorage Ref_FirebaseStorage = firebaseStorage();
   final UserFirestore userFirestore = UserFirestore();
@@ -26,16 +26,55 @@ class CustomDrawer extends StatefulWidget{
     return State_CustomDrawer(this);
   }
 }
-
 class State_CustomDrawer extends State<CustomDrawer> {
   final CustomDrawer Ref_Window;
   String className = "";
-
 
   State_CustomDrawer(this.Ref_Window) : super() {
     className = "State_windowHome";
   }
 
+  @override
+  void initState() {
+    _loadUserImage();
+    super.initState();
+  }
+
+  bool _dataLoaded = true;
+  bool _hasImage = false;
+  List<Map<String, dynamic>> loadedImages = [];
+
+  Future<void> _loadUserImage() async {
+    /*
+    String? uid = await Ref_Window.Ref_Management.Get_SharedPreferences_STRING("UID");
+
+    // Skip fetching data if it's already loaded
+    if (_dataLoaded) {
+      return;
+    }
+
+    try {
+      loadedImages.clear();
+
+      List<Map<String, dynamic>> images = await Ref_Window.Ref_FirebaseStorage.loadImages(uid!);
+
+      if (images.isNotEmpty) {
+        Map<String, dynamic> firstImage = images.first;
+        loadedImages.add(firstImage);
+        _hasImage = true;
+      } else {
+        _hasImage = false;
+      }
+    } catch (e) {
+      Utils.MSG_Debug("Error fetching user data: $e");
+    } finally {
+      setState(() {
+        _dataLoaded = true; // Set the flag to true after loading data
+      });
+    }
+
+     */
+  }
 
 
   Future navigateToWindowSettings(context) async {
@@ -50,22 +89,27 @@ class State_CustomDrawer extends State<CustomDrawer> {
     UserModel user = UserModel(
       uid: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1"),
       email: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_EMAIL", ""),
-      username: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_USERNAME", ""),
+      username: Ref_Window.Ref_Management.SETTINGS
+          .Get("WND_USER_PROFILE_USERNAME", ""),
       fullName: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_NAME", ""),
-      registerDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_REGDATE", ""),
-      lastChangedDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_LASTDATE", ""),
-      location: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOCATION", ""),
+      registerDate: Ref_Window.Ref_Management.SETTINGS
+          .Get("WND_USER_PROFILE_REGDATE", ""),
+      lastChangedDate:
+          Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_LASTDATE", ""),
+      location: Ref_Window.Ref_Management.SETTINGS
+          .Get("WND_USER_PROFILE_LOCATION", ""),
       image: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_IMAGE", ""),
       online: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_ONLINE", ""),
-      lastLogInDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LOGIN_DATE", ""),
-      lastSignOutDate: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_SIGNOUT_DATE", ""),
+      lastLogInDate: Ref_Window.Ref_Management.SETTINGS
+          .Get("WND_USER_PROFILE_LOGIN_DATE", ""),
+      lastSignOutDate: Ref_Window.Ref_Management.SETTINGS
+          .Get("WND_USER_PROFILE_SIGNOUT_DATE", ""),
     );
 
     windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management, user);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
-
 
   Future navigateToWindowHome(context) async {
     windowHome win = windowHome(Ref_Window.Ref_Management);
@@ -74,7 +118,8 @@ class State_CustomDrawer extends State<CustomDrawer> {
   }
 
   Future navigateToWindowInitial(context) async {
-    MyHomePage win = MyHomePage(Ref_Window.Ref_Management, Ref_Window.Ref_Management.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
+    MyHomePage win = MyHomePage(Ref_Window.Ref_Management,
+        Ref_Window.Ref_Management.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
@@ -89,179 +134,149 @@ class State_CustomDrawer extends State<CustomDrawer> {
     Ref_Window.Ref_Management.Load();
 
     return Drawer(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      child: ListView(
-        padding: EdgeInsets.zero,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      child: Column(
         children: <Widget>[
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).appBarTheme.backgroundColor,
-              image: const DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage('assets/PORSCHE_MAIN_2.jpeg'),
-              ),
-            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                 Expanded(
-                  child: FutureBuilder(
-                    future: Ref_Window.Ref_FirebaseStorage.loadImages(Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                          child: Text('Something went wrong!'),
-                        );
-                      } else if (snapshot.hasData) {
-                        final List<Map<String, dynamic>> images = snapshot.data ?? [];
-                        if (images.isNotEmpty) {
-                          final Map<String, dynamic> firstImage = images.first;
-
-                          return SizedBox(
-                            child: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(firstImage['url'])
-                            ),
-                          );
-                        }
-                      }
-
-                      return const SizedBox(
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundImage: AssetImage("assets/PORSCHE_MAIN_2.jpeg"),
-                        ),
-                      );
-                    },
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(140),
                   ),
-                ),
-                const SizedBox(height: 10),
-                // Espaço entre a foto e o texto
-                Text(
-                  Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_DRAWER_TITLE_1", "NAME"),
-                  style: Theme.of(context).textTheme.titleLarge,
+                  child: Expanded(
+                    child: _dataLoaded
+                        ? (_hasImage
+                        ? SizedBox(
+                      width: 200,
+                      height: 200,
+                      child: CircleAvatar(
+                        radius: 100,
+                        backgroundImage: NetworkImage(
+                            loadedImages[0]['url']),
+                      ),
+                    )
+                        : const SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundColor:
+                        Colors.transparent,
+                        backgroundImage: AssetImage(
+                            "assets/LOGO.png"),
+                      ),
+                    ))
+                        : Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context)
+                            .iconTheme
+                            .color,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
           ListTile(
             leading: const Icon(Icons.home),
-            // TODO meter o logo da app
             title: Text(
               Ref_Window.Ref_Management.SETTINGS
-                  .Get("JNL_HOME_DRAWER_SUBTITLE_1", "HOME"),
+                  .Get("WND_HOME_DRAWER_SUBTITLE_1", "HOME"),
             ),
-            // adicionar ao management
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.secondary,
+            textColor: Theme.of(context).colorScheme.onPrimary,
             onTap: () => {navigateToWindowHome(context)},
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.person),
             title: Text(
               Ref_Window.Ref_Management.SETTINGS
-                  .Get("JNL_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
+                  .Get("WND_HOME_DRAWER_SUBTITLE_2", "PROFILE"),
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.secondary,
+            textColor: Theme.of(context).colorScheme.onPrimary,
             onTap: () => {navigateToWindowUserProfile(context)},
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.settings),
             title: Text(
               Ref_Window.Ref_Management.SETTINGS
-                  .Get("JNL_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
+                  .Get("WND_HOME_DRAWER_SUBTITLE_3", "SETTINGS"),
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.secondary,
+            textColor: Theme.of(context).colorScheme.onPrimary,
             onTap: () => {navigateToWindowSettings(context)},
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.border_color),
             title: Text(
               Ref_Window.Ref_Management.SETTINGS
-                  .Get("JNL_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
+                  .Get("WND_HOME_DRAWER_SUBTITLE_4", "FEEDBACK"),
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
-            textColor: Theme.of(context).colorScheme.secondary,
+            textColor: Theme.of(context).colorScheme.onPrimary,
             onTap: () => {navigateToWindowFeedback(context)},
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          Spacer(),
           Container(
             alignment: Alignment.center,
-            margin: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(
-                        color: Theme.of(context).colorScheme.secondary),
-                  ),
-                  child: ListTile(
-                    // leading: Icon(Icons.exit_to_app),
-                    // iconColor: Theme.of(context).scaffoldBackgroundColor,
-                    title: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        Ref_Window.Ref_Management.SETTINGS
-                            .Get("JNL_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.titleLarge
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.secondaryContainer,
-                        ),
-                      ),
-                    ),
-                    onTap: () async {
-                      await Ref_Window.Ref_Management.Delete_Shared_Preferences("EMAIL");
-                      await Ref_Window.Ref_Management.Delete_Shared_Preferences("NAME");
-
-                      UserModel? userData = await userFirestore.getUserData(FirebaseAuth.instance.currentUser!.uid);
-                      UserModel userUpdated = UserModel(
-                        uid: userData!.uid,
-                        email: userData!.email,
-                        username: userData!.username,
-                        fullName: userData!.fullName,
-                        registerDate: userData!.registerDate,
-                        lastChangedDate: userData!.lastChangedDate,
-                        location: userData!.location,
-                        image: userData!.image,
-                        online: "0",
-                        lastLogInDate: userData!.lastLogInDate,
-                        lastSignOutDate: Utils.currentTime(),
-                      );
-
-                      if (userData != null) {
-                        await userFirestore.updateUserData(userUpdated);
-                      }
-
-                      await FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pop();
-                      navigateToWindowInitial(context);
-                    },
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10), // Add a bottom margin here
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                ),
+              ),
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: ListTile(
+                title: Align(
+                  child: Text(
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(),
                   ),
                 ),
-              ],
+                onTap: () async {
+                  UserModel? userData =
+                  await userFirestore.getUserData(
+                      FirebaseAuth.instance.currentUser!.uid);
+                  UserModel userUpdated = UserModel(
+                    uid: userData!.uid,
+                    email: userData!.email,
+                    username: userData!.username,
+                    fullName: userData!.fullName,
+                    registerDate: userData!.registerDate,
+                    lastChangedDate: userData!.lastChangedDate,
+                    location: userData!.location,
+                    image: userData!.image,
+                    online: "0",
+                    lastLogInDate: userData!.lastLogInDate,
+                    lastSignOutDate: Utils.currentTime(),
+                  );
+
+                  if (userData != null) {
+                    await userFirestore.updateUserData(userUpdated);
+                  }
+
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pop();
+                  navigateToWindowInitial(context);
+                },
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

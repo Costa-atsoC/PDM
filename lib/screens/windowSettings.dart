@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ubi/screens/windowDeleteAccount.dart';
 import 'windowChangePassword.dart';
+// import 'windowLanguage.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
@@ -13,6 +14,8 @@ import '../common/appTheme.dart';
 class windowSettings extends StatefulWidget {
   String windowTitle = "";
   final Management Ref_Management;
+
+  String selectedLanguage = "";
 
   //--------------
   windowSettings(this.Ref_Management) {
@@ -70,7 +73,6 @@ class State_windowSettings extends State<windowSettings> {
     });
   }
 
-
   final windowSettings Ref_Window;
   String className = "";
 
@@ -120,9 +122,16 @@ class State_windowSettings extends State<windowSettings> {
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
-    return Scaffold(
+    return MaterialApp(
+      theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,
+              color: Theme.of(context).colorScheme.secondary),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text(className, style: TextStyle(fontSize: 22)),
         centerTitle: true,
       ),
@@ -135,28 +144,29 @@ class State_windowSettings extends State<windowSettings> {
                 children: [
                   Icon(
                     Icons.person,
-                    color: Colors.blue,
                   ),
                   SizedBox(width: 10),
                   Text("Account",
                       style:
-                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
                 ],
               ),
               Divider(height: 20, thickness: 1),
               SizedBox(height: 20),
-              buildAccountOption(context, "Change Password", actions: ['Yes', 'No']),
-              buildAccountOption(context, "Appearance", actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
+              buildAccountOption(context, "Change Password",
+                  actions: ['Yes', 'No']),
+              buildAccountOption(context, "Appearance",
+                  actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
               buildAccountOption(context, "Language", actions: []),
               buildAccountOption(context, "Delete Account", actions: []),
               SizedBox(height: 40),
               Row(
                 children: [
-                  Icon(Icons.volume_up_outlined, color: Colors.blue),
+                  Icon(Icons.volume_up_outlined),
                   SizedBox(width: 10),
                   Text("Notifications",
                       style:
-                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
                 ],
               ),
               Divider(height: 20, thickness: 1),
@@ -167,23 +177,39 @@ class State_windowSettings extends State<windowSettings> {
                   "Notifications", valNotify2, onChangeFunction2),
               buildNotificationOption(
                   "Notifications", valNotify3, onChangeFunction3),
+              Divider(height: 20, thickness: 1),
               Center(
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
-                  onPressed: () {},
-                  child: Text(
-                    "SIGN OUT",
-                    style: TextStyle(
-                        fontSize: 16, letterSpacing: 2.2, color: Colors.black),
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10), // Add a bottom margin here
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                      ),
+                    ),
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    child: ListTile(
+                      title: Align(
+                        child: Text(
+                          Ref_Window.Ref_Management.SETTINGS
+                              .Get("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleLarge
+                              ?.copyWith(),
+                        ),
+                      ),
+                      onTap: () {}
+                    ),
                   ),
                 ),
               )
             ],
           )),
-    );
+    ));
   }
 
   Padding buildNotificationOption(
@@ -246,27 +272,76 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 
-  GestureDetector buildAccountOption(BuildContext context, String title, {List<String>? actions}) {
+  void _showLanguageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Select Language'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text('Portuguese'),
+                onTap: () {
+                  setState(() {
+                    // Define a linguagem como português e armazena nas preferências compartilhadas
+                    widget.selectedLanguage = 'Portuguese';
+                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
+                        "LANGUAGE", 'PT');
+                    Ref_Window.Ref_Management.Load();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('English'),
+                onTap: () {
+                  setState(() {
+                    // Define a linguagem como inglês e armazena nas preferências compartilhadas
+                    widget.selectedLanguage = 'English';
+                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
+                        "LANGUAGE", 'EN');
+                    Ref_Window.Ref_Management.Load();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  GestureDetector buildAccountOption(BuildContext context, String title,
+      {List<String>? actions}) {
     return GestureDetector(
       onTap: () {
         if (title == 'Change Password') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WindowChangePassword(Ref_Window.Ref_Management)),
+            MaterialPageRoute(
+                builder: (context) =>
+                    WindowChangePassword(Ref_Window.Ref_Management)),
           );
         } else if (title == 'Delete Account') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WindowDeleteAccount(Ref_Window.Ref_Management)),
+            MaterialPageRoute(
+                builder: (context) =>
+                    WindowDeleteAccount(Ref_Window.Ref_Management)),
           );
+        } else if (title == 'Language') {
+          _showLanguageDialog(context);
         } else {
           // Se houver outras opções de conta
           showDialog(
             context: context,
             builder: (_) {
               return AlertDialog(
-                // Restante do seu código para outras opções...
-              );
+                  // Restante do seu código para outras opções...
+                  );
             },
           );
         }
@@ -294,5 +369,3 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 }
-
-
