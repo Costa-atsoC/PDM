@@ -50,10 +50,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Management appManagement = Management("APP-RideWME");
-    if(appManagement.Get_SharedPreferences_STRING("LANGUAGE") == null){
-      appManagement.Save_Shared_Preferences_STRING("LANGUAGE", "EN");
-    }
-    appManagement.Load();
 
     return FutureBuilder<bool>(
       future: checkInternetConnection(),
@@ -66,6 +62,13 @@ class MyApp extends StatelessWidget {
               if (delaySnapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else {
+                if(appManagement.Get_SharedPreferences_STRING("LANGUAGE") == null){
+                  appManagement.Save_Shared_Preferences_STRING("LANGUAGE", "EN");
+                }
+                if(appManagement.Get_SharedPreferences_STRING("THEME") == null){
+                  appManagement.Save_Shared_Preferences_STRING("THEME", "DARK");
+                }
+                appManagement.Load();
                 // Continue with your logic after the delay
                 Widget initialScreen = MyHomePage(
                   appManagement,
@@ -85,6 +88,14 @@ class MyApp extends StatelessWidget {
             },
           );
         } else {
+          if(appManagement.Get_SharedPreferences_STRING("LANGUAGE") == null){
+            appManagement.Save_Shared_Preferences_STRING("LANGUAGE", "EN");
+          }
+          if(appManagement.Get_SharedPreferences_STRING("THEME") == null){
+            appManagement.Save_Shared_Preferences_STRING("THEME", "DARK");
+          }
+          appManagement.Load();
+
           Widget initialScreen = MyHomePage(
             appManagement,
             appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"),

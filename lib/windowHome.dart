@@ -68,6 +68,9 @@ class State_windowHome extends State<windowHome> {
   final windowHome Ref_Window;
   String className = "";
 
+  // for the bottomNavigationBar
+  int _currentIndex = 1;
+
   // ALL THESE METHODS ARE REFRESHED WHEN REFRESH METHODS ARE APPLIED
   // STORES THE POSTS
   List<PostModel> loadedPosts = [];
@@ -171,7 +174,7 @@ class State_windowHome extends State<windowHome> {
   }
 
   final FloatingActionButtonLocation _fabLocation =
-      FloatingActionButtonLocation.miniEndDocked;
+      FloatingActionButtonLocation.miniEndFloat;
 
   //-------------
 
@@ -187,35 +190,14 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  //--------------
-  @override
-  Widget build(BuildContext context) {
-    Ref_Window.Ref_Management.Load();
-    PostFirestore postManager = PostFirestore();
-
-    // usamos o pop scope para não ser possível voltar do home para o login
+  /// WIDGETS
+  Widget _buildHomePage(PostFirestore postManager) {
     return PopScope(
         canPop: false,
         child: MaterialApp(
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             home: Scaffold(
-              drawer: CustomDrawer(Ref_Window.Ref_Management),
-              appBar: AppBar(
-                title: Text(Ref_Window.Ref_Management.SETTINGS
-                    .Get("WND_HOME_TITLE_1", "")),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () async {
-                      setState(() {
-                        _dataLoaded = false;
-                      });
-                      await getData();
-                    },
-                  ),
-                ],
-              ),
               body: RefreshIndicator(onRefresh: () async {
                 setState(() {
                   _dataLoaded = false;
@@ -620,45 +602,62 @@ class State_windowHome extends State<windowHome> {
                 ),
               ),
               floatingActionButtonLocation: _fabLocation,
-              bottomNavigationBar: Padding(
-                padding: const EdgeInsets.only(right: 100.0),
-                // Adjust the margin as needed
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // Adjust the spacing as needed
-                  children: <Widget>[
-                    IconButton(
-                      tooltip: 'Search',
-                      icon: const Icon(
-                        Icons.search_rounded,
-                        size: 35,
-                      ),
-                      onPressed: () {
-                        navigateToWindowSearch(context);
-                      },
-                    ),
-                    IconButton(
-                      tooltip: 'Home',
-                      icon: const Icon(
-                        Icons.home,
-                        size: 35,
-                      ),
-                      onPressed: () {
-                      },
-                    ),
-                    IconButton(
-                      tooltip: 'Notifications',
-                      icon: const Icon(
-                        Icons.notifications,
-                        size: 35,
-                      ),
-                      onPressed: () {
-                        navigateToWindowNotifications(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
             )));
+  }
+
+  //--------------
+  @override
+  Widget build(BuildContext context) {
+    Ref_Window.Ref_Management.Load();
+    return MaterialApp(
+        theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        home: Scaffold(
+          drawer: CustomDrawer(Ref_Window.Ref_Management),
+          appBar: AppBar(
+            title: Text(
+                Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () async {
+                  setState(() {
+                    _dataLoaded = false;
+                  });
+                  await getData();
+                },
+              ),
+            ],
+          ),
+          body: (_currentIndex == 0
+              ? _buildHomePage(postFirestore) // search
+              : (_currentIndex == 1
+                  ? _buildHomePage(postFirestore) // home
+                  : _buildHomePage(postFirestore) // notifications
+              )),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search_rounded),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_filled),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: '',
+              ),
+            ],
+          ),
+        ));
   }
 }
