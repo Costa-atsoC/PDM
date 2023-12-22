@@ -1,13 +1,11 @@
 import 'dart:io' as io;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:ubi/common/Drawer.dart';
+import 'package:ubi/common/widgets/modals/modalReviewUser.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:path/path.dart' as path;
@@ -19,6 +17,7 @@ import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
 import '../common/widgets/modals/modalUpdatePost.dart';
+import '../firebase_auth_implementation/models/review_model.dart';
 import '../firestore/post_firestore.dart';
 import '../main.dart';
 
@@ -102,17 +101,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
     _refreshData();
   }
 
-  // void NavigateTo_New_Window(context) {
-  //   Navigator.push(
-  //       context,
-  //       MaterialPageRoute(
-  //           builder: (context) =>
-  //               windowUserProfile(Ref_Window.Ref_Management)));
-  // }
-
   //--- database constants
   // All data
   List<PostModel> userData = [];
+  List<ReviewModel> reviewsData = [];
   final formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
@@ -120,11 +112,12 @@ class State_windowUserProfile extends State<windowUserProfile> {
 
   // This function is used to fetch all data from the database
   void _refreshData() async {
-    final List<PostModel> data =
-        await PostFirestore().getUserPosts(widget.user.uid);
+    final List<PostModel> data = await PostFirestore().getUserPosts(widget.user.uid);
     isOnline = await userFirestore.isUserOnline(widget.user);
+    final List<ReviewModel> reviews = await UserFirestore().getUserReviews(widget.user.uid);
     setState(() {
       userData.addAll(data);
+      reviewsData.addAll(reviews);
       _isLoading = false;
     });
     for (var i = 0; i < userData.length; i++) {
@@ -139,6 +132,43 @@ class State_windowUserProfile extends State<windowUserProfile> {
     return null;
   }
 
+
+
+  //This is for the tab 'Reviews'
+  Widget _reviewSection() {
+    return
+      SizedBox(
+        height: MediaQuery.of(context).size.height ,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : reviewsData.isEmpty
+            ? const Center(child: Text("This user has no reviews yet!"))
+            :
+        // GestureDetector(
+        //         onTap: (){
+        //           modalReviewUser.show(
+        //             context,
+        //             widget.user,
+        //             Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
+        //           );
+        //         },
+        //         child: Text("Review")
+
+        ListView.builder(
+                itemCount: reviewsData.length,
+                itemBuilder: (context, index) {
+                  return Hero(
+                      tag: 'reviewHero${reviewsData[index].rid}',
+                      child: Card(
+                        child: ListTile(
+                          title: Text(reviewsData[index].date),
+                        )
+                      )
+                  );
+                },
+              )
+      );
+  }
   //--------------
   @override
   Widget build(BuildContext context) {
@@ -184,8 +214,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   ),
                   child: Expanded(
                     child: FutureBuilder(
-                      future: Ref_Window.Ref_FirebaseStorage.loadImages(
-                          widget.user.uid),
+                      future: Ref_Window.Ref_FirebaseStorage.loadImages(widget.user.uid),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -224,9 +253,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                             child:
                                             CircleAvatar(
                                               backgroundColor: Colors.transparent,
-                                            radius: 100,
-                                            backgroundImage: NetworkImage(firstImage['url']),
-                                          ),
+                                              radius: 100,
+                                              backgroundImage: NetworkImage(firstImage['url']),
+                                            ),
                                           ),
                                         ),
                                       );
@@ -247,7 +276,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         child: Container(
                                           width: 50,
                                           height: 50,
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                             color: Colors.transparent,
                                             shape: BoxShape.circle,
                                           ),
@@ -263,7 +292,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                               backgroundColor:
                                               Theme.of(context).colorScheme.inversePrimary,
                                               shadowColor: Colors.transparent,
-                                              padding: EdgeInsets.only(left: 2, bottom: 2),
+                                              padding: const EdgeInsets.only(left: 2, bottom: 2),
                                             ),
                                           ),
                                         ),
@@ -328,14 +357,13 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           }
                         }
                         if (widget.user.uid ==
-                            Ref_Window.Ref_Management.SETTINGS
-                                .Get("WND_USER_PROFILE_UID", "-1")) {
+                            Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
                           return SizedBox(
                             width: 200,
                             height: 200,
                             child: Stack(
                               children: <Widget>[
-                                CircleAvatar(
+                                const CircleAvatar(
                                   radius: 100,
                                   backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
                                 ),
@@ -344,7 +372,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                   child: Container(
                                     width: 50,
                                     height: 50,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       color: Colors.transparent,
                                       shape: BoxShape.circle,
                                     ),
@@ -360,7 +388,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         backgroundColor:
                                         Theme.of(context).colorScheme.inversePrimary,
                                         shadowColor: Colors.transparent,
-                                        padding: EdgeInsets.only(left: 2, bottom: 2),
+                                        padding: const EdgeInsets.only(left: 2, bottom: 2),
                                       ),
                                     ),
                                   ),
@@ -430,7 +458,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                 ),
               ]),
               const SizedBox(
-                height: 30,
+                height: 10,
               ),
               Row(
                 children: [
@@ -463,9 +491,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                       color: Theme.of(context).textTheme.titleSmall?.color,
                     ),
                   ),
-                  SizedBox(width: 10), // Add some spacing between the texts
+                  const SizedBox(width: 10), // Add some spacing between the texts
                   if (isOnline)
-                    Text(
+                    const Text(
                       "Online",
                       style: TextStyle(
                         fontSize: 20,
@@ -486,123 +514,146 @@ class State_windowUserProfile extends State<windowUserProfile> {
                 height: 10,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 3 - 30,
-                child: _isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : userData.isEmpty
-                        ? const Center(child: Text("No Data Available!!!"))
-                        : ListView.builder(
-                            itemCount: userData.length,
-                            itemBuilder: (context, index) {
-                              return Hero(
-                                tag: 'postHero${userData[index].pid}',
-                                child: Card(
-                                  child: ListTile(
-                                      title: Text(userData[index].title),
-                                      subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(userData[index].date),
-                                            Text(
-                                                "from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
-                                            Text(userData[index].freeSeats +
-                                                "/" +
-                                                userData[index].totalSeats +
-                                                " FREE SEATS"),
-                                            Text(userData[index].description),
-                                          ]),
-                                      trailing: SizedBox(
-                                        width: 100,
-                                        child: Row(
-                                          children: [
-                                            userData[index].uid ==
-                                                    currentUserUID
-                                                ? IconButton(
-                                                    icon:
-                                                        const Icon(Icons.edit),
-                                                    onPressed: () async {
-                                                      Ref_Window.Ref_Management
-                                                          .saveNumAccess(
-                                                              "NUM_ACCESS_BTN_UPDATE_POST");
-                                                      ModalUpdatePost.show(
-                                                          context,
-                                                          userData[index]);
-                                                      setState(() {});
-                                                    },
-                                                  )
-                                                : const SizedBox(),
-                                            userData[index].uid ==
-                                                    currentUserUID
-                                                ? IconButton(
-                                                    icon: const Icon(
-                                                      Icons.delete,
-                                                      color: Colors.redAccent,
-                                                    ),
-                                                    onPressed: () {
-                                                      // Show a confirmation dialog
-                                                      Ref_Window.Ref_Management
-                                                          .saveNumAccess(
-                                                              "NUM_ACCESS_BTN_DELETE_POST");
-                                                      showDialog(
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            title: const Text(
-                                                                'Confirm Delete'),
-                                                            content: const Text(
-                                                                'Are you sure you want to delete this post?'),
-                                                            actions: <Widget>[
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop(); // Close the dialog
-                                                                },
-                                                                child: const Text(
-                                                                    'Cancel'),
-                                                              ),
-                                                              TextButton(
-                                                                onPressed: () {
-                                                                  // Close the dialog and delete the post
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  PostFirestore().deletePost(
-                                                                      currentUserUID!,
-                                                                      userData[
-                                                                              index]
-                                                                          .pid);
-                                                                  //MISSING THE REFRESH!!
-                                                                },
-                                                                child: const Text(
-                                                                    'Delete'),
-                                                              ),
-                                                            ],
-                                                          );
-                                                        },
-                                                      );
-                                                    },
-                                                  )
-                                                : const SizedBox()
-                                          ],
-                                        ),
-                                      )),
-                                ),
-                              );
-                            },
+                height: MediaQuery.of(context).size.height / 3 - 6,
+                child: DefaultTabController(
+                  initialIndex: 0,
+                  length: 2,
+                  child: Scaffold(
+                    appBar: PreferredSize(
+                      preferredSize: const Size.fromHeight(kToolbarHeight),
+                      child: AppBar(
+                      bottom: const TabBar(
+                        indicatorSize: TabBarIndicatorSize.label,
+                        tabs: [
+                          Tab(
+                            text: ("Posts"),
                           ),
-              )
+                          Tab(
+                            text: ("Reviews"),
+                          ),
+                        ],
+                      )
+                      ),
+                    ),
+                  body: TabBarView(
+                      children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height ,
+                      child: _isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : userData.isEmpty
+                          ? const Center(child: Text("No Data Available!!!"))
+                          : ListView.builder(
+                        itemCount: userData.length,
+                        itemBuilder: (context, index) {
+                          return Hero(
+                            tag: 'postHero${userData[index].pid}',
+                            child: Card(
+                              child: ListTile(
+                                  title: Text(userData[index].title),
+                                  subtitle: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Text(userData[index].date),
+                                        Text(
+                                            "from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
+                                        Text("${userData[index].freeSeats}/${userData[index].totalSeats} FREE SEATS"),
+                                        Text(userData[index].description),
+                                      ]),
+                                  trailing: SizedBox(
+                                    width: 100,
+                                    child: Row(
+                                      children: [
+                                        userData[index].uid ==
+                                            currentUserUID
+                                            ? IconButton(
+                                          icon:
+                                          const Icon(Icons.edit),
+                                          onPressed: () async {
+                                            Ref_Window.Ref_Management
+                                                .saveNumAccess(
+                                                "NUM_ACCESS_BTN_UPDATE_POST");
+                                            ModalUpdatePost.show(
+                                                context,
+                                                userData[index]);
+                                            setState(() {});
+                                          },
+                                        )
+                                            : const SizedBox(),
+                                        userData[index].uid ==
+                                            currentUserUID
+                                            ? IconButton(
+                                          icon: const Icon(
+                                            Icons.delete,
+                                            color: Colors.redAccent,
+                                          ),
+                                          onPressed: () {
+                                            // Show a confirmation dialog
+                                            Ref_Window.Ref_Management
+                                                .saveNumAccess(
+                                                "NUM_ACCESS_BTN_DELETE_POST");
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext
+                                              context) {
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Confirm Delete'),
+                                                  content: const Text(
+                                                      'Are you sure you want to delete this post?'),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(
+                                                            context)
+                                                            .pop(); // Close the dialog
+                                                      },
+                                                      child: const Text(
+                                                          'Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        // Close the dialog and delete the post
+                                                        Navigator.of(
+                                                            context)
+                                                            .pop();
+                                                        PostFirestore().deletePost(
+                                                            currentUserUID!,
+                                                            userData[
+                                                            index]
+                                                                .pid);
+                                                        //MISSING THE REFRESH!!
+                                                      },
+                                                      child: const Text(
+                                                          'Delete'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
+                                        )
+                                            : const SizedBox()
+                                      ],
+                                    ),
+                                  )),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Center(
+                      child: _reviewSection(),
+                    )
+                  ]),
+                  )
+                  )
+              ),
             ],
           ),
         ),
       ),
     );
   }
-//--------------
-//--------------
-//--------------
 }

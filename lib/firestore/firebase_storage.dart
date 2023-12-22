@@ -1,22 +1,9 @@
 import 'dart:io' as io;
 
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:ubi/common/Drawer.dart';
-import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
-import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:path/path.dart' as path;
-
-import '../common/Management.dart';
-import '../common/Utils.dart';
-import '../common/appTheme.dart';
-import '../database_help.dart';
-import '../firestore/post_firestore.dart';
-import '../firestore/user_firestore.dart';
 
 class firebaseStorage {
   //-----------------------------------------------------------
@@ -73,8 +60,7 @@ class firebaseStorage {
           "url": fileUrl,
           "path": file.fullPath,
           "uploaded_by": fileMeta.customMetadata?['uploaded_by'] ?? 'Nobody',
-          "description":
-              fileMeta.customMetadata?['description'] ?? 'No description'
+          "description": fileMeta.customMetadata?['description'] ?? 'No description'
         });
       }
     });

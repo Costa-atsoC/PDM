@@ -118,6 +118,7 @@ class _windowFeedbackState extends State<windowFeedback> {
       ],
     );
   }
+
   Widget _buildReportProblemSection() {
     return Scaffold(
       body: Padding(
@@ -341,7 +342,7 @@ class _windowFeedbackState extends State<windowFeedback> {
             allowHalfRating: true,
             itemCount: 5,
             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-            itemBuilder: (context, _) => Icon(
+            itemBuilder: (context, _) => const Icon(
               Icons.star,
               color: Colors.amber,
             ),
