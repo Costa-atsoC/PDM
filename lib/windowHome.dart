@@ -479,8 +479,7 @@ class State_windowHome extends State<windowHome> {
         home: Scaffold(
           drawer: CustomDrawer(Ref_Window.Ref_Management),
           appBar: AppBar(
-            title: Text(
-                Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
+            title: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
             actions: [
               IconButton(
                 icon: const Icon(Icons.refresh),

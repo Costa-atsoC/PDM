@@ -94,19 +94,16 @@ class modalReviewUserState extends State<modalReviewUser> {
                     _buildRatingSection(),
                     TextFormField(
                       controller: _commentController,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.add_location_sharp),
-                        labelText: "Location",
-                      ),
+                      decoration: const InputDecoration(labelText: "Comment"),
                       keyboardType: TextInputType.streetAddress,
                     ),
 
                     const SizedBox(height: 20),
+
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() ?? false) {
                           // Update post data
-
                           ReviewModel review = ReviewModel(
                             uid: widget.user.uid,
                             rid: widget.rid,
@@ -117,21 +114,20 @@ class modalReviewUserState extends State<modalReviewUser> {
                           UserFirestore().saveReview(review);
 
                           Navigator.pop(context); // Close the modal
-                          setState(() {
-                          });
+                          setState(() {});
                         }
                       },
                       child: const Text('Save'),
                     ),
                     const SizedBox(height: 5),
-                    ElevatedButton(onPressed: () {
-                      Navigator.pop(context); // Close the modal
-                    },
+                    ElevatedButton(onPressed: () {Navigator.pop(context);},
                         child: const Text('Cancel')
                     ),
                   ],
                 ),
-              )),
-        ));
+              )
+          ),
+        )
+    );
   }
 }

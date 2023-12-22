@@ -256,13 +256,9 @@ class State_CustomDrawer extends State<CustomDrawer> {
               child: ListTile(
                 title: Align(
                   child: Text(
-                    Ref_Window.Ref_Management.SETTINGS
-                        .Get("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
+                    Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
                     textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(),
                   ),
                 ),
                 onTap: () async {

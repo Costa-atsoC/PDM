@@ -105,6 +105,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
   // All data
   List<PostModel> userData = [];
   List<ReviewModel> reviewsData = [];
+  List<String> nameReviews = [];
   final formKey = GlobalKey<FormState>();
 
   bool _isLoading = true;
@@ -115,14 +116,14 @@ class State_windowUserProfile extends State<windowUserProfile> {
     final List<PostModel> data = await PostFirestore().getUserPosts(widget.user.uid);
     isOnline = await userFirestore.isUserOnline(widget.user);
     final List<ReviewModel> reviews = await UserFirestore().getUserReviews(widget.user.uid);
+    for(var i = 0; i < reviews.length; i++){
+      nameReviews.add(await UserFirestore().getUserAttribute(reviews[i].rid, "username"));
+    }
     setState(() {
       userData.addAll(data);
       reviewsData.addAll(reviews);
       _isLoading = false;
     });
-    for (var i = 0; i < userData.length; i++) {
-      Utils.MSG_Debug("DATA: ${userData[i].title}");
-    }
   }
 
   //------ end of database constants
@@ -131,8 +132,6 @@ class State_windowUserProfile extends State<windowUserProfile> {
     if (value!.isEmpty) return 'Field is Required';
     return null;
   }
-
-
 
   //This is for the tab 'Reviews'
   Widget _reviewSection() {
@@ -143,25 +142,39 @@ class State_windowUserProfile extends State<windowUserProfile> {
             ? const Center(child: CircularProgressIndicator())
             : reviewsData.isEmpty
             ? const Center(child: Text("This user has no reviews yet!"))
-            :
-        // GestureDetector(
-        //         onTap: (){
-        //           modalReviewUser.show(
-        //             context,
-        //             widget.user,
-        //             Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
-        //           );
-        //         },
-        //         child: Text("Review")
-
-        ListView.builder(
+            : ListView.builder(
                 itemCount: reviewsData.length,
                 itemBuilder: (context, index) {
                   return Hero(
                       tag: 'reviewHero${reviewsData[index].rid}',
                       child: Card(
                         child: ListTile(
-                          title: Text(reviewsData[index].date),
+                          title: Text(
+                              nameReviews[index],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).textTheme.titleSmall?.color,
+                              ),
+                          ),
+                          subtitle: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                RatingBarIndicator(
+                                  rating: reviewsData[index].rating,
+                                  itemBuilder: (context, index) => const Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  itemCount: 5,
+                                  itemSize: 20.0,
+                                  direction: Axis.horizontal,
+                                ),
+
+                                Text(reviewsData[index].comment),
+                              ]),
+                          trailing: Text(reviewsData[index].date),
                         )
                       )
                   );
@@ -205,9 +218,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              //Profile Picture
-              Center(
-                child: Container(
+              Row(
+                children: <Widget> [
+                  //Profile Picture
+                  Container(
                   margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
@@ -228,14 +242,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             child: Text('Something went wrong!'),
                           );
                         } else if (snapshot.hasData) {
-                          final List<Map<String, dynamic>> images =
-                              snapshot.data ?? [];
+                          final List<Map<String, dynamic>> images = snapshot.data ?? [];
                           if (images.isNotEmpty) {
-                            final Map<String, dynamic> firstImage =
-                                images.first;
-                            if (widget.user.uid ==
-                                Ref_Window.Ref_Management.SETTINGS
-                                    .Get("WND_USER_PROFILE_UID", "-1")) {
+                            final Map<String, dynamic> firstImage = images.first;
+                            if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS .Get("WND_USER_PROFILE_UID", "-1")) {
                               return GestureDetector(
                                 onTap: () {
                                   showDialog(
@@ -248,8 +258,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         child: ClipOval(
                                           child: Container(
                                             color: Colors.transparent,
-                                            width: 300, // You can adjust the width as needed
-                                            height: 300, // You can adjust the height as needed
+                                            width: 150, // You can adjust the width as needed
+                                            height: 150, // You can adjust the height as needed
                                             child:
                                             CircleAvatar(
                                               backgroundColor: Colors.transparent,
@@ -263,8 +273,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                   );
                                 },
                                 child: SizedBox(
-                                  width: 200,
-                                  height: 200,
+                                  width: 150,
+                                  height: 150,
                                   child: Stack(
                                     children: <Widget>[
                                       CircleAvatar(
@@ -274,15 +284,15 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                       Align(
                                         alignment: Alignment.topRight,
                                         child: Container(
-                                          width: 50,
-                                          height: 50,
+                                          width: 30,
+                                          height: 30,
                                           decoration: const BoxDecoration(
                                             color: Colors.transparent,
                                             shape: BoxShape.circle,
                                           ),
                                           child: ElevatedButton.icon(
                                             icon: Icon(Icons.add_a_photo_sharp,
-                                                size: 40,
+                                                size: 20,
                                                 color: Theme.of(context).scaffoldBackgroundColor),
                                             onPressed: () {
                                               Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
@@ -305,8 +315,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                           child: Tooltip(
                                             message: isOnline ? 'Online' : 'Last Seen',
                                             child: Container(
-                                              width: 30,
-                                              height: 30,
+                                              width: 15,
+                                              height: 15,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 color: isOnline ? Colors.green : Colors.grey,
@@ -321,14 +331,13 @@ class State_windowUserProfile extends State<windowUserProfile> {
                               );
                             }
                             return SizedBox(
-                              width: 200,
-                              height: 200,
+                              width: 150,
+                              height: 150,
                               child: Stack(
                                 children: <Widget>[
                                   CircleAvatar(
                                     radius: 100,
-                                    backgroundImage:
-                                    NetworkImage(firstImage['url']),
+                                    backgroundImage: NetworkImage(firstImage['url']),
                                   ),
                                   Align(
                                     alignment: Alignment.bottomLeft,
@@ -339,13 +348,11 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         message:
                                         isOnline ? 'Online' : 'Last Seen',
                                         child: Container(
-                                          width: 30,
-                                          height: 30,
+                                          width: 15,
+                                          height: 15,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: isOnline
-                                                ? Colors.green
-                                                : Colors.grey,
+                                            color: isOnline ? Colors.green : Colors.grey,
                                           ),
                                         ),
                                       ),
@@ -356,11 +363,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             );
                           }
                         }
-                        if (widget.user.uid ==
-                            Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
+                        if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
                           return SizedBox(
-                            width: 200,
-                            height: 200,
+                            width: 150,
+                            height: 150,
                             child: Stack(
                               children: <Widget>[
                                 const CircleAvatar(
@@ -419,8 +425,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           );
                         }
                         return const SizedBox(
-                          width: 200,
-                          height: 200,
+                          width: 150,
+                          height: 150,
                           child: CircleAvatar(
                             radius: 100,
                             backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
@@ -430,30 +436,39 @@ class State_windowUserProfile extends State<windowUserProfile> {
                     ),
                   ),
                 ),
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(
-                  widget.user.username,
-                  style: TextStyle(
-                    fontSize: 35,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.titleSmall?.color,
+
+                  //Right side of the profile picture row
+                  Container(
+                    margin: const EdgeInsets.only(left: 10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.user.username,
+                          style: TextStyle(
+                            fontSize: 35,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).textTheme.titleSmall?.color,
+                          ),
+                        ),
+                        Text(
+                          "@${widget.user.fullName}",
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ]
+                    )
                   ),
-                ),
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text(
                   widget.user.location,
                   style: TextStyle(
                     color: Theme.of(context).textTheme.titleSmall?.color,
                     fontSize: 25,
-                  ),
-                ),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(
-                  "@${widget.user.fullName}",
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 20,
                   ),
                 ),
               ]),
@@ -463,8 +478,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
               Row(
                 children: [
                   Text(
-                    Ref_Window.Ref_Management.SETTINGS
-                        .Get("WND_USER_PROFILE_MEM", "Member:"),
+                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_MEM", "Member:"),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -483,8 +497,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
               Row(
                 children: [
                   Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get(
-                        "WND_USER_PROFILE_LAST_ONLINE", "Last time online:"),
+                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LAST_ONLINE", "Last time online:"),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -493,16 +506,14 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   ),
                   const SizedBox(width: 10), // Add some spacing between the texts
                   if (isOnline)
-                    const Text(
-                      "Online",
+                    const Text("Online",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.green, // Set the color for online status
                       ),
                     ),
                   if (!isOnline)
-                    Text(
-                      widget.user.lastLogInDate,
+                    Text(widget.user.lastLogInDate,
                       style: TextStyle(
                         fontSize: 20,
                         color: Theme.of(context).textTheme.titleSmall?.color,
@@ -510,11 +521,27 @@ class State_windowUserProfile extends State<windowUserProfile> {
                     ),
                 ],
               ),
-              const SizedBox(
-                height: 10,
+              //review Button
+              SizedBox(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    widget.user.uid != Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1") ?
+                    ElevatedButton(
+                      onPressed: () {
+                        modalReviewUser.show(
+                          context,
+                          widget.user,
+                          Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
+                        );
+                      },
+                      child: const Text("Review"),
+                    ) : const SizedBox(),
+                  ],
+                )
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 3 - 6,
+                height: MediaQuery.of(context).size.height / 2 - 45,
                 child: DefaultTabController(
                   initialIndex: 0,
                   length: 2,
@@ -556,8 +583,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                       CrossAxisAlignment.start,
                                       children: [
                                         Text(userData[index].date),
-                                        Text(
-                                            "from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
+                                        Text("from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
                                         Text("${userData[index].freeSeats}/${userData[index].totalSeats} FREE SEATS"),
                                         Text(userData[index].description),
                                       ]),
@@ -565,25 +591,16 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     width: 100,
                                     child: Row(
                                       children: [
-                                        userData[index].uid ==
-                                            currentUserUID
-                                            ? IconButton(
-                                          icon:
-                                          const Icon(Icons.edit),
+                                        userData[index].uid ==currentUserUID? IconButton(
+                                          icon: const Icon(Icons.edit),
                                           onPressed: () async {
-                                            Ref_Window.Ref_Management
-                                                .saveNumAccess(
-                                                "NUM_ACCESS_BTN_UPDATE_POST");
-                                            ModalUpdatePost.show(
-                                                context,
-                                                userData[index]);
+                                            Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_UPDATE_POST");
+                                            ModalUpdatePost.show(context, userData[index]);
                                             setState(() {});
                                           },
                                         )
                                             : const SizedBox(),
-                                        userData[index].uid ==
-                                            currentUserUID
-                                            ? IconButton(
+                                        userData[index].uid == currentUserUID ? IconButton(
                                           icon: const Icon(
                                             Icons.delete,
                                             color: Colors.redAccent,
@@ -598,10 +615,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                               builder: (BuildContext
                                               context) {
                                                 return AlertDialog(
-                                                  title: const Text(
-                                                      'Confirm Delete'),
-                                                  content: const Text(
-                                                      'Are you sure you want to delete this post?'),
+                                                  title: const Text('Confirm Delete'),
+                                                  content: const Text('Are you sure you want to delete this post?'),
                                                   actions: <Widget>[
                                                     TextButton(
                                                       onPressed: () {
