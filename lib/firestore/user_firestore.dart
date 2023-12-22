@@ -68,7 +68,6 @@ class UserFirestore {
 
       if (userDoc.exists) {
         String attributeFinal = userDoc[attribute];
-        //Utils.MSG_Debug("########################### $attributeFinal");
         return attributeFinal;
       } else {
         Utils.MSG_Debug("User with UID $uid not found");
