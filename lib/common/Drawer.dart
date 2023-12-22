@@ -7,6 +7,7 @@ import 'package:ubi/screens/windowInitial.dart';
 
 import '../firebase_auth_implementation/models/user_model.dart';
 import '../firestore/firebase_storage.dart';
+import '../screens/windowFAQ.dart';
 import '../screens/windowFeedback.dart';
 import '../screens/windowSettings.dart';
 import '../screens/windowUserProfile.dart';
@@ -26,6 +27,7 @@ class CustomDrawer extends StatefulWidget {
     return State_CustomDrawer(this);
   }
 }
+
 class State_CustomDrawer extends State<CustomDrawer> {
   final CustomDrawer Ref_Window;
   String className = "";
@@ -79,6 +81,12 @@ class State_CustomDrawer extends State<CustomDrawer> {
 
   Future navigateToWindowSettings(context) async {
     windowSettings win = windowSettings(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
+  Future navigateToWindowFAQ(context) async {
+    windowFAQ win = windowFAQ(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -224,7 +232,16 @@ class State_CustomDrawer extends State<CustomDrawer> {
             textColor: Theme.of(context).colorScheme.onPrimary,
             onTap: () => {navigateToWindowFeedback(context)},
           ),
-          Spacer(),
+          ListTile(
+            leading: const Icon(Icons.help),
+            title: Text(
+              Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_DRAWER_SUBTITLE_6", "FAQ"),
+            ),
+            titleTextStyle: Theme.of(context).textTheme.titleLarge,
+            textColor: Theme.of(context).colorScheme.onPrimary,
+            onTap: () => {navigateToWindowFAQ(context)},
+          ),
+          const Spacer(),
           Container(
             alignment: Alignment.center,
             margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10), // Add a bottom margin here

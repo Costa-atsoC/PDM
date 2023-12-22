@@ -189,7 +189,6 @@ class PostFirestore {
     }
   }
 
-
   Future<List<PostModel>> getAllPosts() async {
     List<PostModel> allPosts = [];
 
@@ -228,8 +227,7 @@ class PostFirestore {
     return allPosts.reversed.toList();
   }
 
-  Future<int> _updatePostLikesCount(
-      String uid, String pid, int incrementValue) async {
+  Future<int> _updatePostLikesCount(String uid, String pid, int incrementValue) async {
     try {
       // Get the current likes count as a string
       DocumentSnapshot postSnapshot = await _firestore

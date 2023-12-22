@@ -41,7 +41,7 @@ class Management {
   Future<void> Load() async {
     String? LANGUAGE = await Get_SharedPreferences_STRING('LANGUAGE');
     if(LANGUAGE != null){
-      if(LANGUAGE=='PT'){
+      /*if(LANGUAGE=='PT'){
         //------------------------------------------------------//
         //------------------ JANELA PRINCIPAL PT ---------------//
         //------------------------------------------------------//
@@ -184,8 +184,8 @@ class Management {
           SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NOME_COMPLETO);
           SETTINGS.Add("WND_USER_PROFILE_TITLE_1", NOME_COMPLETO);
         }
-      }
-      else if(LANGUAGE=='EN'){
+      }*/
+      /*else if(LANGUAGE=='EN'){*/
         //------------------------------------------------------//
         //------------------ WINDOW MAIN EN --------------------//
         //------------------------------------------------------//
@@ -316,6 +316,10 @@ class Management {
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT");
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
         SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6", "FAQ");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
         //--------- END OF DRAWER
 
         //--------- ICONS
@@ -413,11 +417,13 @@ class Management {
 
         String? IMAGE = await Get_SharedPreferences_STRING('IMAGE');
         SETTINGS.Add('WND_DRAWER_IMAGE', IMAGE!);
+
+
       }
-    }
-    else{
-      LANGUAGE='EN';
-    }
+    // }
+    // else{
+    //   LANGUAGE='EN';
+    // }
   }
 
   //--------------------------------------
