@@ -88,8 +88,8 @@ class MyApp extends StatelessWidget {
             },
           );
         } else {
-          if(appManagement.Get_SharedPreferences_STRING("LANGUAGE") == null){
-            appManagement.Save_Shared_Preferences_STRING("LANGUAGE", "EN");
+          if(appManagement.Get_SharedPreferences_STRING("LANGUAGE") == "??"){
+            appManagement.Save_Shared_Preferences_STRING("LANGUAGE", "PT");
           }
           if(appManagement.Get_SharedPreferences_STRING("THEME") == null){
             appManagement.Save_Shared_Preferences_STRING("THEME", "DARK");

@@ -40,7 +40,7 @@ class Management {
   //--------------------------------------
   Future<void> Load() async {
     String? LANGUAGE = await Get_SharedPreferences_STRING('LANGUAGE');
-    if(LANGUAGE != null){
+    if(LANGUAGE != "??"){
       if(LANGUAGE=='PT'){
         //------------------------------------------------------//
         //------------------ JANELA PRINCIPAL PT ---------------//
