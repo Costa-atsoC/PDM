@@ -39,15 +39,17 @@ class windowNotifications extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     Utils.MSG_Debug(windowTitle + ":createState");
-    return State_windowSearch(this);
+    return State_windowNotification(this);
   }
+
+
 //--------------
 }
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 // ignore: camel_case_types
-class State_windowSearch extends State<windowNotifications> {
+class State_windowNotification extends State<windowNotifications> {
   List<Map<String, dynamic>> myData = [];
   final formKey = GlobalKey<FormState>();
 
@@ -62,6 +64,157 @@ class State_windowSearch extends State<windowNotifications> {
 
   bool _dataLoaded = false;
   bool _isLoading = true;
+
+  Widget _buildNotificationsPage(){
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            _dataLoaded = false;
+          });
+          await getData();
+        },
+        child: Builder(
+          builder: (BuildContext context) {
+            return FutureBuilder(
+              future: _dataLoaded ? null : getData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).colorScheme.secondary,
+                      //minHeight: 15,
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  Utils.MSG_Debug("Error: ${snapshot.error}");
+                  return Center(
+                    child: Text("Error loading data"),
+                  );
+                } else {
+                  String? currentUserUID =
+                      FirebaseAuth.instance.currentUser?.uid;
+
+                  return Container(
+                      child: _isLoading
+                          ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                          : loadedNotifications.isEmpty
+                          ? Center(
+                        child: Text(
+                          Ref_Window.Ref_Management.SETTINGS.Get(
+                            "JNL_HOME_TITLE_1",
+                            "No Users!",
+                          ),
+                        ),
+                      )
+                          : ListView.builder(
+                        itemCount: loadedNotifications.length,
+                        itemBuilder: (context, index) {
+                          String notificationText;
+
+                          // Determine the text based on the type
+                          if (loadedNotifications[index].type ==
+                              0) {
+                            notificationText =
+                            "@${loadedUsers[index].username} sent you a carpool request!";
+                          } else if (loadedNotifications[index]
+                              .type ==
+                              1) {
+                            notificationText =
+                            "@${loadedUsers[index].username} accepted your request!";
+                          } else if (loadedNotifications[index]
+                              .type ==
+                              2) {
+                            notificationText =
+                            "@${loadedUsers[index].username} liked your post!";
+                          } else {
+                            // Handle other types or provide a default text
+                            notificationText = "New notification!";
+                          }
+                          return Hero(
+                            tag:
+                            'userHero${loadedUsers[index].uid}',
+                            child: Card(
+                              shape:
+                              const ContinuousRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                              elevation: 0,
+                              // Set elevation to 0 to remove the shadow
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        /* CircleAvatar(
+                                                      radius: 20,
+                                                      backgroundImage: NetworkImage(
+                                                        loadedImages.isNotEmpty
+                                                            ? loadedImages[index]["url"]
+                                                            : 'http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon',
+                                                      ),
+                                                    ),
+
+                                                    */
+                                        const SizedBox(width: 10),
+                                        Text("New notification!"),
+                                        Spacer(),
+                                        Text(Utils
+                                            .formatTimeDifference(
+                                            loadedNotifications[
+                                            index]
+                                                .date)),
+                                      ],
+                                    ),
+                                  ),
+                                  // Add more user details as needed
+                                  ListTile(
+                                    onTap: () {
+                                      modalProfile.show(context,Ref_Window.Ref_Management, loadedUsers[index], loadedImages[index]);
+                                    },
+                                    title: Text(
+                                      notificationText,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 8),
+                                        // Add some spacing
+                                        buildSubtitle(
+                                            loadedNotifications[
+                                            index]
+                                                .type,
+                                            loadedPosts[index],
+                                            loadedUsers[index],
+                                            loadedImagesUser[index]),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ));
+                }
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+
 
   //------ END OF DATABASE
   Future getData() async {
@@ -149,7 +302,7 @@ class State_windowSearch extends State<windowNotifications> {
   String className = "";
 
   //--------------
-  State_windowSearch(this.Ref_Window) : super() {
+  State_windowNotification(this.Ref_Window) : super() {
     className = "State_windowSearch";
     Utils.MSG_Debug("$className: createState");
   }
@@ -181,6 +334,9 @@ class State_windowSearch extends State<windowNotifications> {
   void initState() {
     Utils.MSG_Debug("$className: initState");
     super.initState();
+    if (!_dataLoaded) {
+      getData();
+    }
   }
 
   String? formValidator(String? value) {
@@ -198,196 +354,7 @@ class State_windowSearch extends State<windowNotifications> {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_TITLE_1", ""),
-          ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () async {
-                setState(() {
-                  _dataLoaded = false;
-                });
-                await getData();
-              },
-            ),
-          ],
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            setState(() {
-              _dataLoaded = false;
-            });
-            await getData();
-          },
-          child: Builder(
-            builder: (BuildContext context) {
-              return FutureBuilder(
-                future: _dataLoaded ? null : getData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.secondary,
-                        //minHeight: 15,
-                      ),
-                    );
-                  } else if (snapshot.hasError) {
-                    Utils.MSG_Debug("Error: ${snapshot.error}");
-                    return Center(
-                      child: Text("Error loading data"),
-                    );
-                  } else {
-                    String? currentUserUID =
-                        FirebaseAuth.instance.currentUser?.uid;
-
-                    return Container(
-                        child: _isLoading
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : loadedNotifications.isEmpty
-                                ? Center(
-                                    child: Text(
-                                      Ref_Window.Ref_Management.SETTINGS.Get(
-                                        "JNL_HOME_TITLE_1",
-                                        "No Users!",
-                                      ),
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    itemCount: loadedNotifications.length,
-                                    itemBuilder: (context, index) {
-                                      String notificationText;
-
-                                      // Determine the text based on the type
-                                      if (loadedNotifications[index].type ==
-                                          0) {
-                                        notificationText =
-                                            "@${loadedUsers[index].username} sent you a carpool request!";
-                                      } else if (loadedNotifications[index]
-                                              .type ==
-                                          1) {
-                                        notificationText =
-                                            "@${loadedUsers[index].username} accepted your request!";
-                                      } else if (loadedNotifications[index]
-                                              .type ==
-                                          2) {
-                                        notificationText =
-                                            "@${loadedUsers[index].username} liked your post!";
-                                      } else {
-                                        // Handle other types or provide a default text
-                                        notificationText = "New notification!";
-                                      }
-                                      return Hero(
-                                        tag:
-                                            'userHero${loadedUsers[index].uid}',
-                                        child: Card(
-                                          shape:
-                                              const ContinuousRectangleBorder(
-                                            borderRadius: BorderRadius.zero,
-                                          ),
-                                          elevation: 0,
-                                          // Set elevation to 0 to remove the shadow
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  children: [
-                                                   /* CircleAvatar(
-                                                      radius: 20,
-                                                      backgroundImage: NetworkImage(
-                                                        loadedImages.isNotEmpty
-                                                            ? loadedImages[index]["url"]
-                                                            : 'http://www.gravatar.com/avatar/3b3be63a4c2a439b013787725dfce802?d=identicon',
-                                                      ),
-                                                    ),
-
-                                                    */
-                                                    const SizedBox(width: 10),
-                                                    Text("New notification!"),
-                                                    Spacer(),
-                                                    Text(Utils
-                                                        .formatTimeDifference(
-                                                            loadedNotifications[
-                                                                    index]
-                                                                .date)),
-                                                  ],
-                                                ),
-                                              ),
-                                              // Add more user details as needed
-                                              ListTile(
-                                                onTap: () {
-                                                  modalProfile.show(context,Ref_Window.Ref_Management, loadedUsers[index], loadedImages[index]);
-                                                },
-                                                title: Text(
-                                                  notificationText,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleMedium,
-                                                ),
-                                                subtitle: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(height: 8),
-                                                    // Add some spacing
-                                                    buildSubtitle(
-                                                        loadedNotifications[
-                                                                index]
-                                                            .type,
-                                                        loadedPosts[index],
-                                                        loadedUsers[index],
-                                                        loadedImagesUser[index]),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ));
-                  }
-                },
-              );
-            },
-          ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30.0), // Adjust the margin as needed
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adjust the spacing as needed
-            children: <Widget>[
-              IconButton(
-                tooltip: 'Search',
-                icon: const Icon(Icons.search_rounded, size: 30,),
-                onPressed: () {
-
-                },
-              ),
-              IconButton(
-                tooltip: 'Home',
-                icon: const Icon(Icons.home, size: 30,),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              IconButton(
-                tooltip: 'Notifications',
-                icon: const Icon(Icons.notifications, size: 30,),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-      ),
+      home: _buildNotificationsPage(),
     );
   }
 

@@ -39,16 +39,17 @@ class windowUserProfile extends StatefulWidget {
     //Utils.MSG_Debug(windowTitle);
   }
 
-  //--------------
+//--------------
+//--------------------------------------
   Future<void> Load() async {
-    //Utils.MSG_Debug(windowTitle + ":Load");
+//Utils.MSG_Debug(windowTitle + ":Load");
     ACCESS_WINDOW_PROFILE = await Ref_Management.Get_SharedPreferences_INT(
         "WND_PROFILE_ACCESS_NUMBER");
     Ref_Management.Save_Shared_Preferences_INT(
         "WND_PROFILE_ACCESS_NUMBER", ACCESS_WINDOW_PROFILE! + 1);
   }
 
-  //--------------
+//--------------
   @override
   State<StatefulWidget> createState() {
     //Utils.MSG_Debug(windowTitle + ":createState");
@@ -70,7 +71,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
     //Utils.MSG_Debug("$className: createState");
   }
 
-  //--------------
+//--------------
   @override
   void dispose() {
     //Utils.MSG_Debug("createState");
@@ -78,31 +79,31 @@ class State_windowUserProfile extends State<windowUserProfile> {
     //Utils.MSG_Debug("$className:dispose");
   }
 
-  //--------------
+//--------------
   @override
   void deactivate() {
-    //Utils.MSG_Debug("$className:deactivate");
+//Utils.MSG_Debug("$className:deactivate");
     super.deactivate();
   }
 
-  //--------------
+//--------------
   @override
   void didChangeDependencies() {
-    //Utils.MSG_Debug("$className: didChangeDependencies");
+//Utils.MSG_Debug("$className: didChangeDependencies");
     super.didChangeDependencies();
   }
 
-  //--------------
+//--------------
   @override
   void initState() {
-    //Utils.MSG_Debug("$className: initState");
+//Utils.MSG_Debug("$className: initState");
     super.initState();
     Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_WND_PROFILE");
     _refreshData();
   }
 
-  //--- database constants
-  // All data
+//--- database constants
+// All data
   List<PostModel> userData = [];
   List<ReviewModel> reviewsData = [];
   List<String> nameReviews = [];
@@ -111,13 +112,16 @@ class State_windowUserProfile extends State<windowUserProfile> {
   bool _isLoading = true;
   bool isOnline = false;
 
-  // This function is used to fetch all data from the database
+// This function is used to fetch all data from the database
   void _refreshData() async {
-    final List<PostModel> data = await PostFirestore().getUserPosts(widget.user.uid);
+    final List<PostModel> data =
+        await PostFirestore().getUserPosts(widget.user.uid);
     isOnline = await userFirestore.isUserOnline(widget.user);
-    final List<ReviewModel> reviews = await UserFirestore().getUserReviews(widget.user.uid);
-    for(var i = 0; i < reviews.length; i++){
-      nameReviews.add(await UserFirestore().getUserAttribute(reviews[i].rid, "username"));
+    final List<ReviewModel> reviews =
+        await UserFirestore().getUserReviews(widget.user.uid);
+    for (var i = 0; i < reviews.length; i++) {
+      nameReviews.add(
+          await UserFirestore().getUserAttribute(reviews[i].rid, "username"));
     }
     setState(() {
       userData.addAll(data);
@@ -126,63 +130,62 @@ class State_windowUserProfile extends State<windowUserProfile> {
     });
   }
 
-  //------ end of database constants
+//------ end of database constants
+//---------
 
   String? formValidator(String? value) {
     if (value!.isEmpty) return 'Field is Required';
     return null;
   }
 
-  //This is for the tab 'Reviews'
+//This is for the tab 'Reviews'
   Widget _reviewSection() {
-    return
-      SizedBox(
-        height: MediaQuery.of(context).size.height ,
+    return SizedBox(
+        height: MediaQuery.of(context).size.height,
         child: _isLoading
             ? const Center(child: CircularProgressIndicator())
             : reviewsData.isEmpty
-            ? const Center(child: Text("This user has no reviews yet!"))
-            : ListView.builder(
-                itemCount: reviewsData.length,
-                itemBuilder: (context, index) {
-                  return Hero(
-                      tag: 'reviewHero${reviewsData[index].rid}',
-                      child: Card(
-                        child: ListTile(
-                          title: Text(
+                ? const Center(child: Text("This user has no reviews yet!"))
+                : ListView.builder(
+                    itemCount: reviewsData.length,
+                    itemBuilder: (context, index) {
+                      return Hero(
+                          tag: 'reviewHero${reviewsData[index].rid}',
+                          child: Card(
+                              child: ListTile(
+                            title: Text(
                               nameReviews[index],
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).textTheme.titleSmall?.color,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.color,
                               ),
-                          ),
-                          subtitle: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                RatingBarIndicator(
-                                  rating: reviewsData[index].rating,
-                                  itemBuilder: (context, index) => const Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
+                            ),
+                            subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: reviewsData[index].rating,
+                                    itemBuilder: (context, index) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: 20.0,
+                                    direction: Axis.horizontal,
                                   ),
-                                  itemCount: 5,
-                                  itemSize: 20.0,
-                                  direction: Axis.horizontal,
-                                ),
-
-                                Text(reviewsData[index].comment),
-                              ]),
-                          trailing: Text(reviewsData[index].date),
-                        )
-                      )
-                  );
-                },
-              )
-      );
+                                  Text(reviewsData[index].comment),
+                                ]),
+                            trailing: Text(reviewsData[index].date),
+                          )));
+                    },
+                  ));
   }
-  //--------------
+
+//--------------
   @override
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
@@ -199,7 +202,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
         },
       );
     }
-    //Utils.MSG_Debug("$className: build");
+//Utils.MSG_Debug("$className: build");
     return MaterialApp(
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
@@ -218,17 +221,17 @@ class State_windowUserProfile extends State<windowUserProfile> {
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
-              Row(
-                children: <Widget> [
-                  //Profile Picture
-                  Container(
+              Row(children: <Widget>[
+//Profile Picture
+                Container(
                   margin: const EdgeInsets.only(top: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
                   ),
                   child: Expanded(
                     child: FutureBuilder(
-                      future: Ref_Window.Ref_FirebaseStorage.loadImages(widget.user.uid),
+                      future: Ref_Window.Ref_FirebaseStorage.loadImages(
+                          widget.user.uid),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -242,10 +245,14 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             child: Text('Something went wrong!'),
                           );
                         } else if (snapshot.hasData) {
-                          final List<Map<String, dynamic>> images = snapshot.data ?? [];
+                          final List<Map<String, dynamic>> images =
+                              snapshot.data ?? [];
                           if (images.isNotEmpty) {
-                            final Map<String, dynamic> firstImage = images.first;
-                            if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS .Get("WND_USER_PROFILE_UID", "-1")) {
+                            final Map<String, dynamic> firstImage =
+                                images.first;
+                            if (widget.user.uid ==
+                                Ref_Window.Ref_Management.SETTINGS
+                                    .Get("WND_USER_PROFILE_UID", "-1")) {
                               return GestureDetector(
                                 onTap: () {
                                   showDialog(
@@ -253,18 +260,22 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     builder: (BuildContext context) {
                                       return Dialog(
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20.0),
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
                                         ),
                                         child: ClipOval(
                                           child: Container(
                                             color: Colors.transparent,
-                                            width: 150, // You can adjust the width as needed
-                                            height: 150, // You can adjust the height as needed
-                                            child:
-                                            CircleAvatar(
-                                              backgroundColor: Colors.transparent,
+                                            width: 150,
+                                            // You can adjust the width as needed
+                                            height: 150,
+                                            // You can adjust the height as needed
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.transparent,
                                               radius: 100,
-                                              backgroundImage: NetworkImage(firstImage['url']),
+                                              backgroundImage: NetworkImage(
+                                                  firstImage['url']),
                                             ),
                                           ),
                                         ),
@@ -279,7 +290,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     children: <Widget>[
                                       CircleAvatar(
                                         radius: 100,
-                                        backgroundImage: NetworkImage(firstImage['url']),
+                                        backgroundImage:
+                                            NetworkImage(firstImage['url']),
                                       ),
                                       Align(
                                         alignment: Alignment.topRight,
@@ -293,16 +305,21 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                           child: ElevatedButton.icon(
                                             icon: Icon(Icons.add_a_photo_sharp,
                                                 size: 20,
-                                                color: Theme.of(context).scaffoldBackgroundColor),
+                                                color: Theme.of(context)
+                                                    .scaffoldBackgroundColor),
                                             onPressed: () {
-                                              Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
+                                              Ref_Window.Ref_FirebaseStorage
+                                                  .upload("gallery",
+                                                      widget.user.uid);
                                             },
                                             label: const Text(""),
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                              Theme.of(context).colorScheme.inversePrimary,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .inversePrimary,
                                               shadowColor: Colors.transparent,
-                                              padding: const EdgeInsets.only(left: 2, bottom: 2),
+                                              padding: const EdgeInsets.only(
+                                                  left: 2, bottom: 2),
                                             ),
                                           ),
                                         ),
@@ -311,15 +328,19 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         alignment: Alignment.bottomLeft,
                                         child: Padding(
                                           padding: const EdgeInsets.all(15.0),
-                                          // Add padding to move the button to the right
+// Add padding to move the button to the right
                                           child: Tooltip(
-                                            message: isOnline ? 'Online' : 'Last Seen',
+                                            message: isOnline
+                                                ? 'Online'
+                                                : 'Last Seen',
                                             child: Container(
                                               width: 15,
                                               height: 15,
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: isOnline ? Colors.green : Colors.grey,
+                                                color: isOnline
+                                                    ? Colors.green
+                                                    : Colors.grey,
                                               ),
                                             ),
                                           ),
@@ -337,22 +358,25 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                 children: <Widget>[
                                   CircleAvatar(
                                     radius: 100,
-                                    backgroundImage: NetworkImage(firstImage['url']),
+                                    backgroundImage:
+                                        NetworkImage(firstImage['url']),
                                   ),
                                   Align(
                                     alignment: Alignment.bottomLeft,
                                     child: Padding(
                                       padding: const EdgeInsets.all(15.0),
-                                      // Add padding to move the button to the right
+// Add padding to move the button to the right
                                       child: Tooltip(
                                         message:
-                                        isOnline ? 'Online' : 'Last Seen',
+                                            isOnline ? 'Online' : 'Last Seen',
                                         child: Container(
                                           width: 15,
                                           height: 15,
                                           decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: isOnline ? Colors.green : Colors.grey,
+                                            color: isOnline
+                                                ? Colors.green
+                                                : Colors.grey,
                                           ),
                                         ),
                                       ),
@@ -363,7 +387,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             );
                           }
                         }
-                        if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
+                        if (widget.user.uid ==
+                            Ref_Window.Ref_Management.SETTINGS
+                                .Get("WND_USER_PROFILE_UID", "-1")) {
                           return SizedBox(
                             width: 150,
                             height: 150,
@@ -371,7 +397,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                               children: <Widget>[
                                 const CircleAvatar(
                                   radius: 100,
-                                  backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
+                                  backgroundImage: AssetImage(
+                                      "assets/PROFILE_PICTURE_DEMO.jpeg"),
                                 ),
                                 Align(
                                   alignment: Alignment.topRight,
@@ -385,16 +412,20 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     child: ElevatedButton.icon(
                                       icon: Icon(Icons.add_a_photo_sharp,
                                           size: 40,
-                                          color: Theme.of(context).scaffoldBackgroundColor),
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
                                       onPressed: () {
-                                        Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
+                                        Ref_Window.Ref_FirebaseStorage.upload(
+                                            "gallery", widget.user.uid);
                                       },
                                       label: const Text(""),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                        Theme.of(context).colorScheme.inversePrimary,
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .inversePrimary,
                                         shadowColor: Colors.transparent,
-                                        padding: const EdgeInsets.only(left: 2, bottom: 2),
+                                        padding: const EdgeInsets.only(
+                                            left: 2, bottom: 2),
                                       ),
                                     ),
                                   ),
@@ -403,10 +434,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                   alignment: Alignment.bottomLeft,
                                   child: Padding(
                                     padding: const EdgeInsets.all(15.0),
-                                    // Add padding to move the button to the right
+// Add padding to move the button to the right
                                     child: Tooltip(
                                       message:
-                                      isOnline ? 'Online' : 'Last Seen',
+                                          isOnline ? 'Online' : 'Last Seen',
                                       child: Container(
                                         width: 30,
                                         height: 30,
@@ -429,7 +460,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           height: 150,
                           child: CircleAvatar(
                             radius: 100,
-                            backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
+                            backgroundImage:
+                                AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
                           ),
                         );
                       },
@@ -437,31 +469,30 @@ class State_windowUserProfile extends State<windowUserProfile> {
                   ),
                 ),
 
-                  //Right side of the profile picture row
-                  Container(
+//Right side of the profile picture row
+                Container(
                     margin: const EdgeInsets.only(left: 10.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.user.username,
-                          style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.titleSmall?.color,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.user.username,
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  Theme.of(context).textTheme.titleSmall?.color,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "@${widget.user.fullName}",
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 20,
+                          Text(
+                            "@${widget.user.fullName}",
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                      ]
-                    )
-                  ),
+                        ])),
               ]),
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 Text(
@@ -478,7 +509,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
               Row(
                 children: [
                   Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_MEM", "Member:"),
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("WND_USER_PROFILE_MEM", "Member:"),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -497,23 +529,27 @@ class State_windowUserProfile extends State<windowUserProfile> {
               Row(
                 children: [
                   Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LAST_ONLINE", "Last time online:"),
+                    Ref_Window.Ref_Management.SETTINGS.Get(
+                        "WND_USER_PROFILE_LAST_ONLINE", "Last time online:"),
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).textTheme.titleSmall?.color,
                     ),
                   ),
-                  const SizedBox(width: 10), // Add some spacing between the texts
+                  const SizedBox(width: 10),
+                  // Add some spacing between the texts
                   if (isOnline)
-                    const Text("Online",
+                    const Text(
+                      "Online",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.green, // Set the color for online status
                       ),
                     ),
                   if (!isOnline)
-                    Text(widget.user.lastLogInDate,
+                    Text(
+                      widget.user.lastLogInDate,
                       style: TextStyle(
                         fontSize: 20,
                         color: Theme.of(context).textTheme.titleSmall?.color,
@@ -521,150 +557,171 @@ class State_windowUserProfile extends State<windowUserProfile> {
                     ),
                 ],
               ),
-              //review Button
+//review Button
               SizedBox(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    widget.user.uid != Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1") ?
-                    ElevatedButton(
-                      onPressed: () {
-                        modalReviewUser.show(
-                          context,
-                          widget.user,
-                          Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
-                        );
-                      },
-                      child: const Text("Review"),
-                    ) : const SizedBox(),
-                  ],
-                )
-              ),
+                  child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  widget.user.uid !=
+                          Ref_Window.Ref_Management.SETTINGS
+                              .Get("WND_USER_PROFILE_UID", "-1")
+                      ? ElevatedButton(
+                          onPressed: () {
+                            modalReviewUser.show(
+                                context,
+                                widget.user,
+                                Ref_Window.Ref_Management.SETTINGS
+                                    .Get("WND_USER_PROFILE_UID", "-1"));
+                          },
+                          child: const Text("Review"),
+                        )
+                      : const SizedBox(),
+                ],
+              )),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 45,
-                child: DefaultTabController(
-                  initialIndex: 0,
-                  length: 2,
-                  child: Scaffold(
-                    appBar: PreferredSize(
-                      preferredSize: const Size.fromHeight(kToolbarHeight),
-                      child: AppBar(
-                      bottom: const TabBar(
-                        indicatorSize: TabBarIndicatorSize.label,
-                        tabs: [
-                          Tab(
-                            text: ("Posts"),
-                          ),
-                          Tab(
-                            text: ("Reviews"),
-                          ),
-                        ],
-                      )
-                      ),
-                    ),
-                  body: TabBarView(
-                      children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height ,
-                      child: _isLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : userData.isEmpty
-                          ? const Center(child: Text("No Data Available!!!"))
-                          : ListView.builder(
-                        itemCount: userData.length,
-                        itemBuilder: (context, index) {
-                          return Hero(
-                            tag: 'postHero${userData[index].pid}',
-                            child: Card(
-                              child: ListTile(
-                                  title: Text(userData[index].title),
-                                  subtitle: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(userData[index].date),
-                                        Text("from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
-                                        Text("${userData[index].freeSeats}/${userData[index].totalSeats} FREE SEATS"),
-                                        Text(userData[index].description),
-                                      ]),
-                                  trailing: SizedBox(
-                                    width: 100,
-                                    child: Row(
-                                      children: [
-                                        userData[index].uid ==currentUserUID? IconButton(
-                                          icon: const Icon(Icons.edit),
-                                          onPressed: () async {
-                                            Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_UPDATE_POST");
-                                            ModalUpdatePost.show(context, userData[index]);
-                                            setState(() {});
-                                          },
-                                        )
-                                            : const SizedBox(),
-                                        userData[index].uid == currentUserUID ? IconButton(
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: Colors.redAccent,
-                                          ),
-                                          onPressed: () {
-                                            // Show a confirmation dialog
-                                            Ref_Window.Ref_Management
-                                                .saveNumAccess(
-                                                "NUM_ACCESS_BTN_DELETE_POST");
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext
-                                              context) {
-                                                return AlertDialog(
-                                                  title: const Text('Confirm Delete'),
-                                                  content: const Text('Are you sure you want to delete this post?'),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(
-                                                            context)
-                                                            .pop(); // Close the dialog
-                                                      },
-                                                      child: const Text(
-                                                          'Cancel'),
+                  height: MediaQuery.of(context).size.height / 2 - 45,
+                  child: DefaultTabController(
+                      initialIndex: 0,
+                      length: 2,
+                      child: Scaffold(
+                        appBar: PreferredSize(
+                          preferredSize: const Size.fromHeight(kToolbarHeight),
+                          child: AppBar(
+                              bottom: const TabBar(
+                            indicatorSize: TabBarIndicatorSize.label,
+                            tabs: [
+                              Tab(
+                                text: ("Posts"),
+                              ),
+                              Tab(
+                                text: ("Reviews"),
+                              ),
+                            ],
+                          )),
+                        ),
+                        body: TabBarView(children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            child: _isLoading
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : userData.isEmpty
+                                    ? const Center(
+                                        child: Text("No Data Available!!!"))
+                                    : ListView.builder(
+                                        itemCount: userData.length,
+                                        itemBuilder: (context, index) {
+                                          return Hero(
+                                            tag:
+                                                'postHero${userData[index].pid}',
+                                            child: Card(
+                                              child: ListTile(
+                                                  title: Text(
+                                                      userData[index].title),
+                                                  subtitle: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(userData[index]
+                                                            .date),
+                                                        Text(
+                                                            "from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
+                                                        Text(
+                                                            "${userData[index].freeSeats}/${userData[index].totalSeats} FREE SEATS"),
+                                                        Text(userData[index]
+                                                            .description),
+                                                      ]),
+                                                  trailing: SizedBox(
+                                                    width: 100,
+                                                    child: Row(
+                                                      children: [
+                                                        userData[index].uid ==
+                                                                currentUserUID
+                                                            ? IconButton(
+                                                                icon: const Icon(
+                                                                    Icons.edit),
+                                                                onPressed:
+                                                                    () async {
+                                                                  Ref_Window
+                                                                          .Ref_Management
+                                                                      .saveNumAccess(
+                                                                          "NUM_ACCESS_BTN_UPDATE_POST");
+                                                                  ModalUpdatePost.show(
+                                                                      context,
+                                                                      userData[
+                                                                          index]);
+                                                                  setState(
+                                                                      () {});
+                                                                },
+                                                              )
+                                                            : const SizedBox(),
+                                                        userData[index].uid ==
+                                                                currentUserUID
+                                                            ? IconButton(
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons.delete,
+                                                                  color: Colors
+                                                                      .redAccent,
+                                                                ),
+                                                                onPressed: () {
+// Show a confirmation dialog
+                                                                  Ref_Window
+                                                                          .Ref_Management
+                                                                      .saveNumAccess(
+                                                                          "NUM_ACCESS_BTN_DELETE_POST");
+                                                                  showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (BuildContext
+                                                                            context) {
+                                                                      return AlertDialog(
+                                                                        title: const Text(
+                                                                            'Confirm Delete'),
+                                                                        content:
+                                                                            const Text('Are you sure you want to delete this post?'),
+                                                                        actions: <Widget>[
+                                                                          TextButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              Navigator.of(context).pop(); // Close the dialog
+                                                                            },
+                                                                            child:
+                                                                                const Text('Cancel'),
+                                                                          ),
+                                                                          TextButton(
+                                                                            onPressed:
+                                                                                () {
+// Close the dialog and delete the post
+                                                                              Navigator.of(context).pop();
+                                                                              PostFirestore().deletePost(currentUserUID!, userData[index].pid);
+//MISSING THE REFRESH!!
+                                                                            },
+                                                                            child:
+                                                                                const Text('Delete'),
+                                                                          ),
+                                                                        ],
+                                                                      );
+                                                                    },
+                                                                  );
+                                                                },
+                                                              )
+                                                            : const SizedBox()
+                                                      ],
                                                     ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        // Close the dialog and delete the post
-                                                        Navigator.of(
-                                                            context)
-                                                            .pop();
-                                                        PostFirestore().deletePost(
-                                                            currentUserUID!,
-                                                            userData[
-                                                            index]
-                                                                .pid);
-                                                        //MISSING THE REFRESH!!
-                                                      },
-                                                      child: const Text(
-                                                          'Delete'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                        )
-                                            : const SizedBox()
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Center(
-                      child: _reviewSection(),
-                    )
-                  ]),
-                  )
-                  )
-              ),
+                                                  )),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                          ),
+                          Center(
+                            child: _reviewSection(),
+                          )
+                        ]),
+                      ))),
             ],
           ),
         ),
