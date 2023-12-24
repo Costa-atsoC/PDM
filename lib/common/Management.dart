@@ -148,8 +148,8 @@ class Management {
         SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
         String? USER_NAME = await Get_SharedPreferences_STRING('NAME');
         if (USER_NAME != null) {
-          Utils.MSG_Debug(USER_NAME!);
-          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
+          Utils.MSG_Debug(USER_NAME);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME);
         }
 
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "HOME");
@@ -382,8 +382,8 @@ class Management {
         SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
         String? NOME_UTILIZADOR = await Get_SharedPreferences_STRING('NOME');
         if (NOME_UTILIZADOR != null) {
-          Utils.MSG_Debug(NOME_UTILIZADOR!);
-          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NOME_UTILIZADOR!);
+          Utils.MSG_Debug(NOME_UTILIZADOR);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NOME_UTILIZADOR);
         }
 
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "PÁGINA INICIAL");
@@ -475,7 +475,6 @@ class Management {
         }
       }
     }
-  }
   //--------------------------------------
   String GetDefinicao(String key, String def) {
     return SETTINGS.Get(key, def);
