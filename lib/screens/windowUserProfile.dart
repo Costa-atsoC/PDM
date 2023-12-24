@@ -114,14 +114,11 @@ class State_windowUserProfile extends State<windowUserProfile> {
 
 // This function is used to fetch all data from the database
   void _refreshData() async {
-    final List<PostModel> data =
-        await PostFirestore().getUserPosts(widget.user.uid);
-    isOnline = await userFirestore.isUserOnline(widget.user);
-    final List<ReviewModel> reviews =
-        await UserFirestore().getUserReviews(widget.user.uid);
-    for (var i = 0; i < reviews.length; i++) {
-      nameReviews.add(
-          await UserFirestore().getUserAttribute(reviews[i].rid, "username"));
+    final List<PostModel> data = await PostFirestore().getUserPosts(widget.user.uid);
+    isOnline = await userFirestore.isUserOnline(widget.user.uid);
+    final List<ReviewModel> reviews = await UserFirestore().getUserReviews(widget.user.uid);
+    for(var i = 0; i < reviews.length; i++){
+      nameReviews.add(await UserFirestore().getUserAttribute(reviews[i].rid, "username"));
     }
     setState(() {
       userData.addAll(data);
@@ -153,36 +150,39 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           tag: 'reviewHero${reviewsData[index].rid}',
                           child: Card(
                               child: ListTile(
-                            title: Text(
-                              nameReviews[index],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.color,
-                              ),
-                            ),
-                            subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RatingBarIndicator(
-                                    rating: reviewsData[index].rating,
-                                    itemBuilder: (context, index) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    itemCount: 5,
-                                    itemSize: 20.0,
-                                    direction: Axis.horizontal,
+                                title: Text(
+                                  nameReviews[index],
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.color,
                                   ),
-                                  Text(reviewsData[index].comment),
-                                ]),
-                            trailing: Text(reviewsData[index].date),
-                          )));
+                                ),
+                                subtitle: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      RatingBarIndicator(
+                                        rating: reviewsData[index].rating,
+                                        itemBuilder: (context, index) => const Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: 20.0,
+                                        direction: Axis.horizontal,
+                                      ),
+                                      Text(reviewsData[index].comment),
+                                    ]),
+                                trailing: Text(reviewsData[index].date),
+                              )
+                          )
+                      );
                     },
-                  ));
+                  )
+    );
   }
 
 //--------------
@@ -327,8 +327,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                       Align(
                                         alignment: Alignment.bottomLeft,
                                         child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-// Add padding to move the button to the right
+                                          padding: const EdgeInsets.all(15.0), // Add padding to move the button to the right
                                           child: Tooltip(
                                             message: isOnline
                                                 ? 'Online'
@@ -364,8 +363,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                   Align(
                                     alignment: Alignment.bottomLeft,
                                     child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-// Add padding to move the button to the right
+                                      padding: const EdgeInsets.all(15.0), // Add padding to move the button to the right
                                       child: Tooltip(
                                         message:
                                             isOnline ? 'Online' : 'Last Seen',
@@ -387,9 +385,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             );
                           }
                         }
-                        if (widget.user.uid ==
-                            Ref_Window.Ref_Management.SETTINGS
-                                .Get("WND_USER_PROFILE_UID", "-1")) {
+                        if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
                           return SizedBox(
                             width: 150,
                             height: 150,
@@ -412,11 +408,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     child: ElevatedButton.icon(
                                       icon: Icon(Icons.add_a_photo_sharp,
                                           size: 40,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor),
+                                          color: Theme.of(context).scaffoldBackgroundColor),
                                       onPressed: () {
-                                        Ref_Window.Ref_FirebaseStorage.upload(
-                                            "gallery", widget.user.uid);
+                                        Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
                                       },
                                       label: const Text(""),
                                       style: ElevatedButton.styleFrom(
@@ -424,8 +418,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                             .colorScheme
                                             .inversePrimary,
                                         shadowColor: Colors.transparent,
-                                        padding: const EdgeInsets.only(
-                                            left: 2, bottom: 2),
+                                        padding: const EdgeInsets.only(left: 2, bottom: 2),
                                       ),
                                     ),
                                   ),
@@ -619,69 +612,42 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                                   title: Text(
                                                       userData[index].title),
                                                   subtitle: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Text(userData[index]
-                                                            .date),
-                                                        Text(
-                                                            "from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
-                                                        Text(
-                                                            "${userData[index].freeSeats}/${userData[index].totalSeats} FREE SEATS"),
-                                                        Text(userData[index]
-                                                            .description),
+                                                        Text(userData[index].date),
+                                                        Text("from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
+                                                        Text("${userData[index].freeSeats}/${userData[index].totalSeats} FREE SEATS"),
+                                                        Text(userData[index].description),
                                                       ]),
                                                   trailing: SizedBox(
                                                     width: 100,
                                                     child: Row(
                                                       children: [
-                                                        userData[index].uid ==
-                                                                currentUserUID
+                                                        userData[index].uid == currentUserUID
                                                             ? IconButton(
                                                                 icon: const Icon(
                                                                     Icons.edit),
-                                                                onPressed:
-                                                                    () async {
-                                                                  Ref_Window
-                                                                          .Ref_Management
-                                                                      .saveNumAccess(
-                                                                          "NUM_ACCESS_BTN_UPDATE_POST");
-                                                                  ModalUpdatePost.show(
-                                                                      context,
-                                                                      userData[
-                                                                          index]);
-                                                                  setState(
-                                                                      () {});
+                                                                onPressed: () async {
+                                                                  Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_UPDATE_POST");
+                                                                  ModalUpdatePost.show( context, userData[index]);
+                                                                  setState(() {});
                                                                 },
                                                               )
                                                             : const SizedBox(),
-                                                        userData[index].uid ==
-                                                                currentUserUID
+                                                        userData[index].uid == currentUserUID
                                                             ? IconButton(
-                                                                icon:
-                                                                    const Icon(
+                                                                icon: const Icon(
                                                                   Icons.delete,
-                                                                  color: Colors
-                                                                      .redAccent,
+                                                                  color: Colors.redAccent,
                                                                 ),
-                                                                onPressed: () {
-// Show a confirmation dialog
-                                                                  Ref_Window
-                                                                          .Ref_Management
-                                                                      .saveNumAccess(
-                                                                          "NUM_ACCESS_BTN_DELETE_POST");
+                                                                onPressed: () {// Show a confirmation dialog
+                                                                  Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_DELETE_POST");
                                                                   showDialog(
-                                                                    context:
-                                                                        context,
-                                                                    builder:
-                                                                        (BuildContext
-                                                                            context) {
+                                                                    context: context,
+                                                                    builder: (BuildContext context) {
                                                                       return AlertDialog(
-                                                                        title: const Text(
-                                                                            'Confirm Delete'),
-                                                                        content:
-                                                                            const Text('Are you sure you want to delete this post?'),
+                                                                        title: const Text('Confirm Delete'),
+                                                                        content: const Text('Are you sure you want to delete this post?'),
                                                                         actions: <Widget>[
                                                                           TextButton(
                                                                             onPressed:
@@ -693,11 +659,9 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                                                           ),
                                                                           TextButton(
                                                                             onPressed:
-                                                                                () {
-// Close the dialog and delete the post
+                                                                                () {// Close the dialog and delete the post
                                                                               Navigator.of(context).pop();
-                                                                              PostFirestore().deletePost(currentUserUID!, userData[index].pid);
-//MISSING THE REFRESH!!
+                                                                              PostFirestore().deletePost(currentUserUID!, userData[index].pid); //MISSING THE REFRESH!!
                                                                             },
                                                                             child:
                                                                                 const Text('Delete'),

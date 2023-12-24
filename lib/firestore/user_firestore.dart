@@ -158,15 +158,15 @@ class UserFirestore {
     }
   }
 
-  Future<bool> isUserOnline(UserModel user) async {
+  Future<bool> isUserOnline(String uid) async {
     try {
       CollectionReference users = FirebaseFirestore.instance.collection('users');
-      DocumentSnapshot userDoc = await users.doc(user.uid).get();
+      DocumentSnapshot userDoc = await users.doc(uid).get();
 
       if (userDoc.exists) {
         return userDoc['online'] == "1";
       } else {
-        Utils.MSG_Debug("User with UID ${user.uid} not found");
+        Utils.MSG_Debug("User with UID ${uid} not found");
         return false; // Assuming offline if user not found
       }
     } catch (error) {

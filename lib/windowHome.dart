@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowFeedback.dart';
+import 'package:ubi/screens/windowFullPost.dart';
 import 'package:ubi/screens/windowNotifications.dart';
 import 'common/Drawer.dart';
 import 'common/widgets/modals/modalNewPost.dart';
@@ -186,14 +187,15 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   } //-------------
 
-  Future navigateToWindowFAQ(context) async {
-    windowFeedback win = windowFeedback(Ref_Window.Ref_Management);
+
+  Future navigateToWindowNotifications(context) async {
+    windowNotifications win = windowNotifications(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  Future navigateToWindowNotifications(context) async {
-    windowNotifications win = windowNotifications(Ref_Window.Ref_Management);
+  Future navigateToWindowFulPost(context, post) async {
+    windowFullPost win = windowFullPost(Ref_Window.Ref_Management, post);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -245,11 +247,7 @@ class State_windowHome extends State<windowHome> {
                                         }
                                         return GestureDetector(
                                           onTap: () {
-                                            modalPost.show(
-                                                context,
-                                                loadedPosts[index],
-                                                loadedUserProfiles[index],
-                                                loadedImages[index]);
+                                            navigateToWindowFulPost(context, loadedPosts[index]);
                                           },
                                           child: Hero(
                                             tag:'postHero${loadedPosts[index].pid}',
@@ -313,10 +311,6 @@ class State_windowHome extends State<windowHome> {
                                                         ),
                                                         Text(
                                                           "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FROM_TEXT_LABEL", "From: ")}${loadedPosts[index].startLocation} \n${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_TO_TEXT_LABEL", "To ")}${loadedPosts[index].endLocation} ",
-                                                          style:Theme.of(context).textTheme.labelLarge,
-                                                        ),
-                                                        Text(
-                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DESCRIPTION_TEXT_LABEL", "Description: ")}${loadedPosts[index].description}",
                                                           style:Theme.of(context).textTheme.labelLarge,
                                                         ),
                                                         Text(
@@ -490,14 +484,6 @@ class State_windowHome extends State<windowHome> {
           drawer: CustomDrawer(Ref_Window.Ref_Management),
           appBar: AppBar(
             title: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.question_mark),
-                onPressed: () async {
-                 navigateToWindowFAQ(context);
-                },
-              ),
-            ],
           ),
           body: (_currentIndex == 0
               ? _buildHomePage(postFirestore) // search
