@@ -1,674 +1,576 @@
-import 'dart:io' as io;
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:ubi/common/Drawer.dart';
-import 'package:ubi/common/widgets/modals/modalReviewUser.dart';
-import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
-import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
-import 'package:path/path.dart' as path;
-import 'package:ubi/firestore/firebase_storage.dart';
-import 'package:ubi/firestore/user_firestore.dart';
-import '../common/widgets/modals/modalUpdateUser.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as HTTP;
 
-import '../common/Management.dart';
-import '../common/Utils.dart';
-import '../common/appTheme.dart';
-import '../common/widgets/modals/modalUpdatePost.dart';
-import '../firebase_auth_implementation/models/review_model.dart';
-import '../firestore/post_firestore.dart';
-import '../main.dart';
+import '../General.dart';
+import 'Utils.dart';
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-class windowUserProfile extends StatefulWidget {
-  String windowTitle = "";
-  final Management Ref_Management;
-  final firebaseStorage Ref_FirebaseStorage = firebaseStorage();
-  final UserFirestore userFirestore = UserFirestore();
-  int? ACCESS_WINDOW_PROFILE;
 
-  UserModel user;
+class Management {
+  final String appName;
 
-  //--------------
-  windowUserProfile(this.Ref_Management, this.user) {
-    windowTitle = "General Window";
-    user = this.user;
-    //Utils.MSG_Debug(windowTitle);
+  General SETTINGS = General("Settings");
+
+  var Lista_Icones = <IconData>{};
+  int ACCESS_NUMBER = 0;
+
+  final icons = [
+    Icons.directions_bike,
+    Icons.directions_boat,
+    Icons.directions_bus,
+    Icons.directions_car,
+    Icons.directions_railway,
+    Icons.directions_run,
+    Icons.directions_subway,
+    Icons.directions_transit,
+    Icons.directions_walk,
+    Icons.book
+  ];
+
+  // VER https://www.macoratti.net/19/11/flut_shapref1.htm
+  // https://medium.flutterdevs.com/using-sharedpreferences-in-flutter-251755f07127
+  // https://pub.dev/packages/shared_preferences
+  Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+
+  //--------------------------------------
+  Management(this.appName) {
+    ACCESS_NUMBER = 0;
   }
 
-  //--------------
+  //--------------------------------------
   Future<void> Load() async {
-    //Utils.MSG_Debug(windowTitle + ":Load");
-    ACCESS_WINDOW_PROFILE = await Ref_Management.Get_SharedPreferences_INT(
-        "WND_PROFILE_ACCESS_NUMBER");
-    Ref_Management.Save_Shared_Preferences_INT(
-        "WND_PROFILE_ACCESS_NUMBER", ACCESS_WINDOW_PROFILE! + 1);
-  }
+    String? LANGUAGE = await Get_SharedPreferences_STRING('LANGUAGE');
+    if(LANGUAGE == "??" || LANGUAGE == 'EN'){
+        //------------------------------------------------------//
+        //------------------ WINDOW MAIN EN --------------------//
+        //------------------------------------------------------//
 
-  //--------------
-  @override
-  State<StatefulWidget> createState() {
-    //Utils.MSG_Debug(windowTitle + ":createState");
-    return State_windowUserProfile(this);
-  }
-//--------------
-}
+        //--------- TOP
+        //DEFINICOES.Add("TITULO_APP", "REVS & ROASTS");
+        SETTINGS.Add("TITULO_APP", "rideWME");
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-// ignore: camel_case_types
-class State_windowUserProfile extends State<windowUserProfile> {
-  final windowUserProfile Ref_Window;
-  String className = "";
+        //--------- CENTER
+        SETTINGS.Add("WND_LOGIN_TITLE_1_TEXT", "Greetings! Welcome to RideWithME!");
+        SETTINGS.Add("WND_LOGIN_TITLE_1_TEXT_LOGGED", "Welcome back, ");
 
-  //--------------
-  State_windowUserProfile(this.Ref_Window) : super() {
-    className = "State_windowGeneral";
-    //Utils.MSG_Debug("$className: createState");
-  }
+        SETTINGS.Add("WND_LOGIN_HINT_1", "Email");
+        SETTINGS.Add("WND_LOGIN_HINT_1_SIZE", "20");
+        SETTINGS.Add("WND_LOGIN_HINT_1_WARNING", "Please enter your email");
 
-  //--------------
-  @override
-  void dispose() {
-    //Utils.MSG_Debug("createState");
-    super.dispose();
-    //Utils.MSG_Debug("$className:dispose");
-  }
+        SETTINGS.Add("WND_LOGIN_HINT_2", "Password");
+        SETTINGS.Add("WND_LOGIN_HINT_2_SIZE", "20");
+        SETTINGS.Add("WND_LOGIN_HINT_2_WARNING", "Please enter your password");
 
-  //--------------
-  @override
-  void deactivate() {
-    //Utils.MSG_Debug("$className:deactivate");
-    super.deactivate();
-  }
+        SETTINGS.Add("WND_LOGIN_CHECKBOX_LABEL_1", "Remember me");
 
-  //--------------
-  @override
-  void didChangeDependencies() {
-    //Utils.MSG_Debug("$className: didChangeDependencies");
-    super.didChangeDependencies();
-  }
+        SETTINGS.Add("WND_LOGIN_BTN_2", "Forgot Password?");
 
-  //--------------
-  @override
-  void initState() {
-    //Utils.MSG_Debug("$className: initState");
-    super.initState();
-    Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_WND_PROFILE");
-    _refreshData();
-  }
+        SETTINGS.Add("WND_LOGIN_BTN_1", "LOGIN");
 
-  //--- database constants
-  // All data
-  List<PostModel> userData = [];
-  List<ReviewModel> reviewsData = [];
-  List<String> nameReviews = [];
-  final formKey = GlobalKey<FormState>();
+        SETTINGS.Add("TEXT_NEW_WINDOW_REGISTER", "Register Page");
+        SETTINGS.Add(
+            "TEXT_OF_BUTTON_REGISTER", "Don't have an account? Click here");
+        SETTINGS.Add("TAMANHO_TEXTO_BTN_NEW_REGISTER", "20");
 
-  bool _isLoading = true;
-  bool isOnline = false;
+        //--------- BOTTOM
+        //---------- FIM DA MAIN
 
-  // This function is used to fetch all data from the database
-  void _refreshData() async {
-    final List<PostModel> data = await PostFirestore().getUserPosts(widget.user.uid);
-    isOnline = await userFirestore.isUserOnline(widget.user);
-    final List<ReviewModel> reviews = await UserFirestore().getUserReviews(widget.user.uid);
-    for(var i = 0; i < reviews.length; i++){
-      nameReviews.add(await UserFirestore().getUserAttribute(reviews[i].rid, "username"));
+        //------------------------------------------------------//
+        //--------------- WINDOW REGISTER ----------------------//
+        //------------------------------------------------------//
+        SETTINGS.Add("WND_REGISTER_TITLE_1",
+            "Create a RideWithME account");
+        SETTINGS.Add("WND_REGISTER_SUBTITLE_1",
+            "Start your journey Carpooling or being Carpooled now!");
+
+        SETTINGS.Add("WND_REGISTER_OBSTEXT_1", "true");
+        SETTINGS.Add("WND_REGISTER_OBSTEXT_2", "true");
+
+        SETTINGS.Add("WND_REGISTER_HINT_1", "Email");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_EMAIL_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_2", "Username");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_USERNAME_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_3", "Password");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_4", "Confirm the password");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_RPPASSWORD_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_5", "Full Name");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_FULLNAME", "20");
+
+        SETTINGS.Add("WND_REGISTER_BTN_1", "REGISTER");
+
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_TITLE_1",
+            "By creating an account, you are accepting the");
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS",
+          "Terms & Conditions");
+        SETTINGS.Add( "WND_REGISTER_TERMS_CONDITIONS_TITLE_2",
+            'By using our carpooling service, you agree to the following terms and conditions:');
+        SETTINGS.Add( "WND_REGISTER_TERMS_CONDITIONS_1",
+            '1. You must be at least 18 years old to use this app.');
+        SETTINGS.Add( "WND_REGISTER_TERMS_CONDITIONS_2",
+            '2. Users are responsible for their own safety during rides.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_3",
+            '3. Respect other users and their personal space.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_4",
+            "4. Follow traffic laws and regulations during carpooling.");
+        SETTINGS.Add(   "WND_REGISTER_TERMS_CONDITIONS_5",
+            '5. The app is not responsible for any disputes between users.');
+        SETTINGS.Add( "WND_REGISTER_TERMS_CONDITIONS_6",
+            '6. Users are encouraged to report any inappropriate behavior.');
+        SETTINGS.Add(  "WND_REGISTER_TERMS_CONDITIONS_7",
+            '7. The app may use location data for the purpose of carpool matching.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_8",
+            '8. Users should verify the identity of their carpooling partners.');
+        SETTINGS.Add(   "WND_REGISTER_TERMS_CONDITIONS_9",
+            '9. The app may suspend or terminate users violating these terms.');
+        SETTINGS.Add( "WND_REGISTER_TERMS_CONDITIONS_10",
+            '10. By using the app, you consent to our privacy policy.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_BTN_1",
+            'Close');
+        //--------- FIM DA JANELA REGISTER
+
+        //------------------------------------------------------//
+        //----------------- WINDOW HOME ------------------------//
+        //------------------------------------------------------//
+
+        //--------- ANIMATION
+        SETTINGS.Add("WND_HOME_ANIMATION_DURATION_1", "200"); // in ms
+
+        //--------- TEXT
+        SETTINGS.Add("WND_HOME_TITLE_1", "");
+        SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
+
+        //--------- DRAWER
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
+        String? USER_NAME = await Get_SharedPreferences_STRING('NAME');
+        if (USER_NAME != null) {
+          Utils.MSG_Debug(USER_NAME!);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME!);
+        }
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "HOME");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "RideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2", "PROFILE");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_2_ICON", "RideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3", "SETTINGS");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4", "FEEDBACK");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+        //--------- END OF DRAWER
+
+        //--------- ICONS
+
+        //------- FUNCTIONS HOME
+        int? JNL_HOME_NUMERO_ACESSOS =
+        await Get_SharedPreferences_INT('JNL_HOME_NUMERO_ACESSOS');
+        if (JNL_HOME_NUMERO_ACESSOS != null) {
+          //JNL_HOME_NUMERO_ACESSOS++;
+          Save_Shared_Preferences_INT(
+              'JNL_HOME_NUMERO_ACESSOS', JNL_HOME_NUMERO_ACESSOS + 1);
+        }
+
+        //------- FUNCTIONS HOME
+        String? FULL_NAME = await Get_SharedPreferences_STRING('NAME');
+        if (FULL_NAME != null) {
+          (FULL_NAME);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", FULL_NAME);
+          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
+        }
+
+        //------------------------------------------------------//
+        //--------------- WINDOW FORGOT PASSWORD----------------//
+        //------------------------------------------------------//
+        SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_1", "Go Back");
+        SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_1_SIZE", "15");
+        SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_1_ICON", "RideWME");
+
+        SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_2",
+            "Enter your Email and we will send you a password reset link");
+        SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_2_SIZE", "15");
+        SETTINGS.Add("WND_FORGOT_PASSWORD_TITLE_2_ICON", "RideWME");
+
+        SETTINGS.Add("WND_FORGOT_PASSWORD_BTN_1_TEXT",
+            "RESET PASSWORD");
+        SETTINGS.Add("WND_FORGOT_PASSWORD_BTN_1_TEXT_SIZE", "15");
+
+        //--------- FUNÇÕES
+        int? NUMERO_ACESSOS = await Get_SharedPreferences_INT('NUMERO_ACESSOS');
+        if (NUMERO_ACESSOS != null) {
+          //NUMERO_ACESSOS++;
+          Save_Shared_Preferences_INT('NUMERO_ACESSOS', NUMERO_ACESSOS + 1);
+          //("NUMERO_ACESSOS = $NUMERO_ACESSOS");
+        }
+
+        String? NOTICIAS = await Get_SharedPreferences_STRING('NOTICIAS');
+        if (NOTICIAS != null) {
+          SETTINGS.Add("NOTICIAS", NOTICIAS);
+        }
+
+        SETTINGS.Mostrar(2);
+
+        //------------------------------------------------------//
+        //----------------- WINDOW PROFILE----------------------//
+        //------------------------------------------------------//
+
+        if (FULL_NAME != null) {
+          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
+        }
+
+        String? LOCATION = await Get_SharedPreferences_STRING('LOCATION');
+        SETTINGS.Add("WND_USER_PROFILE_LOCATION", LOCATION!);
+
+        String? USERNAME = await Get_SharedPreferences_STRING('USERNAME');
+        SETTINGS.Add("WND_USER_PROFILE_USERNAME", USERNAME!);
+
+        String? UID = await Get_SharedPreferences_STRING('UID');
+        SETTINGS.Add('WND_USER_PROFILE_UID', UID!);
+
+        SETTINGS.Add("WND_USER_PROFILE_MEM", "Member since: ");
+
+        String? REGISTERDATE = await Get_SharedPreferences_STRING('REGDATE');
+        SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
+
+        String? LOGINDATE = await Get_SharedPreferences_STRING('LOGINDATE_FORMATED');
+        SETTINGS.Add('WND_USER_PROFILE_LOGIN_DATE', LOGINDATE!);
+
+        SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Last seen: ");
+
+        String? SIGNOUTDATE = await Get_SharedPreferences_STRING('SIGNOUTDATE');
+        SETTINGS.Add('WND_USER_PROFILE_SIGNOUT_DATE', SIGNOUTDATE!);
+
+        //------------------------------------------------------//
+        //-------------------- DRAWER --------------------------//
+        //------------------------------------------------------//
+
+        String? LASTDATE = await Get_SharedPreferences_STRING('LASTDATE');
+        SETTINGS.Add('WND_DRAWER_LASTDATE', LASTDATE!);
+
+        String? EMAIL = await Get_SharedPreferences_STRING('EMAIL');
+        SETTINGS.Add('WND_DRAWER_EMAIL', EMAIL!);
+
+        String? NAME = await Get_SharedPreferences_STRING('NAME');
+        SETTINGS.Add('WND_DRAWER_NAME', NAME!);
+
+        String? IMAGE = await Get_SharedPreferences_STRING('IMAGE');
+        SETTINGS.Add('WND_DRAWER_IMAGE', IMAGE!);
+      }
+    else if(LANGUAGE == 'PT'){
+        //------------------------------------------------------//
+        //------------------ JANELA PRINCIPAL PT ---------------//
+        //------------------------------------------------------//
+
+        //--------- TOPO
+        SETTINGS.Add("TITULO_APP", "rideWME");
+
+        //--------- CENTRO
+        SETTINGS.Add("WND_LOGIN_TITLE_1_TEXT", "Olá! Bem-vindo ao RideWithME!");
+        SETTINGS.Add("WND_LOGIN_TITLE_1_TEXT_LOGGED", "Bem-vindo de volta, ");
+
+        SETTINGS.Add("WND_LOGIN_HINT_1", "Email");
+        SETTINGS.Add("WND_LOGIN_HINT_1_SIZE", "20");
+        SETTINGS.Add("WND_LOGIN_HINT_1_WARNING", "Por favor insira o seu email");
+
+        SETTINGS.Add("WND_LOGIN_HINT_2", "Palavra-passe");
+        SETTINGS.Add("WND_LOGIN_HINT_2_SIZE", "20");
+        SETTINGS.Add("WND_LOGIN_HINT_2_WARNING", "Por favor insira a sua palavra-passe");
+
+        SETTINGS.Add("WND_LOGIN_CHECKBOX_LABEL_1", "Lembrar-se de mim");
+
+        SETTINGS.Add("WND_LOGIN_BTN_2", "Esqueceu-se da\npalavra-passe?");
+
+        SETTINGS.Add("WND_LOGIN_BTN_1", "ENTRAR");
+
+        SETTINGS.Add("TEXT_NEW_WINDOW_REGISTER", "Página de Registo");
+        SETTINGS.Add("TEXT_OF_BUTTON_REGISTER", "Não tem conta? Clique aqui");
+        SETTINGS.Add("TAMANHO_TEXTO_BTN_NEW_REGISTER", "20");
+
+        //--------- FUNDO
+        //---------- FIM DA JANELA PRINCIPAL
+
+        //------------------------------------------------------//
+        //--------------- JANELA DE REGISTO --------------------//
+        //------------------------------------------------------//
+        SETTINGS.Add("WND_REGISTER_TITLE_1",
+            "Crie uma conta RideWithME");
+        SETTINGS.Add("WND_REGISTER_SUBTITLE_1",
+            "Inicie a sua jornada a partilhar boleias agora!");
+
+
+        SETTINGS.Add("WND_REGISTER_OBSTEXT_1", "true");
+        SETTINGS.Add("WND_REGISTER_OBSTEXT_2", "true");
+
+        SETTINGS.Add("WND_REGISTER_HINT_1", "Email");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_EMAIL_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_2", "Nome de Utilizador");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_USERNAME_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_3", "Palavra-passe");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_4", "Confirmar Palavra-passe");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_RPPASSWORD_REGISTER", "20");
+
+        SETTINGS.Add("WND_REGISTER_HINT_5", "Nome Completo");
+        SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_FULLNAME", "20");
+
+        SETTINGS.Add("WND_REGISTER_BTN_1", "REGISTAR");
+
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_TITLE_1",
+            "Ao criar uma conta, está a aceitar os");
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS",
+            "Termos e Condições");
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_TITLE_2",
+            'Ao utilizar o nosso serviço de boleias, concorda com os seguintes termos e condições:');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_1",
+            '1. Deve ter pelo menos 18 anos para utilizar esta aplicação.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_2",
+            '2. Os utilizadores são responsáveis pela sua própria segurança durante as viagens.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_3",
+            '3. Respeite outros utilizadores e o seu espaço pessoal.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_4",
+            '4. Cumpra as leis e regulamentos de trânsito durante o carpooling.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_5",
+            '5. A aplicação não é responsável por disputas entre utilizadores.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_6",
+            '6. Encoraja-se os utilizadores a denunciarem comportamentos inapropriados.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_7",
+            '7. A aplicação pode utilizar dados de localização para efeitos de correspondência de carpooling.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_8",
+            '8. Os utilizadores devem verificar a identidade dos seus parceiros de carpooling.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_9",
+            '9. A aplicação pode suspender ou terminar utilizadores que violem estes termos.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_10",
+            '10. Ao utilizar a aplicação, consente com a nossa política de privacidade.');
+        SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_BTN_1",
+            'Fechar');
+        //--------- FIM DA JANELA DE REGISTO
+
+        //------------------------------------------------------//
+        //------------------ JANELA INICIAL --------------------//
+        //------------------------------------------------------//
+
+        //--------- ANIMAÇÃO
+        SETTINGS.Add("WND_HOME_ANIMATION_DURATION_1", "200"); // em ms
+
+        //--------- TEXTO
+        SETTINGS.Add("WND_HOME_TITLE_1", "");
+        SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
+
+        //--------- MENU LATERAL
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
+        String? NOME_UTILIZADOR = await Get_SharedPreferences_STRING('NOME');
+        if (NOME_UTILIZADOR != null) {
+          Utils.MSG_Debug(NOME_UTILIZADOR!);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NOME_UTILIZADOR!);
+        }
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "PÁGINA INICIAL");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "rideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2", "PERFIL");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_2_ICON", "rideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3", "DEFINIÇÕES");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "rideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4", "FEEDBACK");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_4_ICON", "rideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "SAIR");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_5_ICON", "rideWME");
+        //--------- FIM DO MENU LATERAL
+
+        //------------------------------------------------------//
+        //----------------- WINDOW PROFILE----------------------//
+        //------------------------------------------------------//
+
+        //------- FUNCTIONS HOME
+        String? FULL_NAME = await Get_SharedPreferences_STRING('NAME');
+        if (FULL_NAME != null) {
+          (FULL_NAME);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", FULL_NAME);
+          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
+        }
+
+
+        if (FULL_NAME != null) {
+          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
+        }
+
+        String? LOCATION = await Get_SharedPreferences_STRING('LOCATION');
+        SETTINGS.Add("WND_USER_PROFILE_LOCATION", LOCATION!);
+
+        String? USERNAME = await Get_SharedPreferences_STRING('USERNAME');
+        SETTINGS.Add("WND_USER_PROFILE_USERNAME", USERNAME!);
+
+        String? UID = await Get_SharedPreferences_STRING('UID');
+        SETTINGS.Add('WND_USER_PROFILE_UID', UID!);
+
+        SETTINGS.Add("WND_USER_PROFILE_MEM", "Member since: ");
+
+        String? REGISTERDATE = await Get_SharedPreferences_STRING('REGDATE');
+        SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
+
+        String? LOGINDATE = await Get_SharedPreferences_STRING('LOGINDATE_FORMATED');
+        SETTINGS.Add('WND_USER_PROFILE_LOGIN_DATE', LOGINDATE!);
+
+        SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Last seen: ");
+
+        String? SIGNOUTDATE = await Get_SharedPreferences_STRING('SIGNOUTDATE');
+        SETTINGS.Add('WND_USER_PROFILE_SIGNOUT_DATE', SIGNOUTDATE!);
+
+        //------------------------------------------------------//
+        //-------------------- DRAWER --------------------------//
+        //------------------------------------------------------//
+
+        String? LASTDATE = await Get_SharedPreferences_STRING('LASTDATE');
+        SETTINGS.Add('WND_DRAWER_LASTDATE', LASTDATE!);
+
+        String? EMAIL = await Get_SharedPreferences_STRING('EMAIL');
+        SETTINGS.Add('WND_DRAWER_EMAIL', EMAIL!);
+
+        String? NAME = await Get_SharedPreferences_STRING('NAME');
+        SETTINGS.Add('WND_DRAWER_NAME', NAME!);
+
+        String? IMAGE = await Get_SharedPreferences_STRING('IMAGE');
+        SETTINGS.Add('WND_DRAWER_IMAGE', IMAGE!);
+
+        //--------- ÍCONES
+
+        //------- FUNÇÕES INICIAIS
+
+        //------- FUNÇÕES INICIAIS
+        String? NOME_COMPLETO = await Get_SharedPreferences_STRING('NOME');
+        if (NOME_COMPLETO != null) {
+          (NOME_COMPLETO);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NOME_COMPLETO);
+          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", NOME_COMPLETO);
+        }
+      }
     }
-    setState(() {
-      userData.addAll(data);
-      reviewsData.addAll(reviews);
-      _isLoading = false;
-    });
+
+  //--------------------------------------
+  String GetDefinicao(String key, String def) {
+    return SETTINGS.Get(key, def);
   }
 
-  //------ end of database constants
-
-  String? formValidator(String? value) {
-    if (value!.isEmpty) return 'Field is Required';
-    return null;
+  //--------------------------------------
+  String GetDadosUtilizadores() {
+    return "Dados dos Utilizadores";
   }
 
-  //This is for the tab 'Reviews'
-  Widget _reviewSection() {
-    return
-      SizedBox(
-        height: MediaQuery.of(context).size.height ,
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : reviewsData.isEmpty
-            ? const Center(child: Text("This user has no reviews yet!"))
-            : ListView.builder(
-                itemCount: reviewsData.length,
-                itemBuilder: (context, index) {
-                  return Hero(
-                      tag: 'reviewHero${reviewsData[index].rid}',
-                      child: Card(
-                        child: ListTile(
-                          title: Text(
-                              nameReviews[index],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).textTheme.titleSmall?.color,
-                              ),
-                          ),
-                          subtitle: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                RatingBarIndicator(
-                                  rating: reviewsData[index].rating,
-                                  itemBuilder: (context, index) => const Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  itemCount: 5,
-                                  itemSize: 20.0,
-                                  direction: Axis.horizontal,
-                                ),
-
-                                Text(reviewsData[index].comment),
-                              ]),
-                          trailing: Text(reviewsData[index].date),
-                        )
-                      )
-                  );
-                },
-              )
-      );
-  }
-  //--------------
-  @override
-  Widget build(BuildContext context) {
-    Ref_Window.Ref_Management.Load();
-    String? currentUserUID = FirebaseAuth.instance.currentUser?.uid;
-
-    Widget userAction = const SizedBox.shrink();
-    if (widget.user.uid ==
-        Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
-      userAction = IconButton(
-        icon: const Icon(Icons.settings),
-        color: Colors.white,
-        onPressed: () {
-          modalUpdateUser.show(context, widget.user);
-        },
-      );
+  //--------------------------------------
+  //--------------------------------------
+  void saveNumAccess(String TAG) async{
+    int? numAccess = await Get_SharedPreferences_INT(TAG);
+    if (numAccess == null){
+      Save_Shared_Preferences_INT(TAG, 1);
     }
-    //Utils.MSG_Debug("$className: build");
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      home: Scaffold(
-        drawer: CustomDrawer(Ref_Window.Ref_Management),
-        appBar: AppBar(
-          title: Text(
-            Ref_Window.Ref_Management.SETTINGS
-                .Get("WND_PROFILE_TITLE_1", "User Profile"),
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          actions: [userAction],
-          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
-                children: <Widget> [
-                  //Profile Picture
-                  Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  child: Expanded(
-                    child: FutureBuilder(
-                      future: Ref_Window.Ref_FirebaseStorage.loadImages(widget.user.uid),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).iconTheme.color,
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          return const Center(
-                            child: Text('Something went wrong!'),
-                          );
-                        } else if (snapshot.hasData) {
-                          final List<Map<String, dynamic>> images = snapshot.data ?? [];
-                          if (images.isNotEmpty) {
-                            final Map<String, dynamic> firstImage = images.first;
-                            if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS .Get("WND_USER_PROFILE_UID", "-1")) {
-                              return GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return Dialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                        child: ClipOval(
-                                          child: Container(
-                                            color: Colors.transparent,
-                                            width: 150, // You can adjust the width as needed
-                                            height: 150, // You can adjust the height as needed
-                                            child:
-                                            CircleAvatar(
-                                              backgroundColor: Colors.transparent,
-                                              radius: 100,
-                                              backgroundImage: NetworkImage(firstImage['url']),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: SizedBox(
-                                  width: 150,
-                                  height: 150,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      CircleAvatar(
-                                        radius: 100,
-                                        backgroundImage: NetworkImage(firstImage['url']),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Container(
-                                          width: 30,
-                                          height: 30,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.transparent,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: ElevatedButton.icon(
-                                            icon: Icon(Icons.add_a_photo_sharp,
-                                                size: 20,
-                                                color: Theme.of(context).scaffoldBackgroundColor),
-                                            onPressed: () {
-                                              Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
-                                            },
-                                            label: const Text(""),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                              Theme.of(context).colorScheme.inversePrimary,
-                                              shadowColor: Colors.transparent,
-                                              padding: const EdgeInsets.only(left: 2, bottom: 2),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          // Add padding to move the button to the right
-                                          child: Tooltip(
-                                            message: isOnline ? 'Online' : 'Last Seen',
-                                            child: Container(
-                                              width: 15,
-                                              height: 15,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: isOnline ? Colors.green : Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }
-                            return SizedBox(
-                              width: 150,
-                              height: 150,
-                              child: Stack(
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 100,
-                                    backgroundImage: NetworkImage(firstImage['url']),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      // Add padding to move the button to the right
-                                      child: Tooltip(
-                                        message:
-                                        isOnline ? 'Online' : 'Last Seen',
-                                        child: Container(
-                                          width: 15,
-                                          height: 15,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: isOnline ? Colors.green : Colors.grey,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        }
-                        if (widget.user.uid == Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
-                          return SizedBox(
-                            width: 150,
-                            height: 150,
-                            child: Stack(
-                              children: <Widget>[
-                                const CircleAvatar(
-                                  radius: 100,
-                                  backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
-                                ),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.transparent,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: ElevatedButton.icon(
-                                      icon: Icon(Icons.add_a_photo_sharp,
-                                          size: 40,
-                                          color: Theme.of(context).scaffoldBackgroundColor),
-                                      onPressed: () {
-                                        Ref_Window.Ref_FirebaseStorage.upload("gallery", widget.user.uid);
-                                      },
-                                      label: const Text(""),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor:
-                                        Theme.of(context).colorScheme.inversePrimary,
-                                        shadowColor: Colors.transparent,
-                                        padding: const EdgeInsets.only(left: 2, bottom: 2),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    // Add padding to move the button to the right
-                                    child: Tooltip(
-                                      message:
-                                      isOnline ? 'Online' : 'Last Seen',
-                                      child: Container(
-                                        width: 30,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: isOnline
-                                              ? Colors.green
-                                              : Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return const SizedBox(
-                          width: 150,
-                          height: 150,
-                          child: CircleAvatar(
-                            radius: 100,
-                            backgroundImage:AssetImage("assets/PROFILE_PICTURE_DEMO.jpeg"),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-
-                  //Right side of the profile picture row
-                  Container(
-                    margin: const EdgeInsets.only(left: 10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.user.username,
-                          style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.titleSmall?.color,
-                          ),
-                        ),
-                        Text(
-                          "@${widget.user.fullName}",
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ]
-                    )
-                  ),
-              ]),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(
-                  widget.user.location,
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.titleSmall?.color,
-                    fontSize: 25,
-                  ),
-                ),
-              ]),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_MEM", "Member:"),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.titleSmall?.color,
-                    ),
-                  ),
-                  Text(
-                    widget.user.registerDate,
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).textTheme.titleSmall?.color,
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_LAST_ONLINE", "Last time online:"),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.titleSmall?.color,
-                    ),
-                  ),
-                  const SizedBox(width: 10), // Add some spacing between the texts
-                  if (isOnline)
-                    const Text("Online",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.green, // Set the color for online status
-                      ),
-                    ),
-                  if (!isOnline)
-                    Text(widget.user.lastLogInDate,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Theme.of(context).textTheme.titleSmall?.color,
-                      ),
-                    ),
-                ],
-              ),
-              //review Button
-              SizedBox(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    widget.user.uid != Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1") ?
-                    ElevatedButton(
-                      onPressed: () {
-                        modalReviewUser.show(
-                          context,
-                          widget.user,
-                          Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")
-                        );
-                      },
-                      child: const Text("Review"),
-                    ) : const SizedBox(),
-                  ],
-                )
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2 - 45,
-                child: DefaultTabController(
-                  initialIndex: 0,
-                  length: 2,
-                  child: Scaffold(
-                    appBar: PreferredSize(
-                      preferredSize: const Size.fromHeight(kToolbarHeight),
-                      child: AppBar(
-                      bottom: const TabBar(
-                        indicatorSize: TabBarIndicatorSize.label,
-                        tabs: [
-                          Tab(
-                            text: ("Posts"),
-                          ),
-                          Tab(
-                            text: ("Reviews"),
-                          ),
-                        ],
-                      )
-                      ),
-                    ),
-                  body: TabBarView(
-                      children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height ,
-                      child: _isLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : userData.isEmpty
-                          ? const Center(child: Text("No Data Available!!!"))
-                          : ListView.builder(
-                        itemCount: userData.length,
-                        itemBuilder: (context, index) {
-                          return Hero(
-                            tag: 'postHero${userData[index].pid}',
-                            child: Card(
-                              child: ListTile(
-                                  title: Text(userData[index].title),
-                                  subtitle: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Text(userData[index].date),
-                                        Text("from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
-                                        Text("${userData[index].freeSeats}/${userData[index].totalSeats} FREE SEATS"),
-                                        Text(userData[index].description),
-                                      ]),
-                                  trailing: SizedBox(
-                                    width: 100,
-                                    child: Row(
-                                      children: [
-                                        userData[index].uid ==currentUserUID? IconButton(
-                                          icon: const Icon(Icons.edit),
-                                          onPressed: () async {
-                                            Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_BTN_UPDATE_POST");
-                                            ModalUpdatePost.show(context, userData[index]);
-                                            setState(() {});
-                                          },
-                                        )
-                                            : const SizedBox(),
-                                        userData[index].uid == currentUserUID ? IconButton(
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            color: Colors.redAccent,
-                                          ),
-                                          onPressed: () {
-                                            // Show a confirmation dialog
-                                            Ref_Window.Ref_Management
-                                                .saveNumAccess(
-                                                "NUM_ACCESS_BTN_DELETE_POST");
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext
-                                              context) {
-                                                return AlertDialog(
-                                                  title: const Text('Confirm Delete'),
-                                                  content: const Text('Are you sure you want to delete this post?'),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.of(
-                                                            context)
-                                                            .pop(); // Close the dialog
-                                                      },
-                                                      child: const Text(
-                                                          'Cancel'),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        // Close the dialog and delete the post
-                                                        Navigator.of(
-                                                            context)
-                                                            .pop();
-                                                        PostFirestore().deletePost(
-                                                            currentUserUID!,
-                                                            userData[
-                                                            index]
-                                                                .pid);
-                                                        //MISSING THE REFRESH!!
-                                                      },
-                                                      child: const Text(
-                                                          'Delete'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                        )
-                                            : const SizedBox()
-                                      ],
-                                    ),
-                                  )),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Center(
-                      child: _reviewSection(),
-                    )
-                  ]),
-                  )
-                  )
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+    if (numAccess != null) {
+      Save_Shared_Preferences_INT(TAG, numAccess + 1);
+      Utils.MSG_Debug('$TAG -> $numAccess');
+    }
   }
+
+  //--------------------------------------
+  Future<int?> Get_SharedPreferences_INT(String TAG) async {
+    final SharedPreferences pfs = await prefs;
+    if (pfs == null) return 0;
+    if (pfs.containsKey(TAG)) {
+      return pfs.getInt(TAG);
+    }
+    return 0;
+  }
+
+  //--------------------------------------
+  Future<String?> Get_SharedPreferences_STRING(String TAG) async {
+    final SharedPreferences pfs = await prefs;
+    if (pfs == null) return "??";
+    if (pfs.containsKey(TAG)) {
+      return pfs.getString(TAG);
+    }
+    return "??";
+  }
+
+  //---------
+
+  void Save_Shared_Preferences_INT(String TAG, int Valor) async {
+    final SharedPreferences pfs = await prefs;
+    pfs.setInt(TAG, Valor);
+  }
+
+  //--------------------------------------
+  void Save_Shared_Preferences_STRING(String TAG, String Valor) async {
+    final SharedPreferences pfs = await prefs;
+    pfs.setString(TAG, Valor);
+  }
+
+  //--------------------------------------
+  Future<Object?> Delete_Shared_Preferences(String TAG) async {
+    final SharedPreferences pfs = await prefs;
+    if (pfs == null) {
+      ("$TAG doens't exist");
+      return "$TAG doesn't exist";
+    }
+    if (pfs.containsKey(TAG)) {
+      await pfs.remove(TAG);
+      Utils.MSG_Debug("$TAG removed");
+      return "$TAG deleted";
+    }
+    Utils.MSG_Debug("$TAG not deleted, there was a error");
+    return "$TAG not deleted";
+  }
+
+  Future<String> ExecutaServidor() async {
+    String Resposta_Servidor = "";
+    HTTP.Client Servidor = HTTP.Client();
+    try {
+      //String str_servidor = "http://solar.f2mobile.eu/servico_solar_V1_0.php";
+      String str_servidor = "http://feeds.jn.pt/JN-Ultimas";
+      var url = Uri.parse(str_servidor);
+      var response = await Servidor.get(url);
+      //var response = await Servidor.post(str_servidor, body: {'ACCAO': 'GET_CLIENTS', 'color': 'blue'});
+      if (response.statusCode == 200) {
+        Utils.MSG_Debug("Resposta SERVIDOR Valida!");
+        Resposta_Servidor = response.body;
+        Utils.MSG_Debug("Resposta : " + Resposta_Servidor);
+        Save_Shared_Preferences_STRING("NOTICIAS", Resposta_Servidor);
+      } else {
+        Utils.MSG_Debug("Resposta SERVIDOR Invalida!");
+      }
+    } finally {
+      Servidor.close();
+      Utils.MSG_Debug("ExecutaServidor: finally");
+    }
+    Utils.MSG_Debug("FIM: ExecutaServidor!");
+    return Resposta_Servidor;
+  }
+
+//-------- WINDOW FUNCTIONS
+// Future NavigateTo_Window_User_Profile(context) async {
+//   windowUserProfile win = new windowUserProfile(Management as Management);
+//   await win.Load();
+//   Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+// }
 }

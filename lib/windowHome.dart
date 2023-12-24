@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/rendering.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
+import 'package:ubi/screens/windowFeedback.dart';
 import 'package:ubi/screens/windowNotifications.dart';
 import 'common/Drawer.dart';
 import 'common/widgets/modals/modalNewPost.dart';
@@ -58,6 +59,8 @@ class windowHome extends StatefulWidget {
 //----------------------------------------------------------------
 // ignore: camel_case_types
 class State_windowHome extends State<windowHome> {
+  late windowNotifications _windowNotifications;
+
   PlatformFile? pickedFile;
   UserFirestore userFirestore = UserFirestore();
   PostFirestore postFirestore = PostFirestore();
@@ -168,6 +171,7 @@ class State_windowHome extends State<windowHome> {
   void initState() {
     Utils.MSG_Debug("$className: initState");
     super.initState();
+    _windowNotifications = windowNotifications(Ref_Window.Ref_Management);
     getData();
   }
 
@@ -182,6 +186,12 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   } //-------------
 
+  Future navigateToWindowFAQ(context) async {
+    windowFeedback win = windowFeedback(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
   Future navigateToWindowNotifications(context) async {
     windowNotifications win = windowNotifications(Ref_Window.Ref_Management);
     await win.Load();
@@ -190,9 +200,7 @@ class State_windowHome extends State<windowHome> {
 
   /// WIDGETS
   Widget _buildHomePage(PostFirestore postManager) {
-    return PopScope(
-        canPop: false,
-        child: MaterialApp(
+    return MaterialApp(
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             home: Scaffold(
@@ -466,14 +474,16 @@ class State_windowHome extends State<windowHome> {
                 ),
               ),
               floatingActionButtonLocation: _fabLocation,
-            )));
+            ));
   }
 
   //--------------
   @override
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
-    return MaterialApp(
+    return PopScope(
+        canPop: false,
+        child: MaterialApp(
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         home: Scaffold(
@@ -482,12 +492,9 @@ class State_windowHome extends State<windowHome> {
             title: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
             actions: [
               IconButton(
-                icon: const Icon(Icons.refresh),
+                icon: const Icon(Icons.question_mark),
                 onPressed: () async {
-                  setState(() {
-                    _dataLoaded = false;
-                  });
-                  await getData();
+                 navigateToWindowFAQ(context);
                 },
               ),
             ],
@@ -496,7 +503,7 @@ class State_windowHome extends State<windowHome> {
               ? _buildHomePage(postFirestore) // search
               : (_currentIndex == 1
                   ? _buildHomePage(postFirestore) // home
-                  : _buildHomePage(postFirestore) // notifications
+                  : _windowNotifications // notifications
               )),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
@@ -521,6 +528,6 @@ class State_windowHome extends State<windowHome> {
               ),
             ],
           ),
-        ));
+        )));
   }
 }
