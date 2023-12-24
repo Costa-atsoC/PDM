@@ -152,7 +152,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -400,9 +400,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 obscureText: _isPasswordHidden,
                                 decoration: InputDecoration(
                                   icon: Icon(Icons.password_outlined),
-                                  labelText: Ref_Management.SETTINGS.Get(
-                                      "WND_LOGIN_HINT_2",
-                                      "WND_LOGIN_HINT_2 ??"),
+                                  labelText: Ref_Management.SETTINGS.Get("WND_LOGIN_HINT_2","WND_LOGIN_HINT_2 ??"),
                                   labelStyle:
                                       Theme.of(context).textTheme.titleSmall,
                                   enabledBorder: const UnderlineInputBorder(
@@ -432,8 +430,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: Theme.of(context).textTheme.titleSmall,
                                 validator: (String? value) {
                                   if (value == null || value.isEmpty) {
-                                    return Ref_Management.SETTINGS
-                                        .Get("WND_LOGIN_HINT_2_WARNING", "Please enter your password");
+                                    return Ref_Management.SETTINGS.Get("WND_LOGIN_HINT_2_WARNING", "Please enter your password 2");
                                   }
                                   return null;
                                 },
@@ -522,13 +519,13 @@ class _MyHomePageState extends State<MyHomePage> {
       UserModel? userData = await userFirestore.getUserData(user.uid);
       UserModel userUpdated = UserModel(
         uid: userData!.uid,
-        email: userData!.email,
-        username: userData!.username,
-        fullName: userData!.fullName,
-        registerDate: userData!.registerDate,
-        lastChangedDate: userData!.lastChangedDate,
-        location: userData!.location,
-        image: userData!.image,
+        email: userData.email,
+        username: userData.username,
+        fullName: userData.fullName,
+        registerDate: userData.registerDate,
+        lastChangedDate: userData.lastChangedDate,
+        location: userData.location,
+        image: userData.image,
         online: "1",
         lastLogInDate: currentTime,
         lastSignOutDate: userData!.lastSignOutDate,
@@ -536,24 +533,11 @@ class _MyHomePageState extends State<MyHomePage> {
       userFirestore.updateUserData(userUpdated);
 
       if (isChecked!) {
-        if (Ref_Management
-            .Get_SharedPreferences_STRING(
-            "REMEMBER_ME_DATE") ==
-            null) {
-          Ref_Management
-              .Save_Shared_Preferences_STRING(
-              "REMEMBER_ME_DATE",
-              Utils
-                  .currentTimeUser());
-          Ref_Management
-              .Save_Shared_Preferences_STRING(
-              "REMEMBER_ME_STATUS",
-              "1");
+        if (Ref_Management.Get_SharedPreferences_STRING("REMEMBER_ME_DATE") == null) {
+          Ref_Management.Save_Shared_Preferences_STRING("REMEMBER_ME_DATE",Utils.currentTimeUser());
+          Ref_Management.Save_Shared_Preferences_STRING("REMEMBER_ME_STATUS","1");
         } else {
-          Ref_Management
-              .Save_Shared_Preferences_STRING(
-              "REMEMBER_ME_STATUS",
-              "1");
+          Ref_Management.Save_Shared_Preferences_STRING("REMEMBER_ME_STATUS","1");
         }
       } else {
         Ref_Management
@@ -562,24 +546,17 @@ class _MyHomePageState extends State<MyHomePage> {
             "0");
       }
 
-      Ref_Management.Save_Shared_Preferences_STRING("NAME", userData!.fullName);
+      Ref_Management.Save_Shared_Preferences_STRING("NAME", userData.fullName);
       Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "USERNAME", userData.username);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "LOCATION", userData.location);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "REGDATE", userData.registerDate);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "LASTDATE", userData.lastChangedDate);
+      Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
+      Ref_Management.Save_Shared_Preferences_STRING("LOCATION", userData.location);
+      Ref_Management.Save_Shared_Preferences_STRING("REGDATE", userData.registerDate);
+      Ref_Management.Save_Shared_Preferences_STRING("LASTDATE", userData.lastChangedDate);
       Ref_Management.Save_Shared_Preferences_STRING("IMAGE", userData.image);
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "LOGINDATE", userData.lastLogInDate);
+      Ref_Management.Save_Shared_Preferences_STRING("LOGINDATE", userData.lastLogInDate);
 
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "LOGINDATE_FORMATED", Utils.currentTimeUser());
-      Ref_Management.Save_Shared_Preferences_STRING(
-          "SIGNOUTDATE", userData.lastSignOutDate);
+      Ref_Management.Save_Shared_Preferences_STRING("LOGINDATE_FORMATED", Utils.currentTimeUser());
+      Ref_Management.Save_Shared_Preferences_STRING("SIGNOUTDATE", userData.lastSignOutDate);
 
       Ref_Management.saveNumAccess(
           "NUM_ACCESS_LOGIN"); // guardar o numero de vezes que dá login

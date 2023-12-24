@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ubi/firebase_auth_implementation/models/review_model.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
 import '../common/Utils.dart';
 
 class UserFirestore {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<void> saveUserData(UserModel user) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     var id = user.uid;
@@ -66,7 +68,6 @@ class UserFirestore {
 
       if (userDoc.exists) {
         String attributeFinal = userDoc[attribute];
-        //Utils.MSG_Debug("########################### $attributeFinal");
         return attributeFinal;
       } else {
         Utils.MSG_Debug("User with UID $uid not found");
@@ -174,4 +175,46 @@ class UserFirestore {
     }
   }
 
+  Future<List<ReviewModel>> getUserReviews(String uid) async {
+    List<ReviewModel> reviews = [];
+    try {
+
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('reviews')
+          .get();
+      for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
+        var data = doc.data();
+        ReviewModel review = ReviewModel(
+          uid: data['uid'],
+          rid: data['rid'],
+          date: data['date'],
+          rating: data['rating'],
+          comment: data['comment']
+        );
+        reviews.add(review);
+      }
+    } catch (error) {
+      Utils.MSG_Debug("Error getting user reviews: $error");
+      return [];
+    }
+
+    return reviews;
+  }
+  
+  Future<void> saveReview(ReviewModel data) async{
+    try{
+      await _firestore.collection('users').doc(data.uid).collection('reviews').doc(data.rid)
+          .set({
+            'uid': data.uid,
+            'rid': data.rid,
+            'rating': data.rating,
+            'date': data.date,
+            'comment': data.comment
+          });
+    }catch (error) {
+      Utils.MSG_Debug("Error saving user review: $error");
+    }
+  }
 }

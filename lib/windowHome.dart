@@ -38,10 +38,8 @@ class windowHome extends StatefulWidget {
 
   //--------------
   Future<void> Load() async {
-    ACCESS_WINDOW_HOME = await Ref_Management.Get_SharedPreferences_INT(
-        "JANELA_HOME_NUMERO_ACESSOS");
-    Ref_Management.Save_Shared_Preferences_INT(
-        "JANELA_HOME_NUMERO_ACESSOS", ACCESS_WINDOW_HOME! + 1);
+    ACCESS_WINDOW_HOME = await Ref_Management.Get_SharedPreferences_INT("JANELA_HOME_NUMERO_ACESSOS");
+    Ref_Management.Save_Shared_Preferences_INT("JANELA_HOME_NUMERO_ACESSOS", ACCESS_WINDOW_HOME! + 1);
     Ref_Management.Load();
   }
 
@@ -234,21 +232,16 @@ class State_windowHome extends State<windowHome> {
 
                       return Container(
                           child: _isLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
+                              ? const Center(child: CircularProgressIndicator())
                               : loadedPosts.isEmpty
                                   ? Center(
-                                      child: Text(Ref_Window
-                                          .Ref_Management.SETTINGS
-                                          .Get("JNL_HOME_NO_POSTS_TEXT",
-                                              "JNL_HOME_NO_POSTS_TEXT ??")))
+                                      child: Text(Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_NO_POSTS_TEXT","JNL_HOME_NO_POSTS_TEXT ??"))
+                                  )
                                   : ListView.builder(
                                       itemCount: loadedPosts.length,
                                       itemBuilder: (context, index) {
                                         if (localLikes.length <= index) {
-                                          localLikes.add(int.parse(
-                                              loadedPosts[index].likes));
+                                          localLikes.add(int.parse(loadedPosts[index].likes));
                                         }
                                         return GestureDetector(
                                           onTap: () {
@@ -259,23 +252,19 @@ class State_windowHome extends State<windowHome> {
                                                 loadedImages[index]);
                                           },
                                           child: Hero(
-                                            tag:
-                                                'postHero${loadedPosts[index].pid}',
+                                            tag:'postHero${loadedPosts[index].pid}',
                                             child: Card(
                                               shape:
-                                                  const ContinuousRectangleBorder(
-                                                borderRadius: BorderRadius.zero,
-                                              ),
+                                                const ContinuousRectangleBorder(
+                                                  borderRadius: BorderRadius.zero,
+                                                ),
                                               elevation: 0,
                                               // Set elevation to 0 to remove the shadow
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                    padding: const EdgeInsets.all(8.0),
                                                     child: Row(
                                                       children: [
                                                         // click to go to that user profile
@@ -284,104 +273,63 @@ class State_windowHome extends State<windowHome> {
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                builder: (context) => windowUserProfile(
-                                                                    Ref_Window
-                                                                        .Ref_Management,
-                                                                    loadedUserProfiles[
-                                                                        index]),
+                                                                builder: (context) => windowUserProfile( Ref_Window.Ref_Management, loadedUserProfiles[index]),
                                                               ),
                                                             );
                                                           },
                                                           child: Expanded(
                                                             child: CircleAvatar(
                                                               radius: 20,
-                                                              backgroundImage:
-                                                                  NetworkImage(
-                                                                      loadedImages[
-                                                                              index]
-                                                                          [
-                                                                          'url']),
+                                                              backgroundImage: NetworkImage(loadedImages[index]['url']),
                                                             ),
                                                           ),
                                                         ),
-                                                        const SizedBox(
-                                                            width: 10),
+                                                        const SizedBox(width: 10),
                                                         Column(children: [
                                                           Text(
-                                                            loadedPosts[index]
-                                                                .userFullName,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .titleSmall,
+                                                            loadedPosts[index].userFullName,
+                                                            style: Theme.of(context).textTheme.titleSmall,
                                                           ),
                                                           Text(
                                                               "@${loadedPosts[index].username}",
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .labelLarge),
+                                                              style: Theme.of(context).textTheme.labelLarge),
                                                         ]),
                                                         const Spacer(),
-                                                        Text(Utils
-                                                            .formatTimeDifference(
-                                                                loadedPosts[
-                                                                        index]
-                                                                    .registerDate))
+                                                        Text(Utils.formatTimeDifference(loadedPosts[index].registerDate))
                                                       ],
                                                     ),
                                                   ),
                                                   ListTile(
                                                     title: Text(
                                                       loadedPosts[index].title,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .titleMedium,
+                                                      style: Theme.of(context) .textTheme.titleMedium,
                                                     ),
                                                     subtitle: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      crossAxisAlignment:CrossAxisAlignment.start,
                                                       children: [
                                                         Text(
                                                           "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DATE_TEXT_LABEL", "Date: ")}${loadedPosts[index].date}",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .labelLarge,
+                                                          style:Theme.of(context).textTheme.labelLarge,
                                                         ),
                                                         Text(
                                                           "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FROM_TEXT_LABEL", "From: ")}${loadedPosts[index].startLocation} \n${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_TO_TEXT_LABEL", "To ")}${loadedPosts[index].endLocation} ",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .labelLarge,
+                                                          style:Theme.of(context).textTheme.labelLarge,
                                                         ),
                                                         Text(
                                                           "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DESCRIPTION_TEXT_LABEL", "Description: ")}${loadedPosts[index].description}",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .labelLarge,
+                                                          style:Theme.of(context).textTheme.labelLarge,
                                                         ),
                                                         Text(
                                                           "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FREE_SEATS_TEXT_LABEL", "Free Seats: ")}${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .labelLarge,
+                                                          style:Theme.of(context).textTheme.labelLarge,
                                                         ),
                                                       ],
                                                     ),
                                                   ),
                                                   Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                    mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
-                                                      if (currentUserUID ==
-                                                          loadedPosts[index]
-                                                              .uid) ...[
+                                                      if (currentUserUID == loadedPosts[index].uid) ...[
                                                         IconButton(
                                                           color:
                                                               Theme.of(context)
@@ -390,46 +338,30 @@ class State_windowHome extends State<windowHome> {
                                                           icon: const Icon(
                                                               Icons.edit),
                                                           onPressed: () async {
-                                                            ModalUpdatePost
-                                                                .show(
-                                                                    context,
-                                                                    loadedPosts[
-                                                                        index]);
+                                                            ModalUpdatePost.show(context, loadedPosts[index]);
                                                             setState(() {});
                                                           },
                                                         ),
                                                         IconButton(
-                                                          color:
-                                                              Colors.red[300],
-                                                          icon: const Icon(
-                                                              Icons.delete),
+                                                          color:Colors.red[300],
+                                                          icon: const Icon(Icons.delete),
                                                           onPressed: () {
                                                             // Show a confirmation dialog
                                                             showDialog(
                                                               context: context,
-                                                              builder:
-                                                                  (BuildContext
-                                                                      context) {
+                                                              builder: (BuildContext context) {
                                                                 return AlertDialog(
                                                                   title: Text(Ref_Window
                                                                       .Ref_Management
                                                                       .SETTINGS
-                                                                      .Get(
-                                                                          "WND_HOME_POST_DELETE_TEXT_LABEL_1",
-                                                                          "Confirm delete")),
-                                                                  content: Text(Ref_Window
-                                                                      .Ref_Management
-                                                                      .SETTINGS
+                                                                      .Get("WND_HOME_POST_DELETE_TEXT_LABEL_1","Confirm delete")),
+                                                                  content: Text(Ref_Window.Ref_Management.SETTINGS
                                                                       .Get(
                                                                           "WND_HOME_POST_DELETE_TEXT_LABEL_2",
                                                                           "Are you sure you want to delete this post?")),
                                                                   actions: <Widget>[
                                                                     TextButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Navigator.of(context)
-                                                                            .pop(); // Close the dialog
-                                                                      },
+                                                                      onPressed: () {Navigator.of(context).pop();},
                                                                       child: Text(Ref_Window
                                                                           .Ref_Management
                                                                           .SETTINGS
@@ -441,21 +373,12 @@ class State_windowHome extends State<windowHome> {
                                                                       onPressed:
                                                                           () {
                                                                         // Close the dialog and delete the post
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                        PostFirestore().deletePost(
-                                                                            currentUserUID!,
-                                                                            loadedPosts[index].pid);
-                                                                        setState(
-                                                                            () {});
+                                                                        Navigator.of(context).pop();
+                                                                        PostFirestore().deletePost(currentUserUID!,loadedPosts[index].pid);
+                                                                        setState(() {});
                                                                         //MISSING THE REFRESH!!
                                                                       },
-                                                                      child: Text(Ref_Window
-                                                                          .Ref_Management
-                                                                          .SETTINGS
-                                                                          .Get(
-                                                                              "WND_HOME_POST_DELETE_TEXT_LABEL_4",
-                                                                              "Delete")),
+                                                                      child: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DELETE_TEXT_LABEL_4","Delete")),
                                                                     ),
                                                                   ],
                                                                 );
@@ -465,114 +388,55 @@ class State_windowHome extends State<windowHome> {
                                                         ),
                                                       ] else ...[
                                                         Text(
-                                                          localLikes[index]
-                                                              .toString(),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .titleMedium,
+                                                          localLikes[index].toString(),
+                                                          style:Theme.of(context).textTheme.titleMedium,
                                                         ),
                                                         IconButton(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .onPrimary,
-                                                          icon: FutureBuilder<
-                                                              bool>(
-                                                            future: postFirestore
-                                                                .getIsLikedStatus(
-                                                                    currentUserUID!,
-                                                                    loadedPosts[
-                                                                        index]),
-                                                            builder: (context,
-                                                                snapshot) {
-                                                              if (snapshot
-                                                                      .connectionState ==
-                                                                  ConnectionState
-                                                                      .waiting) {
+                                                          color:Theme.of(context).colorScheme.onPrimary,
+                                                          icon: FutureBuilder<bool>(
+                                                            future: postFirestore.getIsLikedStatus(currentUserUID!,loadedPosts[index]),
+                                                            builder: (context,snapshot) {
+                                                              if (snapshot.connectionState == ConnectionState.waiting) {
                                                                 // If still loading, you can show a loading indicator or default icon
-                                                                return const Icon(
-                                                                    Icons
-                                                                        .thumb_up_alt_outlined);
-                                                              } else if (snapshot
-                                                                  .hasError) {
+                                                                return const Icon(Icons.thumb_up_alt_outlined);
+                                                              } else if (snapshot.hasError) {
                                                                 // Handle error
-                                                                Utils.MSG_Debug(
-                                                                    'Error checking like status: ${snapshot.error}');
+                                                                Utils.MSG_Debug('Error checking like status: ${snapshot.error}');
 
-                                                                return const Icon(
-                                                                    Icons
-                                                                        .thumb_up_alt_outlined);
+                                                                return const Icon(Icons.thumb_up_alt_outlined);
                                                               } else {
                                                                 // Determine the appropriate icon based on the like status
-                                                                return snapshot
-                                                                            .data ??
-                                                                        false
-                                                                    ? Icon(
-                                                                        Icons
-                                                                            .thumb_up_alt,
-                                                                        color: Theme.of(context)
-                                                                            .colorScheme
-                                                                            .secondaryContainer)
-                                                                    : const Icon(
-                                                                        Icons
-                                                                            .thumb_up_alt_outlined);
+                                                                return snapshot.data ?? false ? Icon(
+                                                                        Icons.thumb_up_alt,
+                                                                        color: Theme.of(context).colorScheme.secondaryContainer)
+                                                                    : const Icon(Icons.thumb_up_alt_outlined);
                                                               }
                                                             },
                                                           ),
                                                           onPressed: () async {
-                                                            // Replace with your logic to get the current user's UID
-
-                                                            int updatedLikes = await postManager
-                                                                .toggleActionPost(
-                                                                    currentUserUID!,
-                                                                    loadedPosts[
-                                                                        index],
-                                                                    2);
-
-                                                            setState(() {
-                                                              localLikes[
-                                                                      index] =
-                                                                  updatedLikes;
-                                                            });
+                                                            int updatedLikes = await postManager.toggleActionPost(currentUserUID!,loadedPosts[index],2);
+                                                            setState(() {localLikes[index] = updatedLikes;});
                                                           },
                                                         ),
                                                         IconButton(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .onPrimary,
-                                                          icon: const Icon(
-                                                              Icons.message),
+                                                          color:Theme.of(context).colorScheme.onPrimary,
+                                                          icon: const Icon(Icons.message),
                                                           onPressed: () {
                                                             // Handle message functionality
                                                           },
                                                         ),
                                                         IconButton(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .onPrimary,
-                                                          icon: const Icon(Icons
-                                                              .waving_hand),
+                                                          color:Theme.of(context).colorScheme.onPrimary,
+                                                          icon: const Icon(Icons.waving_hand),
                                                           onPressed: () async {
-                                                            await postManager
-                                                                .toggleActionPost(
-                                                                    currentUserUID!,
-                                                                    loadedPosts[
-                                                                        index],
-                                                                    0);
-                                                            Utils.MSG_Debug(
-                                                                "CARPOOL REQUESTED");
+                                                            await postManager.toggleActionPost(currentUserUID!,loadedPosts[index],0);
+                                                            Utils.MSG_Debug("CARPOOL REQUESTED");
                                                           },
                                                         ),
                                                       ],
                                                       IconButton(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onPrimary,
-                                                        icon: const Icon(
-                                                            Icons.share),
+                                                        color: Theme.of(context).colorScheme.onPrimary,
+                                                        icon: const Icon(Icons.share),
                                                         onPressed: () {
                                                           // Handle message functionality
                                                         },
@@ -625,8 +489,7 @@ class State_windowHome extends State<windowHome> {
         home: Scaffold(
           drawer: CustomDrawer(Ref_Window.Ref_Management),
           appBar: AppBar(
-            title: Text(
-                Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
+            title: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
             actions: [
               IconButton(
                 icon: const Icon(Icons.question_mark),
@@ -650,7 +513,7 @@ class State_windowHome extends State<windowHome> {
                 _currentIndex = index;
               });
             },
-            items: [
+            items: const [
               BottomNavigationBarItem(
                 icon: Icon(Icons.search_rounded),
                 label: '',

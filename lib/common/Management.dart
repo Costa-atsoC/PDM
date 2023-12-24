@@ -171,6 +171,10 @@ class Management {
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT");
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
         SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6", "FAQ");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
         //--------- END OF DRAWER
 
         //--------- ICONS
@@ -268,6 +272,8 @@ class Management {
 
         String? IMAGE = await Get_SharedPreferences_STRING('IMAGE');
         SETTINGS.Add('WND_DRAWER_IMAGE', IMAGE!);
+
+
       }
     else if(LANGUAGE == 'PT'){
         //------------------------------------------------------//
@@ -469,7 +475,7 @@ class Management {
         }
       }
     }
-
+  }
   //--------------------------------------
   String GetDefinicao(String key, String def) {
     return SETTINGS.Get(key, def);
