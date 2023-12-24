@@ -517,6 +517,7 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       User? user = await _auth.signInWithEmailAndPassword(email, password);
       Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
+      Utils.MSG_Debug("${user!.uid} is logged in");
 
       UserModel? userData = await userFirestore.getUserData(user.uid);
       UserModel userUpdated = UserModel(

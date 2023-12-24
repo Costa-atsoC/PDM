@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ubi/screens/windowDeleteAccount.dart';
+import 'package:ubi/screens/windowsLanguage.dart';
 import 'windowChangePassword.dart';
 // import 'windowLanguage.dart';
 
@@ -159,6 +160,7 @@ class State_windowSettings extends State<windowSettings> {
                   actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
               buildAccountOption(context, "Language", actions: []),
               buildAccountOption(context, "Delete Account", actions: []),
+              buildAccountOption(context, "Delete Cache", actions: []),
               SizedBox(height: 40),
               Row(
                 children: [
@@ -314,6 +316,44 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 
+  void _showDeleteCache(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Delete cache?'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text('Delete'),
+                onTap: () {
+                  setState(() {
+
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('Cancel'),
+                onTap: () {
+                  setState(() {
+                    // Define a linguagem como inglês e armazena nas preferências compartilhadas
+                    widget.selectedLanguage = 'English';
+                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
+                        "LANGUAGE", 'EN');
+                    Ref_Window.Ref_Management.Load();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   GestureDetector buildAccountOption(BuildContext context, String title,
       {List<String>? actions}) {
     return GestureDetector(
@@ -333,8 +373,17 @@ class State_windowSettings extends State<windowSettings> {
                     WindowDeleteAccount(Ref_Window.Ref_Management)),
           );
         } else if (title == 'Language') {
-          _showLanguageDialog(context);
-        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    WindowLanguage(Ref_Window.Ref_Management)),
+          );
+        }
+        else if (title == 'Delete Cache'){
+
+        }
+        else {
           // Se houver outras opções de conta
           showDialog(
             context: context,

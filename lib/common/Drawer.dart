@@ -40,9 +40,9 @@ class State_CustomDrawer extends State<CustomDrawer> {
     super.initState();
   }
 
+  List<Map<String, dynamic>> loadedImages = [];
   bool _dataLoaded = true;
   bool _hasImage = false;
-  List<Map<String, dynamic>> loadedImages = [];
 
   Future<void> _loadUserImage() async {
     /*

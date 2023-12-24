@@ -35,14 +35,14 @@ class windowUserProfile extends StatefulWidget {
 
   //--------------
   windowUserProfile(this.Ref_Management, this.user) {
-    windowTitle = "General Window";
+    windowTitle = "Profile";
     user = this.user;
     //Utils.MSG_Debug(windowTitle);
   }
 
   //--------------
   Future<void> Load() async {
-    //Utils.MSG_Debug(windowTitle + ":Load");
+    Utils.MSG_Debug(windowTitle + ":Load");
     ACCESS_WINDOW_PROFILE = await Ref_Management.Get_SharedPreferences_INT(
         "WND_PROFILE_ACCESS_NUMBER");
     Ref_Management.Save_Shared_Preferences_INT(
@@ -144,10 +144,11 @@ class State_windowUserProfile extends State<windowUserProfile> {
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
     String? currentUserUID = FirebaseAuth.instance.currentUser?.uid;
+    Utils.MSG_Debug(currentUserUID!);
 
     Widget userAction = const SizedBox.shrink();
     if (widget.user.uid ==
-        Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1")) {
+        currentUserUID) {
       userAction = IconButton(
         icon: const Icon(Icons.settings),
         color: Colors.white,
@@ -205,8 +206,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                             final Map<String, dynamic> firstImage =
                                 images.first;
                             if (widget.user.uid ==
-                                Ref_Window.Ref_Management.SETTINGS
-                                    .Get("WND_USER_PROFILE_UID", "-1")) {
+                                currentUserUID) {
                               return GestureDetector(
                                 onTap: () {
                                   showDialog(
@@ -328,8 +328,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                           }
                         }
                         if (widget.user.uid ==
-                            Ref_Window.Ref_Management.SETTINGS
-                                .Get("WND_USER_PROFILE_UID", "-1")) {
+                          currentUserUID) {
                           return SizedBox(
                             width: 200,
                             height: 200,
