@@ -162,20 +162,20 @@ class State_windowFullPost extends State<windowFullPost> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back), // Back button icon
-            onPressed: () {
-              // Define the action when the back button is pressed
-              Navigator.of(context).pop(); // Navigator.pop() to go back
-            },
-          ),
-          title: Text(
-            Ref_Window.Ref_Management.SETTINGS.Get("WND_FULL_POST_1", "Full Post"),
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        ),
+        // appBar: AppBar(
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back), // Back button icon
+          //   onPressed: () {
+          //     // Define the action when the back button is pressed
+          //     Navigator.of(context).pop(); // Navigator.pop() to go back
+          //   },
+          // ),
+        //   title: Text(
+        //     Ref_Window.Ref_Management.SETTINGS.Get("WND_FULL_POST_1", "Full Post"),
+        //     style: Theme.of(context).textTheme.titleMedium,
+        //   ),
+        //   backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        // ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
             :Padding(
@@ -472,18 +472,17 @@ class State_windowFullPost extends State<windowFullPost> {
                             color: Color.fromRGBO(124, 23, 87, 1)
                         ),
                         onPressed: () {
-                          if(_commentController.text.isEmpty){
-                            return;
+                          if(_commentController.text.isNotEmpty){
+                            commentModel com = commentModel(
+                                id: const Uuid().v4(),
+                                pid: widget.post.pid,
+                                uid: widget.post.uid,
+                                cid: FirebaseAuth.instance.currentUser!.uid,
+                                date: widget.post.date,
+                                comment: _commentController.text
+                            );
+                            postFirestore.saveComment(com).then((value) => _refreshData());
                           }
-                          commentModel com = commentModel(
-                              id: const Uuid().v4(),
-                              pid: widget.post.pid,
-                              uid: widget.post.uid,
-                              cid: FirebaseAuth.instance.currentUser!.uid,
-                              date: widget.post.date,
-                              comment: _commentController.text
-                          );
-                          postFirestore.saveComment(com).then((value) => _refreshData());
                         },
                       ),
                     ],
