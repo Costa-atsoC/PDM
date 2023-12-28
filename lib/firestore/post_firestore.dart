@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../firebase_auth_implementation/models/comment_model.dart';
 import '../firebase_auth_implementation/models/notification_model.dart';
 import '../firebase_auth_implementation/models/post_model.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
@@ -570,6 +571,64 @@ class PostFirestore {
     } catch (error) {
       Utils.MSG_Debug('Error checking if post seen: $error');
       return false; // Handle the error by returning false
+    }
+  }
+
+  Future<List<commentModel>> getComments(PostModel post) async {
+    List<commentModel> comments = [];
+
+    try {
+      // Query the 'likes' collection for the specified post ID
+      QuerySnapshot<Map<String, dynamic>> commentsSnapshot = await _firestore
+          .collection('users')
+          .doc(post.uid)
+          .collection('posts')
+          .doc(post.pid)
+          .collection('comments')
+          .get();
+
+      // Iterate through the like documents and retrieve user information
+      for (QueryDocumentSnapshot<Map<String, dynamic>> commentDoc
+          in commentsSnapshot.docs) {
+        var data = commentDoc.data();
+        commentModel comment = commentModel(
+          id: data['id'],
+          pid: data['pid'],
+          uid: data['uid'],
+          cid: data['cid'],
+          date: data['date'],
+          comment: data['comment'],
+        );
+        comments.add(comment);
+      }
+    } catch (error) {
+      Utils.MSG_Debug('Error getting comments: $error');
+    }
+
+    return comments;
+  }
+
+  Future<bool> saveComment(commentModel comment) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(comment.uid)
+          .collection('posts')
+          .doc(comment.pid)
+          .collection('comments')
+          .doc(comment.id)
+          .set({
+            'id': comment.id,
+            'pid': comment.pid,
+            'uid': comment.uid,
+            'cid': comment.cid,
+            'date': comment.date,
+            'comment': comment.comment,
+          });
+      return true;
+    } catch (error) {
+      Utils.MSG_Debug('Error saving comment: $error');
+      return false;
     }
   }
 }

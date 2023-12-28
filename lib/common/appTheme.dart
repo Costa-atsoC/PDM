@@ -31,7 +31,7 @@ class AppTheme {
       secondaryContainer: Color.fromARGB(255, 201, 128, 94),
     ),
     cardTheme: const CardTheme(
-      color: Color.fromARGB(255, 250, 249, 247), // Primary color for cards// Secondary color for card shadows
+      color: Color.fromARGB(255, 234, 234, 230) // Primary color for cards// Secondary color for card shadows
     ),
     iconTheme: const IconThemeData(
       color: Colors.white,

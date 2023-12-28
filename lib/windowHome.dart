@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowFeedback.dart';
+import 'package:ubi/screens/windowFullPost.dart';
 import 'package:ubi/screens/windowNotifications.dart';
 import 'common/Drawer.dart';
 import 'common/widgets/modals/modalNewPost.dart';
@@ -62,6 +63,7 @@ class windowHome extends StatefulWidget {
 // ignore: camel_case_types
 class State_windowHome extends State<windowHome> {
   late windowNotifications _windowNotifications;
+  late windowSearch _windowSearch;
 
   PlatformFile? pickedFile;
   UserFirestore userFirestore = UserFirestore();
@@ -196,6 +198,7 @@ class State_windowHome extends State<windowHome> {
     Utils.MSG_Debug("$className: initState");
     super.initState();
     _windowNotifications = windowNotifications(Ref_Window.Ref_Management);
+    _windowSearch = windowSearch(Ref_Window.Ref_Management);
     getData();
     _getUserData();
   }
@@ -211,14 +214,15 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   } //-------------
 
-  Future navigateToWindowFAQ(context) async {
-    windowFeedback win = windowFeedback(Ref_Window.Ref_Management);
+
+  Future navigateToWindowNotifications(context) async {
+    windowNotifications win = windowNotifications(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  Future navigateToWindowNotifications(context) async {
-    windowNotifications win = windowNotifications(Ref_Window.Ref_Management);
+  Future navigateToWindowFulPost(context, post) async {
+    windowFullPost win = windowFullPost(Ref_Window.Ref_Management, post);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -290,57 +294,88 @@ class State_windowHome extends State<windowHome> {
                             child: CircularProgressIndicator(),
                           )
                               : loadedPosts.isEmpty
-                              ? Center(
-                              child: Text(Ref_Window
-                                  .Ref_Management.SETTINGS
-                                  .Get("JNL_HOME_NO_POSTS_TEXT",
-                                  "JNL_HOME_NO_POSTS_TEXT ??")))
-                              : ListView.builder(
-                            itemCount: loadedPosts.length,
-                            itemBuilder: (context, index) {
-                              if (localLikes.length <= index) {
-                                localLikes.add(int.parse(
-                                    loadedPosts[index].likes));
-                              }
-                              return GestureDetector(
-                                onTap: () {
-                                  modalPost.show(
-                                      context,
-                                      loadedPosts[index],
-                                      loadedUserProfiles[index],
-                                      loadedImages[index]);
-                                },
-                                child: Hero(
-                                  tag:
-                                  'postHero${loadedPosts[index].pid}',
-                                  child: Card(
-                                    shape:
-                                    const ContinuousRectangleBorder(
-                                      borderRadius: BorderRadius.zero,
-                                    ),
-                                    elevation: 0,
-                                    // Set elevation to 0 to remove the shadow
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                          const EdgeInsets.all(
-                                              8.0),
-                                          child: Row(
-                                            children: [
-                                              // click to go to that user profile
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) => windowUserProfile(
-                                                          Ref_Window
-                                                              .Ref_Management,
-                                                          loadedUserProfiles[
-                                                          index]),
+                                  ? Center(
+                                      child: Text(Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_NO_POSTS_TEXT","JNL_HOME_NO_POSTS_TEXT ??"))
+                                  )
+                                  : ListView.builder(
+                                      itemCount: loadedPosts.length,
+                                      itemBuilder: (context, index) {
+                                        if (localLikes.length <= index) {
+                                          localLikes.add(int.parse(loadedPosts[index].likes));
+                                        }
+                                        return GestureDetector(
+                                          onTap: () {
+                                            navigateToWindowFulPost(context, loadedPosts[index]);
+                                          },
+                                          child: Hero(
+                                            tag:'postHero${loadedPosts[index].pid}',
+                                            child: Card(
+                                              shape:
+                                                const ContinuousRectangleBorder(
+                                                  borderRadius: BorderRadius.zero,
+                                                ),
+                                              elevation: 0,
+                                              // Set elevation to 0 to remove the shadow
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        // click to go to that user profile
+                                                        GestureDetector(
+                                                          onTap: () async {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) => windowUserProfile( Ref_Window.Ref_Management, loadedUserProfiles[index]),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Expanded(
+                                                            child: CircleAvatar(
+                                                              radius: 20,
+                                                              backgroundImage: NetworkImage(loadedImages[index]['url']),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(width: 10),
+                                                        Column(children: [
+                                                          Text(
+                                                            loadedPosts[index].userFullName,
+                                                            style: Theme.of(context).textTheme.titleSmall,
+                                                          ),
+                                                          Text(
+                                                              "@${loadedPosts[index].username}",
+                                                              style: Theme.of(context).textTheme.labelLarge),
+                                                        ]),
+                                                        const Spacer(),
+                                                        Text(Utils.formatTimeDifference(loadedPosts[index].registerDate))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  ListTile(
+                                                    title: Text(
+                                                      loadedPosts[index].title,
+                                                      style: Theme.of(context) .textTheme.titleMedium,
+                                                    ),
+                                                    subtitle: Column(
+                                                      crossAxisAlignment:CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DATE_TEXT_LABEL", "Date: ")}${loadedPosts[index].date}",
+                                                          style:Theme.of(context).textTheme.labelLarge,
+                                                        ),
+                                                        Text(
+                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FROM_TEXT_LABEL", "From: ")}${loadedPosts[index].startLocation} \n${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_TO_TEXT_LABEL", "To ")}${loadedPosts[index].endLocation} ",
+                                                          style:Theme.of(context).textTheme.labelLarge,
+                                                        ),
+                                                        Text(
+                                                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FREE_SEATS_TEXT_LABEL", "Free Seats: ")}${loadedPosts[index].freeSeats}/${loadedPosts[index].totalSeats}",
+                                                          style:Theme.of(context).textTheme.labelLarge,
+                                                        ),
+                                                      ],
                                                     ),
                                                   );
                                                 },

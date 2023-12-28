@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubi/common/appTheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:ubi/firestore/post_firestore.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowInitial.dart';
 import 'package:ubi/windowHome.dart';
@@ -14,6 +15,7 @@ import 'common/Management.dart';
 import 'common/Utils.dart';
 
 final UserFirestore userFirestore = UserFirestore();
+final PostFirestore postFirestore = PostFirestore();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
