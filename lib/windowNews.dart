@@ -193,10 +193,10 @@ class State_windowNews extends State<windowNews> {
                       ],
                     ),
                     onLongPress: () {
-                      UtilsFlutter.MSG("Estas a pressionar-me! ACCAO: NADA");
+                      UtilsFlutter.MSG("Estas a pressionar-me! ACCAO: NADA", context);
                     },
                     onTap: () async {
-                      UtilsFlutter.MSG("Picaste-me! ACCAO: LINK");
+                      UtilsFlutter.MSG("Picaste-me! ACCAO: LINK", context);
                       var url = Uri.parse(news[index]['link'] ?? 'No link');
                       await launchUrl(url);
                     }, // Handle your onTap here.

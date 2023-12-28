@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ubi/firebase_auth_implementation/models/review_model.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
@@ -60,6 +62,43 @@ class UserFirestore {
     }
   }
 
+  /// New function that returns a Json scheme of the User
+  Future<String?> getUserDataJson(String uid) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    try {
+      DocumentSnapshot userDoc = await users.doc(uid).get();
+
+      if (userDoc.exists) {
+        UserModel user = UserModel(
+          uid: userDoc['uid'],
+          email: userDoc['email'],
+          username: userDoc['username'],
+          fullName: userDoc['fullName'],
+          registerDate: userDoc['registerDate'],
+          lastChangedDate: userDoc['lastChangedDate'],
+          location: userDoc['location'],
+          image: userDoc['image'],
+          online: userDoc['online'],
+          lastLogInDate: userDoc['lastLogInDate'],
+          lastSignOutDate: userDoc['lastSignOutDate'],
+        );
+
+        // Convert UserModel to JSON string
+        String userJson = jsonEncode(user.toJson());
+
+        return userJson;
+      } else {
+        Utils.MSG_Debug("User with UID $uid not found");
+        return null;
+      }
+    } catch (error) {
+      Utils.MSG_Debug("Error getting user data: $error");
+      return null;
+    }
+  }
+
+  /// to get a certain attribute
   Future<String> getUserAttribute(String uid, String attribute) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
@@ -78,6 +117,25 @@ class UserFirestore {
       return "??";
     }
   }
+
+  /// Update a user attribute, given the attribute (useful for the online/offline mode)
+  Future<void> updateUserAttribute(String uid, String attribute, String newValue) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    try {
+      DocumentSnapshot userDoc = await users.doc(uid).get();
+
+      if (userDoc.exists) {
+        await users.doc(uid).update({attribute: newValue});
+        Utils.MSG_Debug("User attribute '$attribute' updated successfully for UID $uid");
+      } else {
+        Utils.MSG_Debug("User with UID $uid not found");
+      }
+    } catch (error) {
+      Utils.MSG_Debug("Error updating user attribute: $error");
+    }
+  }
+
 
   Future<void> updateUserData(UserModel user) async {
     try {

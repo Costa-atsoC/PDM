@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io' as io;
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -8,13 +9,12 @@ import 'package:ubi/common/Drawer.dart';
 import 'package:ubi/common/widgets/modals/modalReviewUser.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
-import 'package:path/path.dart' as path;
 import 'package:ubi/firestore/firebase_storage.dart';
 import 'package:ubi/firestore/user_firestore.dart';
+import '../common/Utils.dart';
 import '../common/widgets/modals/modalUpdateUser.dart';
 
 import '../common/Management.dart';
-import '../common/Utils.dart';
 import '../common/appTheme.dart';
 import '../common/widgets/modals/modalUpdatePost.dart';
 import '../firebase_auth_implementation/models/review_model.dart';
@@ -97,9 +97,10 @@ class State_windowUserProfile extends State<windowUserProfile> {
   @override
   void initState() {
 //Utils.MSG_Debug("$className: initState");
+    _getUserData();
+    _refreshData();
     super.initState();
     Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_WND_PROFILE");
-    _refreshData();
   }
 
 //--- database constants
@@ -112,10 +113,31 @@ class State_windowUserProfile extends State<windowUserProfile> {
   bool _isLoading = true;
   bool isOnline = false;
 
+  UserModel? currentUserData;
+
+  Future<void> _getUserData() async {
+    String? currentUserID =
+    await Ref_Window.Ref_Management.Get_SharedPreferences_STRING("UID");
+    String? userDataJson = await userFirestore.getUserDataJson(currentUserID!);
+
+    if (userDataJson != null) {
+      UserModel? userData = UserModel.fromJson(jsonDecode(userDataJson));
+
+      if (userData != null) {
+        Utils.MSG_Debug("USER ${userData.uid} IS THE CURRENT USER");
+        currentUserData = userData;
+      } else {
+        print("Failed to convert JSON to UserModel");
+      }
+    } else {
+      print("User data JSON is null");
+    }
+  }
+
 // This function is used to fetch all data from the database
   void _refreshData() async {
     final List<PostModel> data =
-        await PostFirestore().getUserPosts(widget.user.uid);
+        await PostFirestore().getUserPostsOrderedByDate(widget.user.uid);
     isOnline = await userFirestore.isUserOnline(widget.user);
     final List<ReviewModel> reviews =
         await UserFirestore().getUserReviews(widget.user.uid);
@@ -624,7 +646,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                                               .start,
                                                       children: [
                                                         Text(userData[index]
-                                                            .date),
+                                                            .date.toString()),
                                                         Text(
                                                             "from: ${userData[index].startLocation} to: ${userData[index].endLocation}"),
                                                         Text(
