@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +41,36 @@ class State_CustomDrawer extends State<CustomDrawer> {
   @override
   void initState() {
     _loadUserImage();
+
+    /// not usable right now
     super.initState();
+    _getData();
   }
 
   List<Map<String, dynamic>> loadedImages = [];
   bool _dataLoaded = true;
   bool _hasImage = false;
+
+  UserModel? currentUserData;
+
+  Future<void> _getData() async {
+    String? currentUserID =
+        await Ref_Window.Ref_Management.Get_SharedPreferences_STRING("UID");
+    String? userDataJson = await userFirestore.getUserDataJson(currentUserID!);
+
+    if (userDataJson != null) {
+      UserModel? userData = UserModel.fromJson(jsonDecode(userDataJson));
+
+      if (userData != null) {
+        Utils.MSG_Debug("USER ${userData.uid} LOADED");
+        currentUserData = userData;
+      } else {
+        print("Failed to convert JSON to UserModel");
+      }
+    } else {
+      print("User data JSON is null");
+    }
+  }
 
   Future<void> _loadUserImage() async {
     /*
@@ -78,7 +104,6 @@ class State_CustomDrawer extends State<CustomDrawer> {
      */
   }
 
-
   Future navigateToWindowSettings(context) async {
     windowSettings win = windowSettings(Ref_Window.Ref_Management);
     await win.Load();
@@ -94,6 +119,8 @@ class State_CustomDrawer extends State<CustomDrawer> {
   Future navigateToWindowUserProfile(context) async {
     Ref_Window.Ref_Management.Load();
 
+    /// old method to retrieve the user data
+    /*
     UserModel user = UserModel(
       uid: Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_UID", "-1"),
       email: Ref_Window.Ref_Management.SETTINGS.Get("WND_DRAWER_EMAIL", ""),
@@ -113,8 +140,13 @@ class State_CustomDrawer extends State<CustomDrawer> {
       lastSignOutDate: Ref_Window.Ref_Management.SETTINGS
           .Get("WND_USER_PROFILE_SIGNOUT_DATE", ""),
     );
+    */
 
-    windowUserProfile win = windowUserProfile(Ref_Window.Ref_Management, user);
+    /// new method, much more cleaner and way faster!
+    UserModel? userData = currentUserData;
+
+    windowUserProfile win =
+        windowUserProfile(Ref_Window.Ref_Management, userData!);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -157,33 +189,30 @@ class State_CustomDrawer extends State<CustomDrawer> {
                   child: Expanded(
                     child: _dataLoaded
                         ? (_hasImage
-                        ? SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: CircleAvatar(
-                        radius: 100,
-                        backgroundImage: NetworkImage(
-                            loadedImages[0]['url']),
-                      ),
-                    )
-                        : const SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundColor:
-                        Colors.transparent,
-                        backgroundImage: AssetImage(
-                            "assets/LOGO.png"),
-                      ),
-                    ))
+                            ? SizedBox(
+                                width: 200,
+                                height: 200,
+                                child: CircleAvatar(
+                                  radius: 100,
+                                  backgroundImage:
+                                      NetworkImage(loadedImages[0]['url']),
+                                ),
+                              )
+                            : const SizedBox(
+                                width: 100,
+                                height: 100,
+                                child: CircleAvatar(
+                                  radius: 80,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage:
+                                      AssetImage("assets/LOGO.png"),
+                                ),
+                              ))
                         : Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context)
-                            .iconTheme
-                            .color,
-                      ),
-                    ),
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).iconTheme.color,
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -235,7 +264,8 @@ class State_CustomDrawer extends State<CustomDrawer> {
           ListTile(
             leading: const Icon(Icons.help),
             title: Text(
-              Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_DRAWER_SUBTITLE_6", "FAQ"),
+              Ref_Window.Ref_Management.SETTINGS
+                  .Get("WND_HOME_DRAWER_SUBTITLE_6", "FAQ"),
             ),
             titleTextStyle: Theme.of(context).textTheme.titleLarge,
             textColor: Theme.of(context).colorScheme.onPrimary,
@@ -244,7 +274,8 @@ class State_CustomDrawer extends State<CustomDrawer> {
           const Spacer(),
           Container(
             alignment: Alignment.center,
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10), // Add a bottom margin here
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            // Add a bottom margin here
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
@@ -256,15 +287,15 @@ class State_CustomDrawer extends State<CustomDrawer> {
               child: ListTile(
                 title: Align(
                   child: Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
+                    Ref_Window.Ref_Management.SETTINGS
+                        .Get("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(),
                   ),
                 ),
                 onTap: () async {
-                  UserModel? userData =
-                  await userFirestore.getUserData(
-                      FirebaseAuth.instance.currentUser!.uid);
+                  UserModel? userData = await userFirestore
+                      .getUserData(FirebaseAuth.instance.currentUser!.uid);
                   UserModel userUpdated = UserModel(
                     uid: userData!.uid,
                     email: userData!.email,

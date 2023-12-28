@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as HTTP;
 
 import '../General.dart';
+import '../firebase_auth_implementation/models/post_model.dart';
 import 'Utils.dart';
 
 
@@ -519,6 +522,21 @@ class Management {
   }
 
   //---------
+  Future<List<PostModel>> GET_Shared_Preferences_LIST(String TAG) async {
+    List<PostModel> posts = [];
+    final SharedPreferences pfs = await prefs;
+    List<String> postsJson = pfs.getStringList(TAG) ?? [];
+
+    for (String json in postsJson) {
+      Map<String, dynamic> data = jsonDecode(json);
+      PostModel post = PostModel.fromJson(data);
+      posts.add(post);
+    }
+
+    return posts;
+  }
+
+  //---------
 
   void Save_Shared_Preferences_INT(String TAG, int Valor) async {
     final SharedPreferences pfs = await prefs;
@@ -530,6 +548,14 @@ class Management {
     final SharedPreferences pfs = await prefs;
     pfs.setString(TAG, Valor);
   }
+
+  void Save_Shared_Preferences_LIST(String TAG, List<PostModel> posts) async {
+    final SharedPreferences pfs = await prefs;
+    List<String> postsJson = posts.map((post) => jsonEncode(post.toJson())).toList();
+    pfs.setStringList(TAG, postsJson);
+  }
+
+
 
   //--------------------------------------
   Future<Object?> Delete_Shared_Preferences(String TAG) async {

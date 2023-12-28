@@ -10,10 +10,6 @@ class UserModel {
   final String online;
   final String lastLogInDate;
   final String lastSignOutDate;
-  /*final String register_date;
-  final String last_changed_date;
-  final String phoneNo;
-  final String password;*/
 
   const UserModel({
     required this.uid,
@@ -27,16 +23,39 @@ class UserModel {
     required this.lastChangedDate,
     required this.lastLogInDate,
     required this.lastSignOutDate,
-    //required this.phoneNo,
   });
-/*
-  toJson(){
+
+  // JSON serialization
+  Map<String, dynamic> toJson() {
     return {
-      "FullName" : fullName,
-      "Email" : email,
-      "Phone" : phoneNo,
-      "Password" : password,
+      'uid': uid,
+      'email': email,
+      'username': username,
+      'fullName': fullName,
+      'registerDate': registerDate,
+      'location': location,
+      'image': image,
+      'online': online,
+      'lastChangedDate': lastChangedDate,
+      'lastLogInDate': lastLogInDate,
+      'lastSignOutDate': lastSignOutDate,
     };
   }
- */
+
+  // JSON deserialization
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      uid: json['uid'],
+      email: json['email'],
+      username: json['username'],
+      fullName: json['fullName'],
+      registerDate: json['registerDate'],
+      location: json['location'],
+      image: json['image'],
+      online: json['online'],
+      lastChangedDate: json['lastChangedDate'],
+      lastLogInDate: json['lastLogInDate'],
+      lastSignOutDate: json['lastSignOutDate'],
+    );
+  }
 }

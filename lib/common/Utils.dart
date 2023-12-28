@@ -75,6 +75,53 @@ class Utils {
     }
   }
 
+  static DateTime formatStringToDateTime(String dateString){
+    try {
+      // Assuming date format is "yyyy-MM-dd HH:mm:ss"
+      // Adjust the format based on your actual date format
+      final DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
+      final DateTime dateTime = format.parse(dateString);
+      return dateTime;
+    } catch (e) {
+      // Handle parsing errors
+      print("Error parsing date: $e");
+      return DateTime.now(); // Return current date as a fallback
+    }
+  }
+
+  static String formatDateTimeToString(DateTime dateTime) {
+    try {
+      // Assuming you want the date format "yyyy-MM-dd HH:mm:ss"
+      // Adjust the format based on your desired output
+      final DateFormat format = DateFormat("yyyy-MM-dd HH:mm:ss");
+      final String formattedString = format.format(dateTime);
+      return formattedString;
+    } catch (e) {
+      // Handle formatting errors
+      print("Error formatting date: $e");
+      return ""; // Return an empty string as a fallback
+    }
+  }
+
+  static String? validateEmail(String value) {
+    // Check if the email is empty
+    if (value.isEmpty) {
+      return 'Email cannot be empty';
+    }
+
+    // Use a regular expression to check if the email is valid
+    // This is a simple example, and you may want to use a more robust regex
+    // or a package like `email_validator` for more accurate email validation.
+    // Here, we are just checking for a basic email format.
+    RegExp emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
+    if (!emailRegExp.hasMatch(value)) {
+      return 'Enter a valid email address';
+    }
+
+    // If the email is valid, return null (no error message)
+    return null;
+  }
+
 
 
 //--------------------------------------
@@ -207,14 +254,13 @@ class UtilsFlutter {
   }
 
 //---------
-  static void MSG(String txt) {
+  static void MSG(String txt, context) {
     Fluttertoast.showToast(
         msg: txt,
-        toastLength: Toast.LENGTH_SHORT,
+        toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        textColor: Theme.of(context).textTheme.titleLarge?.color,
         //timeInSecForIos: 1
         );
   }
@@ -247,6 +293,21 @@ class UtilsFlutter {
     return TextFormField(
         controller: controller,
         validator: validacao,
+        keyboardType: TextInputType.text,
+        obscureText: obscure,
+        style: const TextStyle(color: Colors.black),
+        decoration: InputDecoration(
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+            labelText: label,
+            labelStyle: const TextStyle(fontSize: 20.0, color: Colors.black),
+            hintText: hint));
+  }
+
+  /// trying a more generic approach!
+  static Widget genericTextField(String label, String hint, bool obscure, controller, String? Function(String?)? validation) {
+    return TextFormField(
+        controller: controller,
+        validator: validation,
         keyboardType: TextInputType.text,
         obscureText: obscure,
         style: const TextStyle(color: Colors.black),
