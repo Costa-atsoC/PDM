@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import '../../../firebase_auth_implementation/models/post_model.dart';
-import '../../../firestore/user_firestore.dart';
 
 class modalPost extends StatelessWidget {
   final PostModel post;
@@ -86,69 +85,6 @@ class modalPost extends StatelessWidget {
                           )
                         ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  ListTile(
-                    title: Text(
-                      post.title,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Date: ${post.date}",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text("Description: ${post.description}",
-                            style: TextStyle(fontSize: 16)),
-                        Text("Free Seats: ${post.freeSeats}/${post.totalSeats}",
-                            style: TextStyle(fontSize: 16)),
-                        Text("UID: ${post.uid}",
-                            style: TextStyle(fontSize: 16)),
-                        Text("Location: ${post.location}",
-                            style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (currentUserUID == post.uid) ...[
-                        IconButton(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => {} //showMyForm(post.pid as int?),
-                            ),
-                        IconButton(
-                          color: Colors.red[300],
-                          icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            // Handle delete functionality
-                          },
-                        ),
-                      ] else ...[
-                        IconButton(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          icon: const Icon(Icons.thumb_up),
-                          onPressed: () {
-                            // Handle like functionality
-                          },
-                        ),
-                        IconButton(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          icon: const Icon(Icons.message),
-                          onPressed: () {
-                            // Handle message functionality
-                          },
-                        ),
-                      ],
-                      // Add more buttons as needed
                     ],
                   ),
                 ],

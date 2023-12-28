@@ -61,6 +61,7 @@ class windowHome extends StatefulWidget {
 // ignore: camel_case_types
 class State_windowHome extends State<windowHome> {
   late windowNotifications _windowNotifications;
+  late windowSearch _windowSearch;
 
   PlatformFile? pickedFile;
   UserFirestore userFirestore = UserFirestore();
@@ -173,6 +174,7 @@ class State_windowHome extends State<windowHome> {
     Utils.MSG_Debug("$className: initState");
     super.initState();
     _windowNotifications = windowNotifications(Ref_Window.Ref_Management);
+    _windowSearch = windowSearch(Ref_Window.Ref_Management);
     getData();
   }
 
@@ -478,42 +480,44 @@ class State_windowHome extends State<windowHome> {
     return PopScope(
         canPop: false,
         child: MaterialApp(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        home: Scaffold(
-          drawer: CustomDrawer(Ref_Window.Ref_Management),
-          appBar: AppBar(
-            title: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
-          ),
-          body: (_currentIndex == 0
-              ? _buildHomePage(postFirestore) // search
-              : (_currentIndex == 1
-                  ? _buildHomePage(postFirestore) // home
-                  : _windowNotifications // notifications
-              )),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search_rounded),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_filled),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                label: '',
-              ),
-            ],
-          ),
-        )));
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          home: Scaffold(
+            drawer: CustomDrawer(Ref_Window.Ref_Management),
+            appBar: AppBar(
+              title: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_TITLE_1", "")),
+            ),
+            body: (_currentIndex == 0
+                ? _windowSearch // search
+                : (_currentIndex == 1
+                    ? _buildHomePage(postFirestore) // home
+                    : _windowNotifications // notifications
+                )),
+            bottomNavigationBar: BottomNavigationBar(
+              backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+              currentIndex: _currentIndex,
+              onTap: (index) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search_rounded),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_filled),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications),
+                  label: '',
+                ),
+              ],
+            ),
+          )
+        )
+    );
   }
 }

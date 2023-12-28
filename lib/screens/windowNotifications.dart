@@ -8,7 +8,6 @@ import 'package:ubi/main.dart';
 import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
-import '../common/widgets/modals/modalSearch.dart';
 import '../firebase_auth_implementation/models/notification_model.dart';
 import '../firebase_auth_implementation/models/post_model.dart';
 import '../common/widgets/modals/modalPostViewer.dart';
