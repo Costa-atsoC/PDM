@@ -188,6 +188,21 @@ class State_windowSearch extends State<windowSearch> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       home: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back), // Back button icon
+            onPressed: () {
+              // Define the action when the back button is pressed
+              Navigator.of(context).pop(); // Navigator.pop() to go back
+            },
+          ),
+          title: Text(
+            Ref_Window.Ref_Management.SETTINGS
+                .Get("WND_SEARCH_TITLE_1", "Search"),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

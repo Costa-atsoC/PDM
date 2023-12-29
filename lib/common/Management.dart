@@ -477,7 +477,184 @@ class Management {
           SETTINGS.Add("WND_USER_PROFILE_TITLE_1", NOME_COMPLETO);
         }
       }
+    else if (LANGUAGE == 'DE') {
+      //------------------------------------------------------//
+      //------------------ HAUPTFENSTER DE -------------------//
+      //------------------------------------------------------//
+
+      //--------- HEADER
+      SETTINGS.Add("TITULO_APP", "rideWME");
+
+      //--------- BODY
+      SETTINGS.Add("WND_LOGIN_TITLE_1_TEXT", "Hallo! Willkommen bei RideWithME!");
+      SETTINGS.Add("WND_LOGIN_TITLE_1_TEXT_LOGGED", "Willkommen zurück, ");
+
+      SETTINGS.Add("WND_LOGIN_HINT_1", "E-Mail");
+      SETTINGS.Add("WND_LOGIN_HINT_1_SIZE", "20");
+      SETTINGS.Add("WND_LOGIN_HINT_1_WARNING", "Bitte geben Sie Ihre E-Mail ein");
+
+      SETTINGS.Add("WND_LOGIN_HINT_2", "Passwort");
+      SETTINGS.Add("WND_LOGIN_HINT_2_SIZE", "20");
+      SETTINGS.Add("WND_LOGIN_HINT_2_WARNING", "Bitte geben Sie Ihr Passwort ein");
+
+      SETTINGS.Add("WND_LOGIN_CHECKBOX_LABEL_1", "An mich erinnern");
+
+      SETTINGS.Add("WND_LOGIN_BTN_2", "Passwort\nvergessen?");
+
+      SETTINGS.Add("WND_LOGIN_BTN_1", "ANMELDEN");
+
+      SETTINGS.Add("TEXT_NEW_WINDOW_REGISTER", "Registrierungsseite");
+      SETTINGS.Add("TEXT_OF_BUTTON_REGISTER", "Kein Konto? Hier klicken");
+      SETTINGS.Add("TAMANHO_TEXTO_BTN_NEW_REGISTER", "20");
+
+      //--------- BACKGROUND
+      //---------- ENDE DES HAUPTFENSTERS
+
+      //------------------------------------------------------//
+      //--------------- REGISTRIERUNGSFENSTER DE --------------//
+      //------------------------------------------------------//
+      SETTINGS.Add("WND_REGISTER_TITLE_1", "RideWithME Konto erstellen");
+      SETTINGS.Add("WND_REGISTER_SUBTITLE_1", "Starten Sie jetzt Ihre Fahrgemeinschaftsreise!");
+
+      SETTINGS.Add("WND_REGISTER_OBSTEXT_1", "true");
+      SETTINGS.Add("WND_REGISTER_OBSTEXT_2", "true");
+
+      SETTINGS.Add("WND_REGISTER_HINT_1", "E-Mail");
+      SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_EMAIL_REGISTER", "20");
+
+      SETTINGS.Add("WND_REGISTER_HINT_2", "Benutzername");
+      SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_USERNAME_REGISTER", "20");
+
+      SETTINGS.Add("WND_REGISTER_HINT_3", "Passwort");
+      SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_PASSWORD_REGISTER", "20");
+
+      SETTINGS.Add("WND_REGISTER_HINT_4", "Passwort bestätigen");
+      SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_RPPASSWORD_REGISTER", "20");
+
+      SETTINGS.Add("WND_REGISTER_HINT_5", "Vollständiger Name");
+      SETTINGS.Add("TAMANHO_TEXTO_TEXTFIELD_FULLNAME", "20");
+
+      SETTINGS.Add("WND_REGISTER_BTN_1", "REGISTRIEREN");
+
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_TITLE_1", "Durch die Erstellung eines Kontos akzeptieren Sie die");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS", "Nutzungsbedingungen");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_TITLE_2", "Durch die Nutzung unseres Fahrgemeinschaftsdienstes stimmen Sie den folgenden Nutzungsbedingungen zu:");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_1", "1. Sie müssen mindestens 18 Jahre alt sein, um diese Anwendung zu verwenden.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_2", "2. Benutzer sind für ihre eigene Sicherheit während der Fahrten verantwortlich.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_3", "3. Respektieren Sie andere Benutzer und ihren persönlichen Raum.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_4", "4. Befolgen Sie die Verkehrs- und Sicherheitsvorschriften während der Fahrgemeinschaft.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_5", "5. Die Anwendung ist nicht für Streitigkeiten zwischen Benutzern verantwortlich.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_6", "6. Benutzer werden ermutigt, unangemessenes Verhalten zu melden.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_7", "7. Die Anwendung kann Standortdaten für das Matching von Fahrgemeinschaften verwenden.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_8", "8. Benutzer müssen die Identität ihrer Fahrgemeinschaftspartner überprüfen.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_9", "9. Die Anwendung kann Benutzer, die gegen diese Bedingungen verstoßen, suspendieren oder beenden.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_10", "10. Durch die Verwendung der Anwendung stimmen Sie unserer Datenschutzrichtlinie zu.");
+      SETTINGS.Add("WND_REGISTER_TERMS_CONDITIONS_BTN_1", "Schließen");
+      //--------- ENDE DES REGISTRIERUNGSFENSTERS
+
+      //------------------------------------------------------//
+      //------------------ STARTFENSTER DE --------------------//
+      //------------------------------------------------------//
+      SETTINGS.Add("WND_HOME_ANIMATION_DURATION_1", "200"); // in ms
+
+      SETTINGS.Add("WND_HOME_TITLE_1", "");
+      SETTINGS.Add("WND_HOME_TITLE_1_SIZE", "30");
+
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_SIZE", "25");
+      String? NUTZERNAME = await Get_SharedPreferences_STRING('NUTZERNAME');
+      if (NUTZERNAME != null) {
+        Utils.MSG_Debug(NUTZERNAME);
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NUTZERNAME);
+      }
+
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "STARTSEITE");
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "rideWME");
+
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2", "PROFIL");
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2_SIZE", "15");
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_2_ICON", "rideWME");
+
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3", "EINSTELLUNGEN");
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3_SIZE", "15");
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "rideWME");
+
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4", "FEEDBACK");
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4_SIZE", "15");
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_4_ICON", "rideWME");
+
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "ABMELDEN");
+      SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
+      SETTINGS.Add("WND_HOME_DRAWER_TITLE_5_ICON", "rideWME");
+      //--------- ENDE DER STARTFENSTER
+
+      //------------------------------------------------------//
+      //----------------- PROFILFENSTER DE ----------------------//
+      //------------------------------------------------------//
+
+      String? VOLLER_NAME = await Get_SharedPreferences_STRING('VOLLER_NAME');
+      if (VOLLER_NAME != null) {
+        (VOLLER_NAME);
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", VOLLER_NAME);
+        SETTINGS.Add("WND_USER_PROFILE_TITLE_1", VOLLER_NAME);
+      }
+
+      if (VOLLER_NAME != null) {
+        SETTINGS.Add("WND_USER_PROFILE_TITLE_1", VOLLER_NAME);
+      }
+
+      String? STANDORT = await Get_SharedPreferences_STRING('STANDORT');
+      SETTINGS.Add("WND_USER_PROFILE_LOCATION", STANDORT!);
+
+      String? BENUTZERNAME = await Get_SharedPreferences_STRING('BENUTZERNAME');
+      SETTINGS.Add("WND_USER_PROFILE_USERNAME", BENUTZERNAME!);
+
+      String? UID = await Get_SharedPreferences_STRING('UID');
+      SETTINGS.Add('WND_USER_PROFILE_UID', UID!);
+
+      SETTINGS.Add("WND_USER_PROFILE_MEM", "Mitglied seit: ");
+
+      String? REGISTRIERDATUM = await Get_SharedPreferences_STRING('REGISTRIERDATUM');
+      SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTRIERDATUM!);
+
+      String? LOGINDATUM = await Get_SharedPreferences_STRING('LOGINDATUM_FORMIERT');
+      SETTINGS.Add('WND_USER_PROFILE_LOGIN_DATE', LOGINDATUM!);
+
+      SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Zuletzt gesehen: ");
+
+      String? ABMELDEDATUM = await Get_SharedPreferences_STRING('ABMELDEDATUM');
+      SETTINGS.Add('WND_USER_PROFILE_SIGNOUT_DATE', ABMELDEDATUM!);
+
+      //------------------------------------------------------//
+      //-------------------- SEITENLEISTE DE --------------------------//
+      //------------------------------------------------------//
+
+      String? LETZTEDATUM = await Get_SharedPreferences_STRING('LETZTEDATUM');
+      SETTINGS.Add('WND_DRAWER_LASTDATE', LETZTEDATUM!);
+
+      String? E_MAIL = await Get_SharedPreferences_STRING('E_MAIL');
+      SETTINGS.Add('WND_DRAWER_EMAIL', E_MAIL!);
+
+      String? NAME = await Get_SharedPreferences_STRING('NAME');
+      SETTINGS.Add('WND_DRAWER_NAME', NAME!);
+
+      String? BILD = await Get_SharedPreferences_STRING('BILD');
+      SETTINGS.Add('WND_DRAWER_IMAGE', BILD!);
+
+      //--------- SYMBOLE
+
+      //------- STARTFUNKTIONEN
+
+      //------- STARTFUNKTIONEN
+      String? VOLLER_NAME2 = await Get_SharedPreferences_STRING('VOLLER_NAME');
+      if (VOLLER_NAME2 != null) {
+        (VOLLER_NAME2);
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", VOLLER_NAME2);
+        SETTINGS.Add("WND_USER_PROFILE_TITLE_1", VOLLER_NAME2);
+      }
     }
+
+  }
   //--------------------------------------
   String GetDefinicao(String key, String def) {
     return SETTINGS.Get(key, def);
