@@ -15,6 +15,8 @@ import '../firebase_auth_implementation/models/user_model.dart';
 import '../windowHome.dart';
 import '../common/Management.dart';
 import '../common/Utils.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -256,10 +258,10 @@ class Estado_windowRegister extends State<windowRegister> {
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$Nome_Classe: build");
-
-    return MaterialApp(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
+    return Consumer<ThemeProvider>(
+      builder: (context, provider, child) {
+        return MaterialApp(
+          theme: provider.currentTheme,
         home: Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -543,8 +545,13 @@ class Estado_windowRegister extends State<windowRegister> {
                   ),
                 ),
               ),
-            )));
+            ),
+        ),
+      );
+    },
+    );
   }
+
 
 //--------------
   void _signUp() async {

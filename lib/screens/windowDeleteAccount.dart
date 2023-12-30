@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubi/common/Management.dart';
 import 'package:ubi/screens/windowInitial.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 /*
 FALTA APAGAR TODOS OS POSTS DESTE USER, TODOS OS SEUS LIKES, etc...

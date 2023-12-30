@@ -1,3 +1,8 @@
+<<<<<<< Updated upstream
+=======
+import 'dart:core';
+
+>>>>>>> Stashed changes
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +17,8 @@ import '../firebase_auth_implementation/models/post_model.dart';
 import '../common/widgets/modals/modalPostViewer.dart';
 import '../firestore/post_firestore.dart';
 import '../firestore/user_firestore.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------

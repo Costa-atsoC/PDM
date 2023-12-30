@@ -14,12 +14,17 @@ import 'package:ubi/firestore/user_firestore.dart';
 import '../common/widgets/modals/modalUpdateUser.dart';
 
 import '../common/Management.dart';
+<<<<<<< Updated upstream
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
+=======
+>>>>>>> Stashed changes
 import '../common/widgets/modals/modalUpdatePost.dart';
 import '../firebase_auth_implementation/models/review_model.dart';
 import '../firestore/post_firestore.dart';
 import '../main.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -188,6 +193,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
 //--------------
   @override
   Widget build(BuildContext context) {
+    return Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
     Ref_Window.Ref_Management.Load();
     String? currentUserUID = FirebaseAuth.instance.currentUser?.uid;
 
@@ -204,8 +211,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
     }
 //Utils.MSG_Debug("$className: build");
     return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: provider.currentTheme,
       home: Scaffold(
         drawer: CustomDrawer(Ref_Window.Ref_Management),
         appBar: AppBar(
@@ -728,4 +734,4 @@ class State_windowUserProfile extends State<windowUserProfile> {
       ),
     );
   }
-}
+    );}}

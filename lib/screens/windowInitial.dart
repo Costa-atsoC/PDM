@@ -17,6 +17,8 @@ import '../firestore/firebase_storage.dart';
 import '../main.dart';
 import '../windowHome.dart';
 import 'windowRegister.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   Management Ref_Management;
@@ -100,9 +102,16 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(
             () {
               selected = !selected;
+<<<<<<< Updated upstream
               UtilsFlutter.MSG(Ref_Management.GetDefinicao(
                   "TEXT_NEW_WINDOW_REGISTER",
                   "Accao-TEXT_NEW_WINDOW_REGISTER ??"));
+=======
+              UtilsFlutter.MSG(
+                  Ref_Management.GetDefinicao("TEXT_NEW_WINDOW_REGISTER",
+                      "Accao-TEXT_NEW_WINDOW_REGISTER ??"),
+                  context);
+>>>>>>> Stashed changes
               NavigateTo_Window_Register(context);
             },
           );
@@ -265,52 +274,75 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      home: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("assets/BACKGROUND_MOUNTAIN.jpeg"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .scaffoldBackgroundColor
-                      .withOpacity(0.9)),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 0.0, right: 0.0),
-                    child: Center(
+    return Consumer<ThemeProvider>(
+      builder: (context, provider, child) {
+        return MaterialApp(
+          theme: provider.currentTheme,
+          home: Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            body: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/BACKGROUND_MOUNTAIN.jpeg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .scaffoldBackgroundColor
+                          .withOpacity(0.9)),
+                  child: Center(
+                    child: SingleChildScrollView(
                       child: Container(
-                        margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(140),
-                                ),
-                                child: Expanded(
-                                  child: _dataLoaded
-                                      ? (_hasImage && _isLoggedIn
-                                          ? SizedBox(
-                                              width: 200,
-                                              height: 200,
-                                              child: CircleAvatar(
-                                                radius: 100,
-                                                backgroundImage: NetworkImage(
-                                                    loadedImages[0]['url']),
+                        margin: const EdgeInsets.only(left: 0.0, right: 0.0),
+                        child: Center(
+                          child: Container(
+                            margin:
+                                const EdgeInsets.only(left: 20.0, right: 20.0),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(140),
+                                    ),
+                                    child: Expanded(
+                                      child: _dataLoaded
+                                          ? (_hasImage && _isLoggedIn
+                                              ? SizedBox(
+                                                  width: 200,
+                                                  height: 200,
+                                                  child: CircleAvatar(
+                                                    radius: 100,
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            loadedImages[0]
+                                                                ['url']),
+                                                  ),
+                                                )
+                                              : const SizedBox(
+                                                  width: 200,
+                                                  height: 200,
+                                                  child: CircleAvatar(
+                                                    radius: 100,
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    backgroundImage: AssetImage(
+                                                        "assets/LOGO.png"),
+                                                  ),
+                                                ))
+                                          : Center(
+                                              child: CircularProgressIndicator(
+                                                color: Theme.of(context)
+                                                    .iconTheme
+                                                    .color,
                                               ),
+<<<<<<< Updated upstream
                                             )
                                           : const SizedBox(
                                               width: 200,
@@ -358,24 +390,41 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-
-                              const SizedBox(
-                                height:
-                                    40, // meter isto responsivo e meter no management
-                              ),
-                              TextFormField(
-                                controller: _email,
-                                decoration: InputDecoration(
-                                  icon: Icon(Icons.alternate_email),
-                                  labelText: Ref_Management.SETTINGS
-                                      .Get("WND_LOGIN_HINT_1", "Email"),
-                                  labelStyle:
-                                      Theme.of(context).textTheme.titleSmall,
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width:
-                                            3.0), // Set the border color here
+=======
+                                            ),
+                                    ),
                                   ),
+                                  const SizedBox(
+                                    height:
+                                        20, // meter isto responsivo e meter no management
+                                  ),
+                                  // aqui meter um Text que diz welcome back caso o user tenha o seu UID nas preferencias
+                                  Text(
+                                    _dataLoaded && _isLoggedIn
+                                        ? "${Ref_Management.SETTINGS.Get("WND_LOGIN_TITLE_1_TEXT_LOGGED", "Welcome back, ")}${loadedUserProfiles[0].fullName}!"
+                                        : Ref_Management.SETTINGS.Get(
+                                            "WND_LOGIN_TITLE_1_TEXT",
+                                            "Greetings! Welcome to RideWithME!"),
+                                    style: TextStyle(
+                                      fontFamily: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.fontFamily,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge
+                                          ?.fontSize,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+>>>>>>> Stashed changes
+
+                                  const SizedBox(
+                                    height:
+                                        40, // meter isto responsivo e meter no management
+                                  ),
+<<<<<<< Updated upstream
                                   focusedBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.blueAccent,
@@ -406,26 +455,41 @@ class _MyHomePageState extends State<MyHomePage> {
                                   enabledBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
                                       width: 3.0,
+=======
+                                  TextFormField(
+                                    controller: _email,
+                                    decoration: InputDecoration(
+                                      icon: Icon(Icons.alternate_email),
+                                      labelText: Ref_Management.SETTINGS
+                                          .Get("WND_LOGIN_HINT_1", "Email"),
+                                      labelStyle: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
+                                      enabledBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width:
+                                                3.0), // Set the border color here
+                                      ),
+                                      focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.blueAccent,
+                                            width:
+                                                3.0), // Set the border color here
+                                      ),
+>>>>>>> Stashed changes
                                     ),
-                                  ),
-                                  focusedBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.blueAccent,
-                                      width: 3.0,
-                                    ),
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isPasswordHidden
-                                          ? Icons.visibility_off
-                                          : Icons.visibility,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isPasswordHidden = !_isPasswordHidden;
-                                      });
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                    validator: (String? value) {
+                                      if (value == null || value.isEmpty) {
+                                        return Ref_Management.SETTINGS.Get(
+                                            "WND_LOGIN_HINT_1_WARNING",
+                                            "Please enter your email");
+                                      }
+                                      return null;
                                     },
                                   ),
+<<<<<<< Updated upstream
                                 ),
                                 style: Theme.of(context).textTheme.titleSmall,
                                 validator: (String? value) {
@@ -455,39 +519,113 @@ class _MyHomePageState extends State<MyHomePage> {
                                               });
                                             }
                                           },
+=======
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  TextFormField(
+                                    controller: _pass,
+                                    obscureText: _isPasswordHidden,
+                                    decoration: InputDecoration(
+                                      icon: Icon(Icons.password_outlined),
+                                      labelText: Ref_Management.SETTINGS.Get(
+                                          "WND_LOGIN_HINT_2",
+                                          "WND_LOGIN_HINT_2 ??"),
+                                      labelStyle: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall,
+                                      enabledBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 3.0,
+>>>>>>> Stashed changes
                                         ),
+                                      ),
+                                      focusedBorder: const UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Colors.blueAccent,
+                                          width: 3.0,
+                                        ),
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          _isPasswordHidden
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _isPasswordHidden =
+                                                !_isPasswordHidden;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall,
+                                    validator: (String? value) {
+                                      if (value == null || value.isEmpty) {
+                                        return Ref_Management.SETTINGS.Get(
+                                            "WND_LOGIN_HINT_2_WARNING",
+                                            "Please enter your password 2");
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  Row(children: [
+                                    Row(
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Checkbox(
+                                              tristate: false,
+                                              value: isChecked,
+                                              activeColor: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                              // Set the color you want
+                                              onChanged: (bool? value) {
+                                                if (value != null) {
+                                                  setState(() {
+                                                    isChecked = value;
+                                                  });
+                                                }
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        Text(Ref_Management.SETTINGS.Get(
+                                            "WND_LOGIN_CHECKBOX_LABEL_1",
+                                            "Remember Me"))
                                       ],
                                     ),
-                                    Text(Ref_Management.SETTINGS.Get(
-                                        "WND_LOGIN_CHECKBOX_LABEL_1",
-                                        "Remember Me"))
-                                  ],
-                                ),
-                                const Spacer(),
-                                Create_Button_Forgot_Password(),
-                              ]),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16.0),
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    _signIn();
-                                    if (_formKey.currentState!.validate()) {
-                                    } else {
-                                      Utils.MSG_Debug("ERROR");
-                                    }
-                                  },
-                                  child: Text(
-                                      Ref_Management.SETTINGS.Get(
-                                          "WND_LOGIN_BTN_1",
-                                          "WND_LOGIN_BTN_1 ??"),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge),
-                                ),
+                                    const Spacer(),
+                                    Create_Button_Forgot_Password(),
+                                  ]),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16.0),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        _signIn();
+                                        if (_formKey.currentState!.validate()) {
+                                        } else {
+                                          Utils.MSG_Debug("ERROR");
+                                        }
+                                      },
+                                      child: Text(
+                                          Ref_Management.SETTINGS.Get(
+                                              "WND_LOGIN_BTN_1",
+                                              "WND_LOGIN_BTN_1 ??"),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleLarge),
+                                    ),
+                                  ),
+                                  Create_Button_New_Window_Register(),
+                                ],
                               ),
-                              Create_Button_New_Window_Register(),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -497,8 +635,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -516,7 +654,42 @@ class _MyHomePageState extends State<MyHomePage> {
       Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
       Utils.MSG_Debug("${user!.uid} is logged in");
 
+<<<<<<< Updated upstream
       UserModel? userData = await userFirestore.getUserData(user.uid);
+=======
+      /// now, instead of saving the user and updating him this way, i've created a function that gets his data
+      /// in a json format (mandatory) and updates him through a function (gen. function) given the online attribute
+      /// and the value
+      // UserModel? userData = await userFirestore.getUserData(user.uid); old method
+      String? userDataJson = await userFirestore.getUserDataJson(user.uid);
+      Ref_Management.Save_Shared_Preferences_STRING(
+          "USER_DATA_JSON", userDataJson!);
+      String? userDataJsonSharedPrefs =
+          await Ref_Management.Get_SharedPreferences_STRING("USER_DATA_JSON");
+      Utils.MSG_Debug(userDataJsonSharedPrefs!);
+
+      if (userDataJson != null) {
+        UserModel? userData = UserModel.fromJson(jsonDecode(userDataJson));
+        Utils.MSG_Debug(userDataJson);
+
+        if (userData != null) {
+          // Use userModel as needed
+          Utils.MSG_Debug("User ID: ${userData.uid}");
+          Utils.MSG_Debug("Username: ${userData.username}");
+
+          userFirestore.updateUserAttribute(user.uid, "online", "1");
+          userFirestore.updateUserAttribute(
+              user.uid, "lastLogInDate", currentTime);
+        } else {
+          Utils.MSG_Debug("Failed to convert JSON to UserModel");
+        }
+      } else {
+        Utils.MSG_Debug("User data JSON is null");
+      }
+
+      /// Old method to update the user
+      /*
+>>>>>>> Stashed changes
       UserModel userUpdated = UserModel(
         uid: userData!.uid,
         email: userData.email,

@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 
 //----------------------------------------------------------------

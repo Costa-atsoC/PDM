@@ -4,6 +4,8 @@ import 'package:ubi/screens/windowInitial.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class WindowChangePassword extends StatefulWidget {
   Management Ref_Management;
