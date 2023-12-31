@@ -309,6 +309,19 @@ class State_windowSettings extends State<windowSettings> {
                   Navigator.pop(context);
                 },
               ),
+              ListTile(
+                title: Text('Deutsch'),
+                onTap: () {
+                  setState(() {
+                    // Define a linguagem como inglês e armazena nas preferências compartilhadas
+                    widget.selectedLanguage = 'Deutsch';
+                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
+                        "LANGUAGE", 'DE');
+                    Ref_Window.Ref_Management.Load();
+                  });
+                  Navigator.pop(context);
+                },
+              ),
             ],
           ),
         );

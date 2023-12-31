@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -102,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
               selected = !selected;
               UtilsFlutter.MSG(Ref_Management.GetDefinicao(
                   "TEXT_NEW_WINDOW_REGISTER",
-                  "Accao-TEXT_NEW_WINDOW_REGISTER ??"));
+                  "Accao-TEXT_NEW_WINDOW_REGISTER ??"), context);
               NavigateTo_Window_Register(context);
             },
           );
@@ -166,7 +167,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   }),
                 );
               },
-              child: Text(Ref_Management.GetDefinicao("WND_LOGIN_BTN_2", "Forgot Password?"),
+              child: Text(
+                Ref_Management.GetDefinicao(
+                    "WND_LOGIN_BTN_2", "Forgot Password?"),
                 style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
@@ -339,9 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               // aqui meter um Text que diz welcome back caso o user tenha o seu UID nas preferencias
                               Text(
                                 _dataLoaded && _isLoggedIn
-                                    ? "${Ref_Management.SETTINGS.Get(
-                                    "WND_LOGIN_TITLE_1_TEXT_LOGGED",
-                                    "Welcome back, ")}${loadedUserProfiles[0].fullName}!"
+                                    ? "${Ref_Management.SETTINGS.Get("WND_LOGIN_TITLE_1_TEXT_LOGGED", "Welcome back, ")}${loadedUserProfiles[0].fullName}!"
                                     : Ref_Management.SETTINGS.Get(
                                         "WND_LOGIN_TITLE_1_TEXT",
                                         "Greetings! Welcome to RideWithME!"),
@@ -350,7 +351,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       .textTheme
                                       .titleLarge
                                       ?.fontFamily,
-                                    fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.bold,
                                   fontSize: Theme.of(context)
                                       .textTheme
                                       .titleLarge
@@ -386,8 +387,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: Theme.of(context).textTheme.titleSmall,
                                 validator: (String? value) {
                                   if (value == null || value.isEmpty) {
-                                    return Ref_Management.SETTINGS
-                                        .Get("WND_LOGIN_HINT_1_WARNING", "Please enter your email");
+                                    return Ref_Management.SETTINGS.Get(
+                                        "WND_LOGIN_HINT_1_WARNING",
+                                        "Please enter your email");
                                   }
                                   return null;
                                 },
@@ -400,7 +402,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 obscureText: _isPasswordHidden,
                                 decoration: InputDecoration(
                                   icon: Icon(Icons.password_outlined),
-                                  labelText: Ref_Management.SETTINGS.Get("WND_LOGIN_HINT_2","WND_LOGIN_HINT_2 ??"),
+                                  labelText: Ref_Management.SETTINGS.Get(
+                                      "WND_LOGIN_HINT_2",
+                                      "WND_LOGIN_HINT_2 ??"),
                                   labelStyle:
                                       Theme.of(context).textTheme.titleSmall,
                                   enabledBorder: const UnderlineInputBorder(
@@ -430,7 +434,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: Theme.of(context).textTheme.titleSmall,
                                 validator: (String? value) {
                                   if (value == null || value.isEmpty) {
-                                    return Ref_Management.SETTINGS.Get("WND_LOGIN_HINT_2_WARNING", "Please enter your password 2");
+                                    return Ref_Management.SETTINGS.Get(
+                                        "WND_LOGIN_HINT_2_WARNING",
+                                        "Please enter your password 2");
                                   }
                                   return null;
                                 },
@@ -514,11 +520,44 @@ class _MyHomePageState extends State<MyHomePage> {
     try {
       User? user = await _auth.signInWithEmailAndPassword(email, password);
       Ref_Management.Save_Shared_Preferences_STRING("UID", user!.uid);
+      Ref_Management.Save_Shared_Preferences_STRING("EMAIL", email);
+
+      /// always handy saving the user id
       Utils.MSG_Debug("${user!.uid} is logged in");
 
-      UserModel? userData = await userFirestore.getUserData(user.uid);
+      /// now, instead of saving the user and updating him this way, i've created a function that gets his data
+      /// in a json format (mandatory) and updates him through a function (gen. function) given the online attribute
+      /// and the value
+      // UserModel? userData = await userFirestore.getUserData(user.uid); old method
+      String? userDataJson = await userFirestore.getUserDataJson(user.uid);
+      Ref_Management.Save_Shared_Preferences_STRING(
+          "USER_DATA_JSON", userDataJson!);
+      String? userDataJsonSharedPrefs = await Ref_Management.Get_SharedPreferences_STRING("USER_DATA_JSON");
+      Utils.MSG_Debug(userDataJsonSharedPrefs!);
+
+      if (userDataJson != null) {
+        UserModel? userData = UserModel.fromJson(jsonDecode(userDataJson));
+        Utils.MSG_Debug(userDataJson);
+
+        if (userData != null) {
+          // Use userModel as needed
+          Utils.MSG_Debug("User ID: ${userData.uid}");
+          Utils.MSG_Debug("Username: ${userData.username}");
+
+          userFirestore.updateUserAttribute(user.uid, "online", "1");
+          userFirestore.updateUserAttribute(
+              user.uid, "lastLogInDate", currentTime);
+        } else {
+          Utils.MSG_Debug("Failed to convert JSON to UserModel");
+        }
+      } else {
+        Utils.MSG_Debug("User data JSON is null");
+      }
+
+      /// Old method to update the user
+      /*
       UserModel userUpdated = UserModel(
-        uid: userData!.uid,
+        uid: userData.uid,
         email: userData.email,
         username: userData.username,
         fullName: userData.fullName,
@@ -532,20 +571,25 @@ class _MyHomePageState extends State<MyHomePage> {
       );
       userFirestore.updateUserData(userUpdated);
 
+       */
+
       if (isChecked!) {
-        if (Ref_Management.Get_SharedPreferences_STRING("REMEMBER_ME_DATE") == null) {
-          Ref_Management.Save_Shared_Preferences_STRING("REMEMBER_ME_DATE",Utils.currentTimeUser());
-          Ref_Management.Save_Shared_Preferences_STRING("REMEMBER_ME_STATUS","1");
+        if (await Ref_Management.Get_SharedPreferences_STRING(
+                "REMEMBER_ME_DATE") ==
+            "??") {
+          Ref_Management.Save_Shared_Preferences_STRING(
+              "REMEMBER_ME_DATE", Utils.currentTimeUser());
+          Ref_Management.Save_Shared_Preferences_STRING(
+              "REMEMBER_ME_STATUS", "1");
         } else {
-          Ref_Management.Save_Shared_Preferences_STRING("REMEMBER_ME_STATUS","1");
+          Ref_Management.Save_Shared_Preferences_STRING(
+              "REMEMBER_ME_STATUS", "1");
         }
       } else {
-        Ref_Management
-            .Save_Shared_Preferences_STRING(
-            "REMEMBER_ME_STATUS",
-            "0");
+        Ref_Management.Save_Shared_Preferences_STRING(
+            "REMEMBER_ME_STATUS", "0");
       }
-
+      /*
       Ref_Management.Save_Shared_Preferences_STRING("NAME", userData.fullName);
       Ref_Management.Save_Shared_Preferences_STRING("EMAIL", userData.email);
       Ref_Management.Save_Shared_Preferences_STRING("USERNAME", userData.username);
@@ -554,12 +598,11 @@ class _MyHomePageState extends State<MyHomePage> {
       Ref_Management.Save_Shared_Preferences_STRING("LASTDATE", userData.lastChangedDate);
       Ref_Management.Save_Shared_Preferences_STRING("IMAGE", userData.image);
       Ref_Management.Save_Shared_Preferences_STRING("LOGINDATE", userData.lastLogInDate);
-
       Ref_Management.Save_Shared_Preferences_STRING("LOGINDATE_FORMATED", Utils.currentTimeUser());
       Ref_Management.Save_Shared_Preferences_STRING("SIGNOUTDATE", userData.lastSignOutDate);
+       */
 
-      Ref_Management.saveNumAccess(
-          "NUM_ACCESS_LOGIN"); // guardar o numero de vezes que dá login
+      Ref_Management.saveNumAccess("NUM_ACCESS_LOGIN"); // guardar o numero de vezes que dá login
 
       //Utils.MSG_Debug("User is signed");
       // saving the email! in the shared_preferences
@@ -571,7 +614,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {
       // In case the user puts a wrong email or password
       Utils.MSG_Debug("Sign-in failed: $e");
-      UtilsFlutter.MSG('Invalid email or password');
+      UtilsFlutter.MSG('Invalid email or password', context);
     }
   }
 }

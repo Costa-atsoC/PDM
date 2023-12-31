@@ -147,6 +147,58 @@ class PostFirestore {
     return userPosts;
   }
 
+  ///----------- USER POSTS ORDERED BY DATE
+  Future<List<PostModel>> getUserPostsOrderedByDate(String uid) async {
+    List<PostModel> userPosts = [];
+
+    try {
+      DocumentSnapshot<Map<String, dynamic>> userDoc =
+      await _firestore.collection('users').doc(uid).get();
+      Utils.MSG_Debug('After fetching user document');
+
+      if (userDoc.exists) {
+        print('Before fetching posts');
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+            .collection('users')
+            .doc(uid)
+            .collection('posts')
+            .orderBy('date', descending: true) // Order by date in descending order (newest to oldest)
+            .get();
+        print('After fetching posts');
+
+        for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshot.docs) {
+          var data = doc.data();
+          PostModel post = PostModel(
+            uid: data['uid'],
+            userFullName: data['userFullName'],
+            username: data['username'],
+            pid: data['pid'],
+            likes: data['likes'],
+            title: data['title'],
+            description: data['description'],
+            date: data['date'],
+            totalSeats: data['totalSeats'],
+            freeSeats: data['freeSeats'],
+            location: data['location'],
+            startLocation: data['startLocation'],
+            endLocation: data['endLocation'],
+            registerDate: data['registerDate'],
+            lastChangedDate: data['lastChangedDate'],
+          );
+          userPosts.add(post);
+        }
+      } else {
+        Utils.MSG_Debug("User with UID $uid not found");
+      }
+    } catch (error) {
+      Utils.MSG_Debug('Error getting user posts: $error');
+      print('Error getting user posts: $error');
+    }
+
+    return userPosts;
+  }
+
+
   Future<PostModel?> getPostByPid(String uid, String pid) async {
     try {
       // Fetch the specific post document
@@ -366,6 +418,8 @@ class PostFirestore {
           'to_uid' : post.uid,
           'pid': post.pid,
           'from_uid': uid,
+          //'fromName': "test",
+          //'fromUsername': "test",
           'type': type,
           // 0 for user carpool request, the 1 is for accepting request, the 2 is for liking!
           'seen': 0,
@@ -380,8 +434,9 @@ class PostFirestore {
       return -1;
     }
   }
+  Future<String> getUserNotificationsJson(String uid) async {
+    Utils.MSG_Debug("ERROR GETTING THE USERNOTIFICATIONSJSON");
 
-  Future<List<NotificationModel>> getUserNotifications(String uid) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
           .collection('notifications')
@@ -389,9 +444,12 @@ class PostFirestore {
           .collection('user_notifications')
           .get();
 
-      return querySnapshot.docs.map((doc) {
+      List<NotificationModel> notifications = [];
+
+      querySnapshot.docs.forEach((doc) {
         Map<String, dynamic> data = doc.data()!;
-        return NotificationModel(
+
+        NotificationModel notification = NotificationModel(
           pid: data['pid'],
           toUid: data['to_uid'],
           fromUid: data['from_uid'],
@@ -399,12 +457,23 @@ class PostFirestore {
           seen: data['seen'],
           date: data['date'],
         );
-      }).toList();
+
+        notifications.add(notification);
+      });
+
+      // Convert the list of notifications to a JSON string
+      List<Map<String, dynamic>> notificationsJsonList = notifications.map((notification) => notification.toJson()).toList();
+      String notificationsJson = jsonEncode(notificationsJsonList);
+
+      Utils.MSG_Debug(notificationsJson);
+
+      return notificationsJson;
     } catch (error) {
       Utils.MSG_Debug('Error fetching user notifications: $error');
-      return [];
+      return '[]'; // Return an empty array as a JSON string in case of an error
     }
   }
+
 
 // disposable
   Future<List<UserModel>> getUsersWhoLikedPost(String pid) async {

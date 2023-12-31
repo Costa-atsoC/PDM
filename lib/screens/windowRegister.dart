@@ -132,7 +132,7 @@ class Estado_windowRegister extends State<windowRegister> {
             Ref_Window.Ref_Management.GetDefinicao(
               "WND_REGISTER_TERMS_CONDITIONS",
               "Terms & Conditions",
-            ),
+            ), context,
           );
 
           // Show terms and conditions dialog
@@ -508,7 +508,7 @@ class Estado_windowRegister extends State<windowRegister> {
                                               .elevatedButtonTheme
                                               .style,
                                           onPressed: () {
-                                            UtilsFlutter.MSG('HOME');
+                                            UtilsFlutter.MSG('HOME', context);
                                             if (_formKey.currentState!
                                                 .validate()) {
                                               //Utils.MSG_Debug("SIGNEDUP");

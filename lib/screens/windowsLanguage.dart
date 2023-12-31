@@ -13,7 +13,8 @@ class WindowLanguage extends StatefulWidget {
 }
 
 class _WindowLanguageState extends State<WindowLanguage> {
-  String? _selectedLanguage;
+
+  String? _selectedLanguage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +38,7 @@ class _WindowLanguageState extends State<WindowLanguage> {
             children: [
               buildLanguageOption('Portuguese', 'PT'),
               buildLanguageOption('English', 'EN'),
+              buildLanguageOption('Deutsch', 'DE')
               // Add more language options as needed
             ],
           ),
@@ -46,6 +48,8 @@ class _WindowLanguageState extends State<WindowLanguage> {
   }
 
   RadioListTile<String> buildLanguageOption(String language, String languageCode) {
+    bool isSelected = _selectedLanguage == languageCode;
+
     return RadioListTile<String>(
       title: Text(language),
       value: languageCode,
@@ -60,7 +64,10 @@ class _WindowLanguageState extends State<WindowLanguage> {
         Utils.MSG_Debug(value!);
         Navigator.pop(context);
       },
-      controlAffinity: ListTileControlAffinity.trailing, // Aligns the radio button to the right
+      controlAffinity: ListTileControlAffinity.trailing,
+      activeColor: Theme.of(context).colorScheme.primaryContainer, // Color when selected
+      selected: isSelected, // Whether the current option is selected
     );
   }
+
 }
