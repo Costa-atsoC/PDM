@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ubi/screens/windowInitial.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
+import '../common/theme_provider.dart';
 
 class WindowChangePassword extends StatefulWidget {
   Management Ref_Management;
@@ -11,7 +13,8 @@ class WindowChangePassword extends StatefulWidget {
   WindowChangePassword(this.Ref_Management);
 
   @override
-  State<WindowChangePassword> createState() => _WindowChangePasswordState(Ref_Management);
+  State<WindowChangePassword> createState() =>
+      _WindowChangePasswordState(Ref_Management);
 }
 
 class _WindowChangePasswordState extends State<WindowChangePassword> {
@@ -38,12 +41,14 @@ class _WindowChangePasswordState extends State<WindowChangePassword> {
   }
 
   Future navigateToWindowHome(context) async {
-    MyHomePage win = MyHomePage(Ref_Window.Ref_Management, Ref_Window.Ref_Management.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
+    MyHomePage win = MyHomePage(Ref_Window.Ref_Management,
+        Ref_Window.Ref_Management.GetDefinicao("TITULO_APP", "TITULO_APP ??"));
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
-  void changePassword({required String oldPassword, required String newPassword}) async {
+  void changePassword(
+      {required String oldPassword, required String newPassword}) async {
     final cred = EmailAuthProvider.credential(
       email: currentUser.email!,
       password: oldPassword,
@@ -59,6 +64,7 @@ class _WindowChangePasswordState extends State<WindowChangePassword> {
       print("Error updating password: $error");
     }
   }
+
 /*
   Future NavigateTo_Window_Login(context) async {
     windowInitial win = new windowInitial(Ref_Management);
@@ -69,50 +75,53 @@ class _WindowChangePasswordState extends State<WindowChangePassword> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Change Password & Logout"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: oldPasswordController,
-              decoration: const InputDecoration(
-                isDense: true,
-                alignLabelWithHint: true,
-                labelText: "Old Password",
-                hintText: "* * * * * *",
-                border: OutlineInputBorder(),
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
+      return MaterialApp(
+          theme: provider.currentTheme,
+          home: Scaffold(
+            appBar: AppBar(
+              title: const Text("Change Password & Logout"),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: oldPasswordController,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      alignLabelWithHint: true,
+                      labelText: "Old Password",
+                      hintText: "* * * * * *",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    controller: newPasswordController,
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      labelText: "New Password",
+                      hintText: "* * * * * *",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      changePassword(
+                        oldPassword: oldPasswordController.text,
+                        newPassword: newPasswordController.text,
+                      );
+                      Utils.MSG_Debug("TESTE EMAIL LOGGOUT CHANGE PASSWORD");
+                      navigateToWindowHome(context);
+                    },
+                    child: const Text("Change Password and Logout"),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: newPasswordController,
-              decoration: const InputDecoration(
-                isDense: true,
-                labelText: "New Password",
-                hintText: "* * * * * *",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: ()  {
-                changePassword(
-                  oldPassword: oldPasswordController.text,
-                  newPassword: newPasswordController.text,
-                );
-                Utils.MSG_Debug("TESTE EMAIL LOGGOUT CHANGE PASSWORD");
-                navigateToWindowHome(context);
-              },
-              child: const Text("Change Password and Logout"),
-            ),
-          ],
-        ),
-      ),
-    );
+          ));
+    });
   }
 }
-

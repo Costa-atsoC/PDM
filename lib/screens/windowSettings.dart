@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:ubi/screens/windowAppearance.dart';
 import 'package:ubi/screens/windowDeleteAccount.dart';
 import 'package:ubi/screens/windowsLanguage.dart';
+import '../common/theme_provider.dart';
 import 'windowChangePassword.dart';
 // import 'windowLanguage.dart';
 
@@ -123,95 +126,100 @@ class State_windowSettings extends State<windowSettings> {
   @override
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$className: build");
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        home: Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back,
-              color: Theme.of(context).colorScheme.secondary),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: Text(className, style: TextStyle(fontSize: 22)),
-        centerTitle: true,
-      ),
-      body: Container(
-          padding: const EdgeInsets.all(10),
-          child: ListView(
-            children: [
-              SizedBox(height: 40),
-              Row(
-                children: [
-                  Icon(
-                    Icons.person,
-                  ),
-                  SizedBox(width: 10),
-                  Text("Account",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                ],
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
+      return MaterialApp(
+          theme: provider.currentTheme,
+          home: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.secondary),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-              Divider(height: 20, thickness: 1),
-              SizedBox(height: 20),
-              buildAccountOption(context, "Change Password",
-                  actions: ['Yes', 'No']),
-              buildAccountOption(context, "Appearance",
-                  actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
-              buildAccountOption(context, "Language", actions: []),
-              buildAccountOption(context, "Delete Account", actions: []),
-              buildAccountOption(context, "Delete Cache", actions: []),
-              SizedBox(height: 40),
-              Row(
-                children: [
-                  Icon(Icons.volume_up_outlined),
-                  SizedBox(width: 10),
-                  Text("Notifications",
-                      style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
-                ],
-              ),
-              Divider(height: 20, thickness: 1),
-              SizedBox(height: 10),
-              buildNotificationOption(
-                  "Notifications", valNotify1, onChangeFunction1),
-              buildNotificationOption(
-                  "Notifications", valNotify2, onChangeFunction2),
-              buildNotificationOption(
-                  "Notifications", valNotify3, onChangeFunction3),
-              Divider(height: 20, thickness: 1),
-              Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10), // Add a bottom margin here
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                      side: BorderSide(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                      ),
+              title: Text(className, style: TextStyle(fontSize: 22)),
+              centerTitle: true,
+            ),
+            body: Container(
+                padding: const EdgeInsets.all(10),
+                child: ListView(
+                  children: [
+                    SizedBox(height: 40),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                        ),
+                        SizedBox(width: 10),
+                        Text("Account",
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold))
+                      ],
                     ),
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    child: ListTile(
-                      title: Align(
-                        child: Text(
-                          Ref_Window.Ref_Management.SETTINGS
-                              .Get("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleLarge
-                              ?.copyWith(),
+                    Divider(height: 20, thickness: 1),
+                    SizedBox(height: 20),
+                    buildAccountOption(context, "Change Password",
+                        actions: ['Yes', 'No']),
+                    buildAccountOption(context, "Appearance",
+                        actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
+                    buildAccountOption(context, "Language", actions: []),
+                    buildAccountOption(context, "Delete Account", actions: []),
+                    buildAccountOption(context, "Delete Cache", actions: []),
+                    SizedBox(height: 40),
+                    Row(
+                      children: [
+                        Icon(Icons.volume_up_outlined),
+                        SizedBox(width: 10),
+                        Text("Notifications",
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                    Divider(height: 20, thickness: 1),
+                    SizedBox(height: 10),
+                    buildNotificationOption(
+                        "Notifications", valNotify1, onChangeFunction1),
+                    buildNotificationOption(
+                        "Notifications", valNotify2, onChangeFunction2),
+                    buildNotificationOption(
+                        "Notifications", valNotify3, onChangeFunction3),
+                    Divider(height: 20, thickness: 1),
+                    Center(
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 10),
+                        // Add a bottom margin here
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                            side: BorderSide(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                            ),
+                          ),
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          child: ListTile(
+                              title: Align(
+                                child: Text(
+                                  Ref_Window.Ref_Management.SETTINGS.Get(
+                                      "WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.copyWith(),
+                                ),
+                              ),
+                              onTap: () {}),
                         ),
                       ),
-                      onTap: () {}
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )),
-    ));
+                    )
+                  ],
+                )),
+          ));
+    });
   }
 
   Padding buildNotificationOption(
@@ -341,9 +349,7 @@ class State_windowSettings extends State<windowSettings> {
               ListTile(
                 title: Text('Delete'),
                 onTap: () {
-                  setState(() {
-
-                  });
+                  setState(() {});
                   Navigator.pop(context);
                 },
               ),
@@ -392,11 +398,15 @@ class State_windowSettings extends State<windowSettings> {
                 builder: (context) =>
                     WindowLanguage(Ref_Window.Ref_Management)),
           );
-        }
-        else if (title == 'Delete Cache'){
-
-        }
-        else {
+        } else if (title == 'Appearance') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    WindowAppearance(Ref_Window.Ref_Management)),
+          );
+        } else if (title == 'Delete Cache') {
+        } else {
           // Se houver outras opções de conta
           showDialog(
             context: context,
@@ -421,7 +431,7 @@ class State_windowSettings extends State<windowSettings> {
                 color: Colors.grey[600],
               ),
             ),
-            Icon(
+            const Icon(
               Icons.arrow_forward_ios,
               color: Colors.grey,
             ),

@@ -5,11 +5,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:ubi/firebase_auth_implementation/firebase_auth_services.dart';
 import 'package:ubi/screens/windowInitial.dart';
 
 import '../../firestore/user_firestore.dart';
 import '../common/appTheme.dart';
+import '../common/theme_provider.dart';
 import '../common/widgets/RWMButtons.dart';
 import '../firebase_auth_implementation/models/user_model.dart';
 import '../windowHome.dart';
@@ -257,9 +259,10 @@ class Estado_windowRegister extends State<windowRegister> {
   Widget build(BuildContext context) {
     Utils.MSG_Debug("$Nome_Classe: build");
 
-    return MaterialApp(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
+    return Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
+          return MaterialApp(
+              theme: provider.currentTheme,
         home: Scaffold(
             appBar: AppBar(
               leading: IconButton(
@@ -543,7 +546,7 @@ class Estado_windowRegister extends State<windowRegister> {
                   ),
                 ),
               ),
-            )));
+            )));});
   }
 
 //--------------

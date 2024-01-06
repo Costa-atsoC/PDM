@@ -3,12 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowFeedback.dart';
 import 'package:ubi/screens/windowFullPost.dart';
 import 'package:ubi/screens/windowNotifications.dart';
 import 'common/Drawer.dart';
+import 'common/theme_provider.dart';
 import 'common/widgets/modals/modalNewPost.dart';
 import 'common/widgets/modals/modalUpdatePost.dart';
 
@@ -206,11 +208,11 @@ class State_windowHome extends State<windowHome> {
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
     PostFirestore postManager = PostFirestore();
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
     return PopScope(
         canPop: false,
         child: MaterialApp(
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+            theme: provider.currentTheme,
             home: Scaffold(
               drawer: CustomDrawer(Ref_Window.Ref_Management),
               appBar: AppBar(
@@ -655,5 +657,6 @@ class State_windowHome extends State<windowHome> {
                 ],
               ),
             )));
-  }
+  });
+}
 }

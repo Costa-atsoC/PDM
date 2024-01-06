@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ubi/common/appTheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:ubi/firestore/post_firestore.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:ubi/screens/windowInitial.dart';
 import 'package:ubi/windowHome.dart';
@@ -13,9 +11,10 @@ import 'firebase_auth_implementation/models/user_model.dart';
 import 'firebase_options.dart';
 import 'common/Management.dart';
 import 'common/Utils.dart';
+import 'common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 final UserFirestore userFirestore = UserFirestore();
-final PostFirestore postFirestore = PostFirestore();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +24,7 @@ void main() async {
   );
 
   final notificationSettings =
-      await FirebaseMessaging.instance.requestPermission(provisional: true);
+  await FirebaseMessaging.instance.requestPermission(provisional: true);
 
   try {
     FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
@@ -49,24 +48,27 @@ Future<bool> checkInternetConnection() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
-  @override
-  Widget build(BuildContext context) {
-    Management appManagement = Management("APP-RideWME");
-    appManagement.Load();
 
-    return FutureBuilder<bool>(
-      future: checkInternetConnection(),
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // Simulate a delay of 2 seconds (adjust as needed)
-          return FutureBuilder<void>(
-            future: Future.delayed(Duration(seconds: 20)),
-            builder: (BuildContext context, AsyncSnapshot<void> delaySnapshot) {
-              if (delaySnapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
+          Management appManagement = Management("APP-RideWME");
+          appManagement.Load();
+
+          return FutureBuilder<bool>(
+            future: checkInternetConnection(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const MaterialApp(
+                  home: CircularProgressIndicator(),
+                );
               } else {
                 appManagement.Load();
-                // Continue with your logic after the delay
+
                 Widget initialScreen = MyHomePage(
                   appManagement,
                   appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"),
@@ -74,8 +76,7 @@ class MyApp extends StatelessWidget {
 
                 return MaterialApp(
                   title: 'RideWME',
-                  theme: AppTheme.lightTheme,
-                  darkTheme: AppTheme.darkTheme,
+                  theme: provider.currentTheme,
                   home: MyAppWrapper(
                     initialScreen: initialScreen,
                     appManagement: appManagement,
@@ -84,25 +85,8 @@ class MyApp extends StatelessWidget {
               }
             },
           );
-        } else {
-          appManagement.Load();
-
-          Widget initialScreen = MyHomePage(
-            appManagement,
-            appManagement.GetDefinicao("TITULO_APP", "TITULO_APP ??"),
-          );
-
-          return MaterialApp(
-            title: 'RideWME',
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            home: MyAppWrapper(
-              initialScreen: initialScreen,
-              appManagement: appManagement,
-            ),
-          );
-        }
-      },
+        },
+      ),
     );
   }
 }
@@ -130,14 +114,14 @@ class _MyAppWrapperState extends State<MyAppWrapper>
     Future.microtask(() async {
       // Check if currentUser is not null before accessing uid
       if (FirebaseAuth.instance.currentUser != null) {
-        UserModel? user = await userFirestore.getUserData(FirebaseAuth.instance.currentUser!.uid);
+        UserModel? user = await userFirestore
+            .getUserData(FirebaseAuth.instance.currentUser!.uid);
         if (user != null) {
           userFirestore.updateUserOnline(user, true);
         }
       }
     });
   }
-
 
   @override
   void dispose() {

@@ -155,30 +155,6 @@ class Management {
           SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", USER_NAME);
         }
 
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "HOME");
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
-        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "RideWME");
-
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2", "PROFILE");
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2_SIZE", "15");
-        SETTINGS.Add("WND_HOME_DRAWER_TITLE_2_ICON", "RideWME");
-
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3", "SETTINGS");
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3_SIZE", "15");
-        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
-
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4", "FEEDBACK");
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4_SIZE", "15");
-        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
-
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT");
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
-        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
-
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6", "FAQ");
-        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6_SIZE", "15");
-        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
-        //--------- END OF DRAWER
 
         //--------- ICONS
 
@@ -263,21 +239,41 @@ class Management {
         //------------------------------------------------------//
         //-------------------- DRAWER --------------------------//
         //------------------------------------------------------//
+        
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "HOME");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "RideWME");
 
-        String? LASTDATE = await Get_SharedPreferences_STRING('LASTDATE');
-        SETTINGS.Add('WND_DRAWER_LASTDATE', LASTDATE!);
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2", "PROFILE");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_2_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_2_ICON", "RideWME");
 
-        String? EMAIL = await Get_SharedPreferences_STRING('EMAIL');
-        SETTINGS.Add('WND_DRAWER_EMAIL', EMAIL!);
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3", "SETTINGS");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_3_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
 
-        String? NAME = await Get_SharedPreferences_STRING('NAME');
-        SETTINGS.Add('WND_DRAWER_NAME', NAME!);
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4", "FEEDBACK");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_4_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
 
-        String? IMAGE = await Get_SharedPreferences_STRING('IMAGE');
-        SETTINGS.Add('WND_DRAWER_IMAGE', IMAGE!);
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
+
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6", "FAQ");
+        SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_6_SIZE", "15");
+        SETTINGS.Add("WND_HOME_DRAWER_TITLE_3_ICON", "RideWME");
 
 
       }
+
+
+///-----------------------------------------------------------///
+///-----------------------------------------------------------///
+///-----------------------PORTUGUÊS---------------------------///
+///-----------------------------------------------------------///
+///-----------------------------------------------------------///
+
     else if(LANGUAGE == 'PT'){
         //------------------------------------------------------//
         //------------------ JANELA PRINCIPAL PT ---------------//
@@ -389,6 +385,50 @@ class Management {
           SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NOME_UTILIZADOR);
         }
 
+
+        //------------------------------------------------------//
+        //----------------- WINDOW PROFILE----------------------//
+        //------------------------------------------------------//
+
+        //------- FUNCTIONS HOME
+        String? FULL_NAME = await Get_SharedPreferences_STRING('NAME');
+        if (FULL_NAME != null) {
+          (FULL_NAME);
+          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", FULL_NAME);
+          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
+        }
+
+
+        if (FULL_NAME != null) {
+          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
+        }
+
+        //String? LOCATION = await Get_SharedPreferences_STRING('LOCATION');
+        //SETTINGS.Add("WND_USER_PROFILE_LOCATION", LOCATION!);
+
+        //String? USERNAME = await Get_SharedPreferences_STRING('USERNAME');
+        //SETTINGS.Add("WND_USER_PROFILE_USERNAME", USERNAME!);
+
+        //String? UID = await Get_SharedPreferences_STRING('UID');
+        //SETTINGS.Add('WND_USER_PROFILE_UID', UID!);
+
+        SETTINGS.Add("WND_USER_PROFILE_MEM", "Membro desde: ");
+
+        //String? REGISTERDATE = await Get_SharedPreferences_STRING('REGDATE');
+        //SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
+
+        //String? LOGINDATE = await Get_SharedPreferences_STRING('LOGINDATE_FORMATED');
+        //SETTINGS.Add('WND_USER_PROFILE_LOGIN_DATE', LOGINDATE!);
+
+        SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Última vez visto: ");
+
+        //String? SIGNOUTDATE = await Get_SharedPreferences_STRING('SIGNOUTDATE');
+        //SETTINGS.Add('WND_USER_PROFILE_SIGNOUT_DATE', SIGNOUTDATE!);
+
+        //------------------------------------------------------//
+        //-------------------- DRAWER --------------------------//
+        //------------------------------------------------------//
+
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "PÁGINA INICIAL");
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
         SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "rideWME");
@@ -408,62 +448,6 @@ class Management {
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "SAIR");
         SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
         SETTINGS.Add("WND_HOME_DRAWER_TITLE_5_ICON", "rideWME");
-        //--------- FIM DO MENU LATERAL
-
-        //------------------------------------------------------//
-        //----------------- WINDOW PROFILE----------------------//
-        //------------------------------------------------------//
-
-        //------- FUNCTIONS HOME
-        String? FULL_NAME = await Get_SharedPreferences_STRING('NAME');
-        if (FULL_NAME != null) {
-          (FULL_NAME);
-          SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", FULL_NAME);
-          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
-        }
-
-
-        if (FULL_NAME != null) {
-          SETTINGS.Add("WND_USER_PROFILE_TITLE_1", FULL_NAME);
-        }
-
-        String? LOCATION = await Get_SharedPreferences_STRING('LOCATION');
-        SETTINGS.Add("WND_USER_PROFILE_LOCATION", LOCATION!);
-
-        String? USERNAME = await Get_SharedPreferences_STRING('USERNAME');
-        SETTINGS.Add("WND_USER_PROFILE_USERNAME", USERNAME!);
-
-        String? UID = await Get_SharedPreferences_STRING('UID');
-        SETTINGS.Add('WND_USER_PROFILE_UID', UID!);
-
-        SETTINGS.Add("WND_USER_PROFILE_MEM", "Member since: ");
-
-        String? REGISTERDATE = await Get_SharedPreferences_STRING('REGDATE');
-        SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTERDATE!);
-
-        String? LOGINDATE = await Get_SharedPreferences_STRING('LOGINDATE_FORMATED');
-        SETTINGS.Add('WND_USER_PROFILE_LOGIN_DATE', LOGINDATE!);
-
-        SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Last seen: ");
-
-        String? SIGNOUTDATE = await Get_SharedPreferences_STRING('SIGNOUTDATE');
-        SETTINGS.Add('WND_USER_PROFILE_SIGNOUT_DATE', SIGNOUTDATE!);
-
-        //------------------------------------------------------//
-        //-------------------- DRAWER --------------------------//
-        //------------------------------------------------------//
-
-        String? LASTDATE = await Get_SharedPreferences_STRING('LASTDATE');
-        SETTINGS.Add('WND_DRAWER_LASTDATE', LASTDATE!);
-
-        String? EMAIL = await Get_SharedPreferences_STRING('EMAIL');
-        SETTINGS.Add('WND_DRAWER_EMAIL', EMAIL!);
-
-        String? NAME = await Get_SharedPreferences_STRING('NAME');
-        SETTINGS.Add('WND_DRAWER_NAME', NAME!);
-
-        String? IMAGE = await Get_SharedPreferences_STRING('IMAGE');
-        SETTINGS.Add('WND_DRAWER_IMAGE', IMAGE!);
 
         //--------- ÍCONES
 
@@ -567,6 +551,17 @@ class Management {
         SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", NUTZERNAME);
       }
 
+
+      //------------------------------------------------------//
+      //----------------- PROFILFENSTER DE ----------------------//
+      //------------------------------------------------------//
+      SETTINGS.Add("WND_USER_PROFILE_MEM", "Mitglied seit: ");
+      SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Zuletzt gesehen: ");
+
+      //------------------------------------------------------//
+      //-------------------- SEITENLEISTE DE --------------------------//
+      //------------------------------------------------------//
+
       SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1", "STARTSEITE");
       SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_1_SIZE", "15");
       SETTINGS.Add("WND_HOME_DRAWER_TITLE_1_ICON", "rideWME");
@@ -586,60 +581,6 @@ class Management {
       SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5", "ABMELDEN");
       SETTINGS.Add("WND_HOME_DRAWER_SUBTITLE_5_SIZE", "15");
       SETTINGS.Add("WND_HOME_DRAWER_TITLE_5_ICON", "rideWME");
-      //--------- ENDE DER STARTFENSTER
-
-      //------------------------------------------------------//
-      //----------------- PROFILFENSTER DE ----------------------//
-      //------------------------------------------------------//
-
-      String? VOLLER_NAME = await Get_SharedPreferences_STRING('VOLLER_NAME');
-      if (VOLLER_NAME != null) {
-        (VOLLER_NAME);
-        SETTINGS.Add("WND_HOME_DRAWER_TITLE_1", VOLLER_NAME);
-        SETTINGS.Add("WND_USER_PROFILE_TITLE_1", VOLLER_NAME);
-      }
-
-      if (VOLLER_NAME != null) {
-        SETTINGS.Add("WND_USER_PROFILE_TITLE_1", VOLLER_NAME);
-      }
-
-      String? STANDORT = await Get_SharedPreferences_STRING('STANDORT');
-      SETTINGS.Add("WND_USER_PROFILE_LOCATION", STANDORT!);
-
-      String? BENUTZERNAME = await Get_SharedPreferences_STRING('BENUTZERNAME');
-      SETTINGS.Add("WND_USER_PROFILE_USERNAME", BENUTZERNAME!);
-
-      String? UID = await Get_SharedPreferences_STRING('UID');
-      SETTINGS.Add('WND_USER_PROFILE_UID', UID!);
-
-      SETTINGS.Add("WND_USER_PROFILE_MEM", "Mitglied seit: ");
-
-      String? REGISTRIERDATUM = await Get_SharedPreferences_STRING('REGISTRIERDATUM');
-      SETTINGS.Add('WND_USER_PROFILE_REGDATE', REGISTRIERDATUM!);
-
-      String? LOGINDATUM = await Get_SharedPreferences_STRING('LOGINDATUM_FORMIERT');
-      SETTINGS.Add('WND_USER_PROFILE_LOGIN_DATE', LOGINDATUM!);
-
-      SETTINGS.Add("WND_USER_PROFILE_LAST_ONLINE", "Zuletzt gesehen: ");
-
-      String? ABMELDEDATUM = await Get_SharedPreferences_STRING('ABMELDEDATUM');
-      SETTINGS.Add('WND_USER_PROFILE_SIGNOUT_DATE', ABMELDEDATUM!);
-
-      //------------------------------------------------------//
-      //-------------------- SEITENLEISTE DE --------------------------//
-      //------------------------------------------------------//
-
-      String? LETZTEDATUM = await Get_SharedPreferences_STRING('LETZTEDATUM');
-      SETTINGS.Add('WND_DRAWER_LASTDATE', LETZTEDATUM!);
-
-      String? E_MAIL = await Get_SharedPreferences_STRING('E_MAIL');
-      SETTINGS.Add('WND_DRAWER_EMAIL', E_MAIL!);
-
-      String? NAME = await Get_SharedPreferences_STRING('NAME');
-      SETTINGS.Add('WND_DRAWER_NAME', NAME!);
-
-      String? BILD = await Get_SharedPreferences_STRING('BILD');
-      SETTINGS.Add('WND_DRAWER_IMAGE', BILD!);
 
       //--------- SYMBOLE
 

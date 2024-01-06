@@ -5,16 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:ubi/main.dart';
+import 'package:provider/provider.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
+import '../common/theme_provider.dart';
 import '../firebase_auth_implementation/models/notification_model.dart';
 import '../firebase_auth_implementation/models/post_model.dart';
-import '../common/widgets/modals/modalPostViewer.dart';
-import '../common/widgets/modals/profileModal/modalProfileViewer.dart';
-import '../firebase_auth_implementation/models/user_model.dart';
 import '../firestore/firebase_storage.dart';
 import '../firestore/post_firestore.dart';
 
@@ -56,37 +54,97 @@ class State_windowNotification extends State<windowNotifications> {
 
   String currentUserUID = FirebaseAuth.instance.currentUser?.uid ?? '';
 
-  List<NotificationModel> loadedNotifications = [];
+  List<NotificationModel> loadedNotificationsAll = [];
+  List<NotificationModel> loadedNotificationsType0 = [];
+  List<NotificationModel> loadedNotificationsType1 = [];
+  List<NotificationModel> loadedNotificationsType2 = [];
+
+  List<PostModel> loadedPostsType2 = [];
+
   bool _dataLoaded = false;
   bool _isLoading = true;
 
   Future<void> getData() async {
     try {
-      String? notifsJson = await Ref_Window.Ref_Management.Get_SharedPreferences_STRING("USER_NOTIFICATIONS_JSON");
+      String? notifsJson =
+          await Ref_Window.Ref_Management.Get_SharedPreferences_STRING(
+              "USER_NOTIFICATIONS_JSON");
 
       if (!_dataLoaded || notifsJson == "??") {
-        String newNotifications = await postFirestore.getUserNotificationsJson(currentUserUID);
-        Ref_Window.Ref_Management.Save_Shared_Preferences_STRING("USER_NOTIFICATIONS_JSON", newNotifications);
+        Utils.MSG_Debug("Fetching notifications for user $currentUserUID");
+        List<NotificationModel> notifications =
+            await postFirestore.getUserNotifications(currentUserUID);
 
-        List<NotificationModel> notifications = (jsonDecode(newNotifications) as List)
-            .map((json) => NotificationModel.fromJson(json))
-            .toList();
+        // Update the SharedPreferences directly with the list of NotificationModel
+        Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
+            "USER_NOTIFICATIONS_JSON", jsonEncode(notifications));
+
+        // Separate notifications based on type
+        List<NotificationModel> type0Notifications =
+            notifications.where((notif) => notif.type == 0).toList();
+        List<NotificationModel> type1Notifications =
+            notifications.where((notif) => notif.type == 1).toList();
+        List<NotificationModel> type2Notifications =
+            notifications.where((notif) => notif.type == 2).toList();
+
+        List<PostModel> posts = [];
+
+        for(int i = 0; i < type2Notifications.length; i++){
+          PostModel? postData = await postFirestore.getPostByPid(type2Notifications[i].toUid, type2Notifications[i].pid);
+          posts.add(postData!);
+        }
+
+        Utils.MSG_Debug("Number of notifications: ${notifications.length}");
+        Utils.MSG_Debug(
+            "Number of type 0 notifications: ${type0Notifications.length}");
+        Utils.MSG_Debug(
+            "Number of type 1 notifications: ${type1Notifications.length}");
+        Utils.MSG_Debug(
+            "Number of type 2 notifications: ${type2Notifications.length}");
 
         setState(() {
           _dataLoaded = true;
           _isLoading = false;
-          loadedNotifications = notifications;
+          loadedNotificationsAll = notifications;
+          loadedNotificationsType0 = type0Notifications;
+          loadedNotificationsType1 = type1Notifications;
+          loadedNotificationsType2 = type2Notifications;
+          loadedPostsType2 = posts;
         });
+
+        Utils.MSG_Debug("Data loaded successfully");
       } else {
-        List<NotificationModel> notifications = (jsonDecode(notifsJson!) as List)
-            .map((json) => NotificationModel.fromJson(json))
-            .toList();
+        List<NotificationModel> notifications =
+            (jsonDecode(notifsJson!) as List)
+                .map((json) => NotificationModel.fromJson(json))
+                .toList();
+
+        // Separate notifications based on type
+        List<NotificationModel> type0Notifications =
+            notifications.where((notif) => notif.type == 0).toList();
+        List<NotificationModel> type1Notifications =
+            notifications.where((notif) => notif.type == 1).toList();
+        List<NotificationModel> type2Notifications =
+            notifications.where((notif) => notif.type == 2).toList();
+
+        Utils.MSG_Debug("Number of notifications: ${notifications.length}");
+        Utils.MSG_Debug(
+            "Number of type 0 notifications: ${type0Notifications.length}");
+        Utils.MSG_Debug(
+            "Number of type 1 notifications: ${type1Notifications.length}");
+        Utils.MSG_Debug(
+            "Number of type 2 notifications: ${type2Notifications.length}");
 
         setState(() {
           _dataLoaded = true;
           _isLoading = false;
-          loadedNotifications = notifications;
+          loadedNotificationsAll = notifications;
+          loadedNotificationsType0 = type0Notifications;
+          loadedNotificationsType1 = type1Notifications;
+          loadedNotificationsType2 = type2Notifications;
         });
+
+        Utils.MSG_Debug("Data loaded successfully");
       }
     } catch (e) {
       Utils.MSG_Debug("Error fetching data: $e");
@@ -95,7 +153,6 @@ class State_windowNotification extends State<windowNotifications> {
       });
     }
   }
-
 
   final windowNotifications Ref_Window;
   String className = "";
@@ -149,9 +206,10 @@ class State_windowNotification extends State<windowNotifications> {
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
 
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+    return Consumer<ThemeProvider>(
+        builder: (context, provider, child) {
+          return MaterialApp(
+            theme: provider.currentTheme,
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -183,7 +241,7 @@ class State_windowNotification extends State<windowNotifications> {
           },
           child: DefaultTabController(
             initialIndex: 0,
-            length: 3,
+            length: 4,
             child: Scaffold(
               appBar: PreferredSize(
                 preferredSize: const Size.fromHeight(kToolbarHeight),
@@ -199,6 +257,9 @@ class State_windowNotification extends State<windowNotifications> {
                       ),
                       Tab(
                         text: ("Likes"),
+                      ),
+                      Tab(
+                        text: ("Accepted"),
                       )
                     ],
                   ),
@@ -212,13 +273,15 @@ class State_windowNotification extends State<windowNotifications> {
                   _buildRequestsTab(),
                   // Content for the "Likes" tab
                   _buildLikesTab(),
+                  // Content for the "Accepted Requests" tab
+                  _buildAcceptedTab()
                 ],
               ),
             ),
           ),
         ),
       ),
-    );
+    );});
   }
 
   Widget _buildAllNotificationsTab() {
@@ -241,9 +304,209 @@ class State_windowNotification extends State<windowNotifications> {
             return Container(
               child: _isLoading
                   ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : loadedNotificationsAll.isEmpty
+                      ? Center(
+                          child: Text(
+                            Ref_Window.Ref_Management.SETTINGS.Get(
+                              "JNL_HOME_TITLE_1",
+                              "0 Notifications!",
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: loadedNotificationsAll.length,
+                          itemBuilder: (context, index) {
+                            String notificationText;
+
+                            // Determine the text based on the type
+                            if (loadedNotificationsAll[index].type == 0) {
+                              notificationText = "New Notification!";
+                            } else if (loadedNotificationsAll[index].type ==
+                                1) {
+                              notificationText = "New Notification!";
+                            }
+                            else if (loadedNotificationsAll[index].type ==
+                                2) {
+                              notificationText = "New Notification!";
+                            } else {
+                              // Handle other types or provide a default text
+                              notificationText = "New notification!";
+                            }
+
+                            return Hero(
+                              tag:
+                                  'userHero${loadedNotificationsAll[index].fromUid}',
+                              child: Card(
+                                shape: const ContinuousRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                                elevation: 0,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(width: 10),
+                                          Text(notificationText),
+                                          const Spacer(),
+                                          Text(Utils.formatTimeDifference(
+                                              loadedNotificationsAll[index]
+                                                  .date)),
+                                        ],
+                                      ),
+                                    ),
+                                    ListTile(
+                                      onTap: () {},
+                                      title: Text(
+                                        loadedNotificationsAll[index].fromUid,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 8),
+                                          buildSubtitle(
+                                              loadedNotificationsAll[index]
+                                                  .type),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+            );
+          }
+        },
+      );
+    });
+  }
+
+  Widget _buildRequestsTab() {
+    return Builder(builder: (BuildContext context) {
+      return FutureBuilder(
+        future: _dataLoaded ? null : getData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            );
+          } else if (snapshot.hasError) {
+            Utils.MSG_Debug("Error: ${snapshot.error}");
+            return Center(
+              child: Text("Error loading data"),
+            );
+          } else {
+            return Container(
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : loadedNotificationsType0.isEmpty
+                      ? Center(
+                          child: Text(
+                            Ref_Window.Ref_Management.SETTINGS.Get(
+                              "JNL_HOME_TITLE_1",
+                              "No Users!",
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: loadedNotificationsType0.length,
+                          itemBuilder: (context, index) {
+                            // Access notification details based on the type 0 list
+                            NotificationModel notification =
+                                loadedNotificationsType0[index];
+
+                            return Hero(
+                              tag: 'userHero${notification.fromUid}',
+                              child: Card(
+                                shape: const ContinuousRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                                elevation: 0,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(width: 10),
+                                          Text("New Notification!"),
+                                          const Spacer(),
+                                          Text(Utils.formatTimeDifference(
+                                              notification.date)),
+                                        ],
+                                      ),
+                                    ),
+                                    ListTile(
+                                      onTap: () {
+                                        // Handle onTap for type 0
+                                        // For example, navigate to a details screen
+                                      },
+                                      title: Text(
+                                        "@${notification.fromUid} sent you a carpool request!",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 8),
+                                          buildSubtitle(notification.seen),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+            );
+          }
+        },
+      );
+    });
+  }
+
+  Widget _buildAcceptedTab() {
+    return Builder(builder: (BuildContext context) {
+      return FutureBuilder(
+        future: _dataLoaded ? null : getData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            );
+          } else if (snapshot.hasError) {
+            Utils.MSG_Debug("Error: ${snapshot.error}");
+            return Center(
+              child: Text("Error loading data"),
+            );
+          } else {
+            return Container(
+              child: _isLoading
+                  ? Center(
                 child: CircularProgressIndicator(),
               )
-                  : loadedNotifications.isEmpty
+                  : loadedNotificationsType1.isEmpty
                   ? Center(
                 child: Text(
                   Ref_Window.Ref_Management.SETTINGS.Get(
@@ -253,28 +516,14 @@ class State_windowNotification extends State<windowNotifications> {
                 ),
               )
                   : ListView.builder(
-                itemCount: loadedNotifications.length,
+                itemCount: loadedNotificationsType1.length,
                 itemBuilder: (context, index) {
-                  String notificationText;
-
-                  // Determine the text based on the type
-                  if (loadedNotifications[index].type == 0) {
-                    notificationText =
-                    "@${loadedNotifications[index].fromUid} sent you a carpool request!";
-                  } else if (loadedNotifications[index].type == 1) {
-                    notificationText =
-                    "@${loadedNotifications[index].fromUid} accepted your request!";
-                  } else if (loadedNotifications[index].type == 2) {
-                    notificationText =
-                    "@${loadedNotifications[index].fromUid} liked your post!";
-                  } else {
-                    // Handle other types or provide a default text
-                    notificationText = "New notification!";
-                  }
+                  // Access notification details based on the type 0 list
+                  NotificationModel notification =
+                  loadedNotificationsType1[index];
 
                   return Hero(
-                    tag:
-                    'userHero${loadedNotifications[index].fromUid}',
+                    tag: 'userHero${notification.fromUid}',
                     child: Card(
                       shape: const ContinuousRectangleBorder(
                         borderRadius: BorderRadius.zero,
@@ -288,17 +537,20 @@ class State_windowNotification extends State<windowNotifications> {
                             child: Row(
                               children: [
                                 const SizedBox(width: 10),
-                                Text(notificationText),
+                                Text("New Notification!"),
                                 const Spacer(),
                                 Text(Utils.formatTimeDifference(
-                                    loadedNotifications[index].date)),
+                                    notification.date)),
                               ],
                             ),
                           ),
                           ListTile(
-                            onTap: () {},
+                            onTap: () {
+                              // Handle onTap for type 0
+                              // For example, navigate to a details screen
+                            },
                             title: Text(
-                              notificationText,
+                              "@${notification.fromUid} sent you a carpool request!",
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium,
@@ -308,8 +560,7 @@ class State_windowNotification extends State<windowNotifications> {
                               CrossAxisAlignment.start,
                               children: [
                                 SizedBox(height: 8),
-                                buildSubtitle(
-                                    loadedNotifications[index].seen),
+                                buildSubtitle(notification.seen),
                               ],
                             ),
                           ),
@@ -326,20 +577,122 @@ class State_windowNotification extends State<windowNotifications> {
     });
   }
 
-  Widget _buildRequestsTab() {
-    // Implement the UI for the "Reviews" tab
-    return Container(
-      // Your "Reviews" tab content goes here
-      child: Text("Reviews Tab Content"),
-    );
-  }
-
   Widget _buildLikesTab() {
-    // Implement the UI for the "Reviews" tab
-    return Container(
-      // Your "Reviews" tab content goes here
-      child: Text("Reviews Tab Content"),
-    );
+    return Builder(builder: (BuildContext context) {
+      return FutureBuilder(
+        future: _dataLoaded ? null : getData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            );
+          } else if (snapshot.hasError) {
+            Utils.MSG_Debug("Error: ${snapshot.error}");
+            return Center(
+              child: Text("Error loading data"),
+            );
+          } else {
+            return Container(
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : loadedNotificationsType2.isEmpty
+                      ? Center(
+                          child: Text(
+                            Ref_Window.Ref_Management.SETTINGS.Get(
+                              "JNL_HOME_TITLE_1",
+                              "No Users!",
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: loadedNotificationsType2.length,
+                          itemBuilder: (context, index) {
+                            // Access notification details based on the type 2 list
+                            NotificationModel notification =
+                                loadedNotificationsType2[index];
+
+                            return Hero(
+                              tag: 'userHero${notification.fromUid}',
+                              child: Card(
+                                shape: const ContinuousRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                                elevation: 0,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(width: 10),
+                                          Text("New Notification!"),
+                                          const Spacer(),
+                                          Text(Utils.formatTimeDifference(
+                                              notification.date)),
+                                        ],
+                                      ),
+                                    ),
+                                    ListTile(
+                                      onTap: () {
+                                        // Handle onTap for type 2
+                                        // For example, navigate to a details screen
+                                      },
+                                      title: Text(
+                                        "@${notification.fromUid} liked your post!",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 8),
+                                          buildSubtitle(notification.seen),
+                                        ],
+                                      ),
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        IconButton(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          icon: const Icon(Icons.check),
+                                          onPressed: () {
+                                            postFirestore.toggleRequestCarpool(currentUserUID, loadedNotificationsType2[index].fromUid, loadedNotificationsType2[index].pid, 1, loadedPostsType2[index]);
+                                            UtilsFlutter.MSG("ACCESS ACCEPTED, NOTIFICATION SENT", context);
+                                          },
+                                        ),
+                                        IconButton(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          icon: const Icon(Icons.cancel),
+                                          onPressed: () {
+                                            // Handle message functionality
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+            );
+          }
+        },
+      );
+    });
   }
 
 //--------------
@@ -347,27 +700,18 @@ class State_windowNotification extends State<windowNotifications> {
     switch (notificationType) {
       case 0:
         return GestureDetector(
-          onTap: () {
-
-          },
-          child: Text(
-              "Trip"),
+          onTap: () {},
+          child: Text("Has requested a carpool!"),
         );
       case 1:
         return GestureDetector(
-          onTap: () {
-
-          },
-          child: Text(
-              "Trip:"),
+          onTap: () {},
+          child: Text("Has accepted the request you sent!"),
         );
       case 2:
         return GestureDetector(
-          onTap: () {
-
-          },
-          child: Text(
-              "Trip"),
+          onTap: () {},
+          child: Text("Liked your post"),
         );
       // Add more cases as needed
       default:
