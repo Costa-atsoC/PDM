@@ -51,10 +51,13 @@ class ThemeProvider extends ChangeNotifier {
 
     if (theme == 'light') {
       _currentTheme = AppTheme.lightTheme;
+      _selectedOption = 'light'; // Adicione essa linha para refletir a seleção do usuário
     } else if (theme == 'dark') {
       _currentTheme = AppTheme.darkTheme;
+      _selectedOption = 'dark'; // Adicione essa linha para refletir a seleção do usuário
     } else {
       _currentTheme = _platformBrightness == Brightness.light ? AppTheme.lightTheme : AppTheme.darkTheme;
+      _selectedOption = 'system'; // Adicione essa linha para refletir a seleção do usuário
     }
 
     notifyListeners();

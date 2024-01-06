@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
 import '../firebase_auth_implementation/models/comment_model.dart';
 import '../firebase_auth_implementation/models/notification_model.dart';
 import '../firebase_auth_implementation/models/post_model.dart';
@@ -153,7 +154,7 @@ class PostFirestore {
 
     try {
       DocumentSnapshot<Map<String, dynamic>> userDoc =
-      await _firestore.collection('users').doc(uid).get();
+          await _firestore.collection('users').doc(uid).get();
       Utils.MSG_Debug('After fetching user document');
 
       if (userDoc.exists) {
@@ -162,7 +163,9 @@ class PostFirestore {
             .collection('users')
             .doc(uid)
             .collection('posts')
-            .orderBy('date', descending: true) // Order by date in descending order (newest to oldest)
+            .orderBy('date',
+                descending:
+                    true) // Order by date in descending order (newest to oldest)
             .get();
         print('After fetching posts');
 
@@ -197,7 +200,6 @@ class PostFirestore {
 
     return userPosts;
   }
-
 
   Future<PostModel?> getPostByPid(String uid, String pid) async {
     try {
@@ -280,7 +282,8 @@ class PostFirestore {
     return allPosts.reversed.toList();
   }
 
-  Future<int> _updatePostLikesCount(String uid, String pid, int incrementValue) async {
+  Future<int> _updatePostLikesCount(
+      String uid, String pid, int incrementValue) async {
     try {
       // Get the current likes count as a string
       DocumentSnapshot postSnapshot = await _firestore
@@ -364,15 +367,16 @@ class PostFirestore {
 
           // Increment the likes count on the post
           int updatedLikes = await _updatePostLikesCount(post.uid, post.pid, 1);
+          String notificationId = const Uuid().v4();
 
           // Create a new notification document in the 'notifications' collection
           await _firestore
-              .collection('notifications')
+              .collection('users')
               .doc(post.uid)
-              .collection('user_notifications')
-              .doc("${uid}_2")
+              .collection('notifications')
+              .doc(notificationId)
               .set({
-            'to_uid' : post.uid,
+            'to_uid': post.uid,
             'pid': post.pid,
             'from_uid': uid,
             'type': 2,
@@ -394,13 +398,6 @@ class PostFirestore {
               .doc(uid)
               .delete();
 
-          await _firestore
-              .collection('notifications')
-              .doc(post.uid)
-              .collection('user_notifications')
-              .doc("${uid}_2")
-              .delete();
-
           // Decrement the likes count on the post
           int updatedLikes =
               await _updatePostLikesCount(post.uid, post.pid, -1);
@@ -409,17 +406,18 @@ class PostFirestore {
         }
       } else {
         // Create a new notification document in the 'notifications' collection
+        String notificationId = const Uuid().v4();
+
         await _firestore
-            .collection('notifications')
+            .collection('users')
             .doc(post.uid)
-            .collection('user_notifications')
-            .doc("${uid}_$type")
+            .collection('notifications')
+            .doc(notificationId)
             .set({
-          'to_uid' : post.uid,
+          'id': notificationId,
+          'to_uid': post.uid,
           'pid': post.pid,
           'from_uid': uid,
-          //'fromName': "test",
-          //'fromUsername': "test",
           'type': type,
           // 0 for user carpool request, the 1 is for accepting request, the 2 is for liking!
           'seen': 0,
@@ -434,43 +432,135 @@ class PostFirestore {
       return -1;
     }
   }
-  Future<String> getUserNotificationsJson(String uid) async {
-    Utils.MSG_Debug("ERROR GETTING THE USERNOTIFICATIONSJSON");
 
+  Future<List<NotificationModel>> getUserNotifications(String uid) async {
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-          .collection('notifications')
+      // Query the 'notifications' collection for the specified user ID
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
           .doc(uid)
-          .collection('user_notifications')
+          .collection('notifications')
           .get();
 
-      List<NotificationModel> notifications = [];
-
-      querySnapshot.docs.forEach((doc) {
-        Map<String, dynamic> data = doc.data()!;
-
-        NotificationModel notification = NotificationModel(
-          pid: data['pid'],
-          toUid: data['to_uid'],
-          fromUid: data['from_uid'],
-          type: data['type'],
-          seen: data['seen'],
-          date: data['date'],
+      // Convert the notification documents to a list of NotificationModel
+      List<NotificationModel> notifications = querySnapshot.docs.map((doc) {
+        return NotificationModel(
+          date: doc['date'],
+          toUid: doc['to_uid'],
+          pid: doc['pid'],
+          type: doc['type'],
+          seen: doc['seen'],
+          fromUid: doc['from_uid'],
+          // Add other attributes as needed
         );
+      }).toList();
 
-        notifications.add(notification);
-      });
-
-      // Convert the list of notifications to a JSON string
-      List<Map<String, dynamic>> notificationsJsonList = notifications.map((notification) => notification.toJson()).toList();
-      String notificationsJson = jsonEncode(notificationsJsonList);
-
-      Utils.MSG_Debug(notificationsJson);
-
-      return notificationsJson;
+      return notifications;
     } catch (error) {
       Utils.MSG_Debug('Error fetching user notifications: $error');
-      return '[]'; // Return an empty array as a JSON string in case of an error
+      // Return an empty list in case of an error
+      return [];
+    }
+  }
+
+  Future<Map<String, String>> getUserNotificationsJson(String uid) async {
+    try {
+      Map<String, String> notificationsJsonMap = {
+        'notifications': '[]',
+      };
+
+      // Query the 'notifications' collection for the specified user ID
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('notifications')
+          .get();
+
+      // Print the number of documents retrieved
+      print('Number of documents: ${querySnapshot.size}');
+
+      // Convert the notification documents to a JSON string
+      List<Map<String, dynamic>> notificationDataList = querySnapshot.docs.map((doc) {
+        print('Document data: ${doc.data()}');
+        return doc.data();
+      }).toList();
+
+      if (notificationDataList.isNotEmpty) {
+        notificationsJsonMap['notifications'] = jsonEncode(notificationDataList);
+      }
+
+      // Print the final JSON string
+      print('Final JSON: ${notificationsJsonMap['notifications']}');
+
+      return notificationsJsonMap;
+    } catch (error) {
+      Utils.MSG_Debug('Error fetching user notifications: $error');
+      // Return an empty map in case of an error
+      return {
+        'notifications': '[]',
+      };
+    }
+  }
+
+  /// METHOD TO CONFIRM OR DENY A CARPOOL REQUEST
+  Future<void> toggleRequestCarpool(String fromUid, String toUid, String pid, int request, PostModel post) async {
+    // type
+    // 0 to deny,
+    // 1 to accept,
+    try {
+      if (request == 1) {
+        int freeSeats = int.parse(post.freeSeats);
+        if(freeSeats > 0){
+          // Create a new notification document in the 'notifications' collection
+          String notificationId = const Uuid().v4();
+
+          await _firestore
+              .collection('users')
+              .doc(toUid)
+              .collection('notifications')
+              .doc(notificationId)
+              .set({
+            'id': notificationId,
+            'to_uid': toUid,
+            'pid': post.pid,
+            'from_uid': post.uid,
+            'type': 1, // 0 for user carpool request, the 1 is for accepting request, the 2 is for liking!
+            'seen': 0,
+            // 0 for not seen, 1 for seen (it will not appear anymore)
+            'date': Utils.currentTime(),
+          });
+
+          Utils.MSG_Debug("Notification Sent to $toUid");
+
+          int updatedSeats = freeSeats - 1;
+
+          await _firestore
+              .collection('users')
+              .doc(post.uid)
+              .collection('posts')
+              .doc(
+            post.pid,
+          )
+              .update(
+            {
+              'title': post.title,
+              'description': post.description,
+              'date': post.date,
+              'totalSeats': post.totalSeats,
+              'freeSeats': "$updatedSeats",
+              'location': post.location,
+              'startLocation': post.startLocation,
+              'endLocation': post.endLocation,
+              'lastChangedDate': post.lastChangedDate,
+            },
+          );
+
+          Utils.MSG_Debug('Post with ID ${post.pid} updated successfully.');
+
+        }
+      }
+    } catch (error) {
+      Utils.MSG_Debug('Error toggling like for post: $error');
     }
   }
 
@@ -574,8 +664,8 @@ class PostFirestore {
     }
   }
 
-  Future<List<commentModel>> getComments(PostModel post) async {
-    List<commentModel> comments = [];
+  Future<List<CommentModel>> getComments(PostModel post) async {
+    List<CommentModel> comments = [];
 
     try {
       // Query the 'likes' collection for the specified post ID
@@ -591,7 +681,7 @@ class PostFirestore {
       for (QueryDocumentSnapshot<Map<String, dynamic>> commentDoc
           in commentsSnapshot.docs) {
         var data = commentDoc.data();
-        commentModel comment = commentModel(
+        CommentModel comment = CommentModel(
           id: data['id'],
           pid: data['pid'],
           uid: data['uid'],
@@ -608,7 +698,7 @@ class PostFirestore {
     return comments;
   }
 
-  Future<bool> saveComment(commentModel comment) async {
+  Future<bool> saveComment(CommentModel comment) async {
     try {
       await _firestore
           .collection('users')
@@ -618,13 +708,13 @@ class PostFirestore {
           .collection('comments')
           .doc(comment.id)
           .set({
-            'id': comment.id,
-            'pid': comment.pid,
-            'uid': comment.uid,
-            'cid': comment.cid,
-            'date': comment.date,
-            'comment': comment.comment,
-          });
+        'id': comment.id,
+        'pid': comment.pid,
+        'uid': comment.uid,
+        'cid': comment.cid,
+        'date': comment.date,
+        'comment': comment.comment,
+      });
       return true;
     } catch (error) {
       Utils.MSG_Debug('Error saving comment: $error');

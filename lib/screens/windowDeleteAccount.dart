@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubi/common/Management.dart';
 import 'package:ubi/screens/windowInitial.dart';
+
+import '../common/theme_provider.dart';
 
 /*
 FALTA APAGAR TODOS OS POSTS DESTE USER, TODOS OS SEUS LIKES, etc...
@@ -41,14 +44,14 @@ class _WindowDeleteAccountState extends State<WindowDeleteAccount> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MyHomePage(widget.refManagement, 'Your Title'),
+            builder: (context) =>
+                MyHomePage(widget.refManagement, 'Your Title'),
           ),
         );
 
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   content: Text('User Account Deleted'),
         // ));
-
       } catch (e) {
         // Handle errors that occur during the process
         // For example, displaying an error message
@@ -59,44 +62,48 @@ class _WindowDeleteAccountState extends State<WindowDeleteAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Delete Account'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Delete Your Account',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
+      return MaterialApp(
+          theme: provider.currentTheme,
+          home: Scaffold(
+            appBar: AppBar(
+              title: Text('Delete Account'),
             ),
-            SizedBox(height: 20),
-            Text(
-              'This action is irreversible. Please enter your password to proceed.',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20),
-            TextFormField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
+            body: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Delete Your Account',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'This action is irreversible. Please enter your password to proceed.',
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20),
+                  TextFormField(
+                    controller: _passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      deleteAccount(_passwordController.text);
+                    },
+                    child: Text('Delete Account'),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                deleteAccount(_passwordController.text);
-              },
-              child: Text('Delete Account'),
-            ),
-          ],
-        ),
-      ),
-    );
+          ));
+    });
   }
 }
