@@ -58,4 +58,20 @@ class UserModel {
       lastSignOutDate: json['lastSignOutDate'],
     );
   }
+
+  static UserModel demo() {
+    return UserModel(
+      uid: 'demo_uid',
+      email: 'demo@example.com',
+      username: 'demouser',
+      fullName: 'Demo User',
+      registerDate: '2024-01-01 00:00:00.000000', // Update with a valid DateTime string
+      location: 'Demo Location',
+      image: 'demo_image_url',
+      online: 'true', // Assuming 'online' is a String, update accordingly
+      lastChangedDate: '2024-01-01 00:00:00.000000', // Update with a valid DateTime string
+      lastLogInDate: '2024-01-01 00:00:00.000000', // Update with a valid DateTime string
+      lastSignOutDate: '2024-01-01 00:00:00.000000', // Update with a valid DateTime string
+    );
+  }
 }

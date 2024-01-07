@@ -67,6 +67,11 @@ class _WindowDeleteAccountState extends State<WindowDeleteAccount> {
           theme: provider.currentTheme,
           home: Scaffold(
             appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
               title: Text('Delete Account'),
             ),
             body: Padding(

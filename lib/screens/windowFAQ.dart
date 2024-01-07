@@ -120,6 +120,11 @@ class _windowFAQState extends State<windowFAQ> {
           home: Scaffold(
             //drawer: CustomDrawer(Ref_Window.Ref_Management, Ref_Window.),
             appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
               title: const Text("FeedBack"),
             ),
             body: (_buildFAQSection()),

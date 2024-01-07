@@ -133,7 +133,7 @@ class State_windowSettings extends State<windowSettings> {
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.arrow_back,
-                    color: Theme.of(context).colorScheme.secondary),
+                    color: Theme.of(context).colorScheme.onPrimary),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               title: Text(className, style: TextStyle(fontSize: 22)),
