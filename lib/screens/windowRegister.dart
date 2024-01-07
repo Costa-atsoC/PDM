@@ -267,7 +267,7 @@ class Estado_windowRegister extends State<windowRegister> {
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(Icons.arrow_back,
-                    color: Theme.of(context).colorScheme.secondary),
+                    color: Theme.of(context).colorScheme.onPrimary),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),

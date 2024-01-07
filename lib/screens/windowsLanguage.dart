@@ -26,7 +26,7 @@ class _WindowLanguageState extends State<WindowLanguage> {
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.secondary),
+                  color: Theme.of(context).colorScheme.onPrimary),
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text('Select Language', style: TextStyle(fontSize: 22)),

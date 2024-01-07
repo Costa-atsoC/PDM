@@ -196,11 +196,9 @@ class State_windowSearch extends State<windowSearch> {
         home: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back), // Back button icon
-              onPressed: () {
-                // Define the action when the back button is pressed
-                Navigator.of(context).pop(); // Navigator.pop() to go back
-              },
+              icon: Icon(Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.onPrimary),
+              onPressed: () => Navigator.of(context).pop(),
             ),
             title: Text(
               Ref_Window.Ref_Management.SETTINGS

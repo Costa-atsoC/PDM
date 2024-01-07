@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
 import 'package:ubi/firestore/firebase_storage.dart';
 import 'package:ubi/firestore/post_firestore.dart';
@@ -480,7 +481,7 @@ class State_windowFullPost extends State<windowFullPost> {
                                     constraints: BoxConstraints(
                                       maxHeight:
                                           MediaQuery.of(context).size.height /
-                                              4, // Adjust height as needed
+                                        2, // Adjust height as needed
                                     ),
                                     child: _commentsSection()),
                               ],
@@ -512,12 +513,14 @@ class State_windowFullPost extends State<windowFullPost> {
                                 color: Color.fromRGBO(124, 23, 87, 1)),
                             onPressed: () {
                               if (_commentController.text.isNotEmpty) {
+                                DateTime now = DateTime.now();
+                                String formattedTime = DateFormat('yy:MM:dd HH:mm').format(now);
                                 CommentModel com = CommentModel(
                                     id: const Uuid().v4(),
                                     pid: widget.post.pid,
                                     uid: widget.post.uid,
                                     cid: FirebaseAuth.instance.currentUser!.uid,
-                                    date: widget.post.date,
+                                    date: formattedTime,
                                     comment: _commentController.text);
                                 postFirestore
                                     .saveComment(com)

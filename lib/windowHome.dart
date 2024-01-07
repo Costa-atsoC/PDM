@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
+import 'package:ubi/screens/windowCarpool.dart';
 import 'package:ubi/screens/windowFeedback.dart';
 import 'package:ubi/screens/windowFullPost.dart';
 import 'package:ubi/screens/windowNotifications.dart';
@@ -104,7 +105,9 @@ class State_windowHome extends State<windowHome> {
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
       List<UserModel> newUsers = [];
       Map<int, List<Map<String, dynamic>>> postImagesMap =
-          {}; // Map to store images by post index
+      {};
+
+      newPosts.sort((a, b) => Utils.parseDateString(b.registerDate).compareTo(Utils.parseDateString(a.registerDate)));
 
       for (int i = 0; i < newPosts.length; i++) {
         PostModel post = newPosts[i];
@@ -113,7 +116,7 @@ class State_windowHome extends State<windowHome> {
         newUsers.add(userProfile!);
 
         List<Map<String, dynamic>> images =
-            await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
+        await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
         postImagesMap[i] = images;
 
         if (images.isNotEmpty) {
@@ -193,6 +196,12 @@ class State_windowHome extends State<windowHome> {
 
   Future navigateToWindowNotifications(context) async {
     windowNotifications win = windowNotifications(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
+  Future navigateToWindowCarpools(context) async {
+    windowCarpool win = windowCarpool(Ref_Window.Ref_Management);
     await win.Load();
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
@@ -638,10 +647,21 @@ class State_windowHome extends State<windowHome> {
                     tooltip: 'Home',
                     icon: Icon(
                       Icons.home,
-                      size: double.parse(Ref_Window.Ref_Management.SETTINGS.Get("BOTTOM_NAV_BAR_ICON_SIZE_2", "40")),
-                      color: Theme.of(context).colorScheme.primary,
+                      size: double.parse(Ref_Window.Ref_Management.SETTINGS.Get("BOTTOM_NAV_BAR_ICON_SIZE_2", "30")),
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                     onPressed: () {},
+                  ),
+                  IconButton(
+                    tooltip: 'Carpools',
+                    icon: Icon(
+                      Icons.car_crash,
+                      size: double.parse(Ref_Window.Ref_Management.SETTINGS.Get("BOTTOM_NAV_BAR_ICON_SIZE_3", "30")),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    onPressed: () {
+                      navigateToWindowCarpools(context);
+                    },
                   ),
                   IconButton(
                     tooltip: 'Notifications',

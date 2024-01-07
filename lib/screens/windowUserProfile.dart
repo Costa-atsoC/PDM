@@ -246,6 +246,32 @@ class State_windowUserProfile extends State<windowUserProfile> {
             child: Column(
               children: [
                 Row(children: <Widget>[
+                  Container(
+                      margin: const EdgeInsets.only(left: 10.0),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.user.fullName,
+                              style: TextStyle(
+                                fontSize: 35,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.color,
+                              ),
+                            ),
+                            Text(
+                              "@${widget.user.username}",
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ])),
+                  Spacer(),
                   //Profile Picture
                   Container(
                     margin: const EdgeInsets.only(top: 20),
@@ -265,8 +291,8 @@ class State_windowUserProfile extends State<windowUserProfile> {
                               ),
                             );
                           } else if (snapshot.hasError) {
-                            return const Center(
-                              child: Text('Something went wrong!'),
+                            return  Center(
+                              child: Text("${Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_WRONG", "SOMETHING WENT WRONG!")}"),
                             );
                           } else if (snapshot.hasData) {
                             final List<Map<String, dynamic>> images =
@@ -351,15 +377,15 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                         Align(
                                           alignment: Alignment.bottomLeft,
                                           child: Padding(
-                                            padding: const EdgeInsets.all(15.0),
+                                            padding: const EdgeInsets.all(10.0),
                                             // Add padding to move the button to the right
                                             child: Tooltip(
                                               message: isOnline
                                                   ? 'Online'
                                                   : 'Last Seen',
                                               child: Container(
-                                                width: 15,
-                                                height: 15,
+                                                width: 25,
+                                                height: 25,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: isOnline
@@ -388,14 +414,14 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     Align(
                                       alignment: Alignment.bottomLeft,
                                       child: Padding(
-                                        padding: const EdgeInsets.all(15.0),
+                                        padding: const EdgeInsets.all(10.0),
                                         // Add padding to move the button to the right
                                         child: Tooltip(
                                           message:
                                               isOnline ? 'Online' : 'Last Seen',
                                           child: Container(
-                                            width: 15,
-                                            height: 15,
+                                            width: 25,
+                                            height: 25,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: isOnline
@@ -456,7 +482,6 @@ class State_windowUserProfile extends State<windowUserProfile> {
                                     alignment: Alignment.bottomLeft,
                                     child: Padding(
                                       padding: const EdgeInsets.all(15.0),
-// Add padding to move the button to the right
                                       child: Tooltip(
                                         message:
                                             isOnline ? 'Online' : 'Last Seen',
@@ -491,47 +516,18 @@ class State_windowUserProfile extends State<windowUserProfile> {
                     ),
                   ),
 
-//Right side of the profile picture row
-                  Container(
-                      margin: const EdgeInsets.only(left: 10.0),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              widget.user.username,
-                              style: TextStyle(
-                                fontSize: 35,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.color,
-                              ),
-                            ),
-                            Text(
-                              "@${widget.user.fullName}",
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ])),
                 ]),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.user.location,
+                      Text("${Ref_Window.Ref_Management.SETTINGS.Get("WND_USER_PROFILE_FROM", "From: ")}${widget.user.location}",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.titleSmall?.color,
-                          fontSize: 25,
+                          fontSize: 20,
                         ),
                       ),
                     ]),
-                const SizedBox(
-                  height: 10,
-                ),
+
                 Row(
                   children: [
                     Text(

@@ -40,6 +40,10 @@ class Utils {
     return formattedDate;
   }
 
+  static DateTime parseDateString(String dateString) {
+    return DateTime.parse(dateString);
+  }
+
 
   //For the creation of the user we need different date format
   static String currentTimeUser() {
