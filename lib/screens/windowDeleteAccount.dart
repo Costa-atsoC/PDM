@@ -1,20 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ubi/common/Management.dart';
 import 'package:ubi/screens/windowInitial.dart';
-
 import '../common/theme_provider.dart';
-
-/*
-FALTA APAGAR TODOS OS POSTS DESTE USER, TODOS OS SEUS LIKES, etc...
- */
+import 'package:provider/provider.dart';
+import '../firestore/user_firestore.dart';
 
 class WindowDeleteAccount extends StatefulWidget {
-  final Management refManagement;
+  final Management Ref_Management;
 
-  const WindowDeleteAccount(this.refManagement, {Key? key}) : super(key: key);
+  const WindowDeleteAccount(this.Ref_Management, {Key? key}) : super(key: key);
 
   @override
   State<WindowDeleteAccount> createState() => _WindowDeleteAccountState();
@@ -35,26 +31,25 @@ class _WindowDeleteAccountState extends State<WindowDeleteAccount> {
         );
 
         await user.reauthenticateWithCredential(credential);
+        await UserFirestore().deleteUserData(user.uid);
         await user.delete();
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.remove('email');
+        widget.Ref_Management.Delete_Shared_Preferences('EMAIL');
 
-        // Navegar para MyHomePage após a exclusão da conta
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                MyHomePage(widget.refManagement, 'Your Title'),
+            builder: (context) => MyHomePage(
+              widget.Ref_Management,
+              widget.Ref_Management.GetDefinicao(
+                "WND_HOME_TITLE",
+                "Your Title",
+              ),
+            ),
           ),
         );
 
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //   content: Text('User Account Deleted'),
-        // ));
       } catch (e) {
-        // Handle errors that occur during the process
-        // For example, displaying an error message
         print(e.toString());
       }
     }
@@ -62,53 +57,56 @@ class _WindowDeleteAccountState extends State<WindowDeleteAccount> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(builder: (context, provider, child) {
-      return MaterialApp(
-          theme: provider.currentTheme,
-          home: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back,
-                    color: Theme.of(context).colorScheme.onPrimary),
-                onPressed: () => Navigator.of(context).pop(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          widget.Ref_Management.GetDefinicao(
+            "WND_DELETE_ACCOUNT_TITLE",
+            "Delete Account",
+          ),
+          style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.onPrimary),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              widget.Ref_Management.GetDefinicao(
+                "WND_DELETE_ACCOUNT_WARNING",
+                'This action is irreversible. Please enter your password to proceed.',
               ),
-              title: Text('Delete Account'),
+              textAlign: TextAlign.center,
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Delete Your Account',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'This action is irreversible. Please enter your password to proceed.',
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 20),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      deleteAccount(_passwordController.text);
-                    },
-                    child: Text('Delete Account'),
-                  ),
-                ],
+            SizedBox(height: 20),
+            TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: widget.Ref_Management.GetDefinicao(
+                  "WND_DELETE_ACCOUNT_PASSWORD",
+                  'Password',
+                ),
+                border: OutlineInputBorder(),
               ),
             ),
-          ));
-    });
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                deleteAccount(_passwordController.text);
+              },
+              child: Text(
+                widget.Ref_Management.GetDefinicao(
+                  "WND_DELETE_ACCOUNT_BUTTON",
+                  'Delete Account',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

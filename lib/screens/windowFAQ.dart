@@ -116,6 +116,7 @@ class _windowFAQState extends State<windowFAQ> {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(builder: (context, provider, child) {
       return MaterialApp(
+          debugShowCheckedModeBanner: false,
           theme: provider.currentTheme,
           home: Scaffold(
             //drawer: CustomDrawer(Ref_Window.Ref_Management, Ref_Window.),

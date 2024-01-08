@@ -221,6 +221,7 @@ class State_windowHome extends State<windowHome> {
     return PopScope(
         canPop: false,
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
             theme: provider.currentTheme,
             home: Scaffold(
               drawer: CustomDrawer(Ref_Window.Ref_Management),
@@ -257,9 +258,7 @@ class State_windowHome extends State<windowHome> {
                     } else if (snapshot.hasError) {
                       Utils.MSG_Debug("Error: ${snapshot.error}");
                       return Center(
-                        child: Text(Ref_Window.Ref_Management.SETTINGS.Get(
-                            "WND_HOME_ERROR_DATA_TEXT",
-                            "WND_HOME_ERROR_DATA_TEXT ??")),
+                        child: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_ERROR_DATA_TEXT", "WND_HOME_ERROR_DATA_TEXT ??")),
                       );
                     } else {
                       String? currentUserUID =
@@ -270,10 +269,7 @@ class State_windowHome extends State<windowHome> {
                               ? const Center(child: CircularProgressIndicator())
                               : loadedPosts.isEmpty
                                   ? Center(
-                                      child: Text(Ref_Window
-                                          .Ref_Management.SETTINGS
-                                          .Get("JNL_HOME_NO_POSTS_TEXT",
-                                              "JNL_HOME_NO_POSTS_TEXT ??")))
+                                      child: Text(Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_NO_POSTS_TEXT", "JNL_HOME_NO_POSTS_TEXT ??")))
                                   : ListView.builder(
                                       itemCount: loadedPosts.length,
                                       itemBuilder: (context, index) {
@@ -297,8 +293,7 @@ class State_windowHome extends State<windowHome> {
                                               elevation: 0,
                                               // Set elevation to 0 to remove the shadow
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
                                                     padding:
@@ -312,11 +307,7 @@ class State_windowHome extends State<windowHome> {
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                builder: (context) => windowUserProfile(
-                                                                    Ref_Window
-                                                                        .Ref_Management,
-                                                                    loadedUserProfiles[
-                                                                        index]),
+                                                                builder: (context) => windowUserProfile(Ref_Window.Ref_Management, loadedUserProfiles[index]),
                                                               ),
                                                             );
                                                           },
@@ -324,11 +315,7 @@ class State_windowHome extends State<windowHome> {
                                                             child: CircleAvatar(
                                                               radius: 20,
                                                               backgroundImage:
-                                                                  NetworkImage(
-                                                                      loadedImages[
-                                                                              index]
-                                                                          [
-                                                                          'url']),
+                                                                  NetworkImage(loadedImages[index]['url']),
                                                             ),
                                                           ),
                                                         ),
@@ -336,19 +323,12 @@ class State_windowHome extends State<windowHome> {
                                                             width: 10),
                                                         Column(children: [
                                                           Text(
-                                                            loadedPosts[index]
-                                                                .userFullName,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .titleSmall,
+                                                            loadedPosts[index].userFullName,
+                                                            style: Theme.of(context).textTheme.titleSmall,
                                                           ),
                                                           Text(
                                                               "@${loadedPosts[index].username}",
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .labelLarge),
+                                                              style: Theme.of(context).textTheme.labelLarge),
                                                         ]),
                                                         const Spacer(),
                                                         Text(Utils

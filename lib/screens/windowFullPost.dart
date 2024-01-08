@@ -159,6 +159,7 @@ class State_windowFullPost extends State<windowFullPost> {
     //Utils.MSG_Debug("$className: build");
     return Consumer<ThemeProvider>(builder: (context, provider, child) {
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: provider.currentTheme,
         home: Scaffold(
           appBar: AppBar(
