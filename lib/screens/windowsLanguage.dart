@@ -1,57 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../common/Utils.dart';
-import '../common/appTheme.dart';
+
 import '../common/Management.dart';
 import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
+import '../windowHome.dart';
 
 class WindowLanguage extends StatefulWidget {
-  final Management refManagement;
+  final Management Ref_Management;
 
-  WindowLanguage(this.refManagement);
+  WindowLanguage(this.Ref_Management);
 
   @override
   _WindowLanguageState createState() => _WindowLanguageState();
+
+  Future NavigateTo_Window_Home(context) async {
+    windowHome Jan = windowHome(Ref_Management);
+    await Jan.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Jan));
+  }
 }
 
 class _WindowLanguageState extends State<WindowLanguage> {
-  String? _selectedLanguage = "";
+  late String _selectedLanguage;
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(builder: (context, provider, child) {
-      return MaterialApp(
-        theme: provider.currentTheme,
-        home: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onPrimary),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            title: Text('Select Language', style: TextStyle(fontSize: 22)),
-            centerTitle: true,
-          ),
-          body: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                buildLanguageOption('Portuguese', 'PT'),
-                buildLanguageOption('English', 'EN'),
-                buildLanguageOption('Deutsch', 'DE')
-                // Add more language options as needed
-              ],
-            ),
-          ),
-        ),
-      );
+  void initState() {
+    super.initState();
+    _loadLanguage();
+  }
+
+  void _loadLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _selectedLanguage = prefs.getString("LANGUAGE") ?? "EN";
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ThemeProvider>(
+      builder: (context, provider, child) {
+        return MaterialApp(
+          theme: provider.currentTheme,
+          home: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: Text(
+                widget.Ref_Management.GetDefinicao(
+                  "WND_LANGUAGE_TITLE", "Select Language",
+                ),
+                style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.onPrimary),
+              ),
+              centerTitle: true,
+            ),
+            body: Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  buildLanguageOption('WND_LANGUAGE_OPTION_PT', 'PT'),
+                  buildLanguageOption('WND_LANGUAGE_OPTION_EN', 'EN'),
+                  buildLanguageOption('WND_LANGUAGE_OPTION_DE', 'DE'),
+                  // Add more language options as needed
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   RadioListTile<String> buildLanguageOption(
-      String language, String languageCode) {
-    bool isSelected = _selectedLanguage == languageCode;
+      String languageDefinition, String languageCode) {
+    final isSelected = _selectedLanguage == languageCode;
+    final language = widget.Ref_Management.GetDefinicao(languageDefinition, languageCode);
 
     return RadioListTile<String>(
       title: Text(language),
@@ -59,19 +88,20 @@ class _WindowLanguageState extends State<WindowLanguage> {
       groupValue: _selectedLanguage,
       onChanged: (String? value) {
         setState(() {
-          _selectedLanguage = value;
+          _selectedLanguage = value!;
         });
         Utils.MSG_Debug('Selected Language: $_selectedLanguage');
-        widget.refManagement
-            .Save_Shared_Preferences_STRING("LANGUAGE", value ?? "");
-        widget.refManagement.Load();
-        Utils.MSG_Debug(value!);
-        Navigator.pop(context);
+        _saveLanguage(value);
+        widget.NavigateTo_Window_Home(context);
       },
       controlAffinity: ListTileControlAffinity.trailing,
       activeColor: Theme.of(context).colorScheme.primaryContainer,
-      // Color when selected
-      selected: isSelected, // Whether the current option is selected
+      selected: isSelected,
     );
+  }
+
+  void _saveLanguage(String? value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("LANGUAGE", value ?? "");
   }
 }

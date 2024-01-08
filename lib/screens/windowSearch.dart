@@ -192,6 +192,7 @@ class State_windowSearch extends State<windowSearch> {
 
     return Consumer<ThemeProvider>(builder: (context, provider, child) {
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: provider.currentTheme,
         home: Scaffold(
           appBar: AppBar(

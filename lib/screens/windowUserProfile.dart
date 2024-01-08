@@ -229,6 +229,7 @@ class State_windowUserProfile extends State<windowUserProfile> {
 //Utils.MSG_Debug("$className: build");
     return Consumer<ThemeProvider>(builder: (context, provider, child) {
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: provider.currentTheme,
         home: Scaffold(
           drawer: CustomDrawer(Ref_Window.Ref_Management),

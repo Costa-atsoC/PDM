@@ -273,6 +273,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Consumer<ThemeProvider>(builder: (context, provider, child) {
       return MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: provider.currentTheme,
         home: Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,

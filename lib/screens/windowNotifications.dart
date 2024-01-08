@@ -244,6 +244,7 @@ class State_windowNotification extends State<windowNotifications> {
     return Consumer<ThemeProvider>(
         builder: (context, provider, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             theme: provider.currentTheme,
       home: Scaffold(
         appBar: AppBar(

@@ -1,280 +1,155 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:ubi/screens/windowAppearance.dart';
 import 'package:ubi/screens/windowDeleteAccount.dart';
 import 'package:ubi/screens/windowsLanguage.dart';
-import '../common/theme_provider.dart';
+import '../firebase_auth_implementation/models/user_model.dart';
+import '../main.dart';
 import 'windowChangePassword.dart';
-// import 'windowLanguage.dart';
+import 'windowAppearance.dart';
 
 import '../common/Management.dart';
 import '../common/Utils.dart';
-import '../common/appTheme.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
+import 'windowInitial.dart';
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
 class windowSettings extends StatefulWidget {
-  String windowTitle = "";
   final Management Ref_Management;
+  String windowTitle = "";
 
-  String selectedLanguage = "";
-
-  //--------------
   windowSettings(this.Ref_Management) {
-    windowTitle = "General Window";
+    windowTitle = Ref_Management.GetDefinicao("WND_SETTINGS_TITLE", "General Window");
     Utils.MSG_Debug(windowTitle);
   }
 
-  //--------------
   Future<void> Load() async {
     Utils.MSG_Debug(windowTitle + ":Load");
   }
 
-  //--------------
   @override
   State<StatefulWidget> createState() {
-    Utils.MSG_Debug(windowTitle + ":createState");
-    return State_windowSettings(this);
+    return State_windowSettings();
   }
-//--------------
+
+  Future<void> navigateToWindowInitial(BuildContext context) async {
+    MyHomePage win = MyHomePage(
+        Ref_Management,
+        Ref_Management.GetDefinicao(
+            "TITULO_APP", "TITULO_APP ??"));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
 }
 
-//----------------------------------------------------------------
-//----------------------------------------------------------------
-// ignore: camel_case_types
 class State_windowSettings extends State<windowSettings> {
-  String _selectedColor = "Light";
-  List<String> _colors = ["Dark", "Light"];
-  bool valNotify1 = true;
-  bool valNotify2 = false;
-  bool valNotify3 = false;
+  late List<String> _options;
 
-  String selectedOption = '';
-
-  void onChangeFunction1(bool newValue) {
-    setState(() {
-      if (!newValue) {
-        valNotify1 = false;
-        valNotify2 = true; // Se valNotify1 for desligado, valNotify2 é ligado
-      }
-    });
+  IconData getOptionIcon(String title) {
+    switch (title) {
+      case 'Change Password':
+        return Icons.lock;
+      case 'Appearance':
+        return Icons.palette;
+      case 'Language':
+        return Icons.language;
+      case 'Delete Account':
+        return Icons.delete;
+      case 'Delete Cache':
+        return Icons.delete_outline;
+      case 'Terms & Conditions':
+        return Icons.assignment; // Ícone para a opção "Terms & Conditions"
+      default:
+        return Icons.error; // Ícone padrão para opções desconhecidas
+    }
   }
 
-  void onChangeFunction2(bool newValue) {
-    setState(() {
-      if (valNotify2 && !newValue) {
-        valNotify2 = false;
-        // Se valNotify2 estiver ligado e for desligado, não muda valNotify1
-      }
-    });
-  }
 
-  void onChangeFunction3(bool newValue3) {
-    setState(() {
-      valNotify3 = newValue3;
-    });
-  }
-
-  final windowSettings Ref_Window;
-  String className = "";
-
-  //--------------
-  State_windowSettings(this.Ref_Window) : super() {
-    className = "Settings";
-    Utils.MSG_Debug("$className: createState");
-  }
-
-  //--------------
   @override
   void dispose() {
-    Utils.MSG_Debug("createState");
+    Utils.MSG_Debug("dispose");
     super.dispose();
-    Utils.MSG_Debug("$className:dispose");
+    Utils.MSG_Debug("dispose:dispose");
   }
 
-  //--------------
   @override
   void deactivate() {
-    Utils.MSG_Debug("$className:deactivate");
+    Utils.MSG_Debug("dispose:deactivate");
     super.deactivate();
   }
 
-  //--------------
   @override
   void didChangeDependencies() {
-    Utils.MSG_Debug("$className: didChangeDependencies");
+    Utils.MSG_Debug("dispose: didChangeDependencies");
     super.didChangeDependencies();
   }
 
-  //--------------
-  @override
+  @override  @override
   void initState() {
-    Utils.MSG_Debug("$className: initState");
     super.initState();
+    _options = [
+      widget.Ref_Management.GetDefinicao("WND_SETTINGS_OPTION_CHANGE_PASSWORD", "Change Password"),
+      widget.Ref_Management.GetDefinicao("WND_SETTINGS_OPTION_APPEARANCE", "Appearance"),
+      widget.Ref_Management.GetDefinicao("WND_SETTINGS_OPTION_LANGUAGE", "Language"),
+      widget.Ref_Management.GetDefinicao("WND_SETTINGS_OPTION_DELETE_ACCOUNT", "Delete Account"),
+      widget.Ref_Management.GetDefinicao("WND_SETTINGS_OPTION_DELETE_CACHE", "Delete Cache"),
+      widget.Ref_Management.GetDefinicao("WND_SETTINGS_OPTION_TERMS_CONDITIONS", "Terms & Conditions"),
+    ];
   }
 
-  void NavigateTo_New_Window(context) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => windowSettings(Ref_Window.Ref_Management)));
-  }
-
-  //--------------
   @override
   Widget build(BuildContext context) {
-    Utils.MSG_Debug("$className: build");
-    return Consumer<ThemeProvider>(builder: (context, provider, child) {
-      return MaterialApp(
+    return Consumer<ThemeProvider>(
+      builder: (context, provider, child) {
+        return MaterialApp(
           theme: provider.currentTheme,
           home: Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                icon: Icon(Icons.arrow_back,
+                icon: Icon(
+                    Icons.arrow_back,
                     color: Theme.of(context).colorScheme.onPrimary),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              title: Text(className, style: TextStyle(fontSize: 22)),
+              title: Text(
+                widget.Ref_Management.GetDefinicao("WND_SETTINGS_TITLE", "Settings"),
+                style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.onPrimary),
+              ),
               centerTitle: true,
             ),
             body: Container(
-                padding: const EdgeInsets.all(10),
-                child: ListView(
-                  children: [
-                    SizedBox(height: 40),
-                    Row(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ListView(
                       children: [
-                        Icon(
-                          Icons.person,
-                        ),
-                        SizedBox(width: 10),
-                        Text("Account",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                    Divider(height: 20, thickness: 1),
-                    SizedBox(height: 20),
-                    buildAccountOption(context, "Change Password",
-                        actions: ['Yes', 'No']),
-                    buildAccountOption(context, "Appearance",
-                        actions: ['Device Theme', 'Dark Theme', 'Light Theme']),
-                    buildAccountOption(context, "Language", actions: []),
-                    buildAccountOption(context, "Delete Account", actions: []),
-                    buildAccountOption(context, "Delete Cache", actions: []),
-                    SizedBox(height: 40),
-                    Row(
-                      children: [
-                        Icon(Icons.volume_up_outlined),
-                        SizedBox(width: 10),
-                        Text("Notifications",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                    Divider(height: 20, thickness: 1),
-                    SizedBox(height: 10),
-                    buildNotificationOption(
-                        "Notifications", valNotify1, onChangeFunction1),
-                    buildNotificationOption(
-                        "Notifications", valNotify2, onChangeFunction2),
-                    buildNotificationOption(
-                        "Notifications", valNotify3, onChangeFunction3),
-                    Divider(height: 20, thickness: 1),
-                    Center(
-                      child: Container(
-                        alignment: Alignment.center,
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 10),
-                        // Add a bottom margin here
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                            side: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryContainer,
-                            ),
-                          ),
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          child: ListTile(
-                              title: Align(
-                                child: Text(
-                                  Ref_Window.Ref_Management.SETTINGS.Get(
-                                      "WND_HOME_DRAWER_SUBTITLE_5", "LOGOUT"),
-                                  textAlign: TextAlign.center,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.copyWith(),
-                                ),
+                        SizedBox(height: 40),
+                        Row(
+                          children: [
+                            Icon(Icons.person),
+                            SizedBox(width: 10),
+                            Text(
+                              widget.Ref_Management.GetDefinicao("WND_SETTINGS_ACCOUNT", "Account"),
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
                               ),
-                              onTap: () {}),
+                            ),
+                          ],
                         ),
-                      ),
-                    )
-                  ],
-                )),
-          ));
-    });
-  }
-
-  Padding buildNotificationOption(
-      String title, bool value, Function onChangeMethod) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(title,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[600])),
-          Transform.scale(
-            scale: 0.7,
-            child: CupertinoSwitch(
-              activeColor: Colors.blue,
-              trackColor: Colors.grey,
-              value: value,
-              onChanged: (bool newValue) {
-                onChangeMethod(newValue);
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  void changeDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          content: Container(
-            height: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                for (var color in _colors)
-                  RadioListTile<String>(
-                    title: Text(color),
-                    value: color,
-                    groupValue: _selectedColor,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedColor = value!;
-                      });
-                      print(_selectedColor);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-              ],
+                        Divider(height: 20, thickness: 1),
+                        SizedBox(height: 20),
+                        for (var option in _options)
+                          buildAccountOption(context, option),
+                      ],
+                    ),
+                  ), // Espaçamento entre a lista e o botão de logout
+                  buildLogoutContainer(context),
+                  SizedBox(height: 220),
+                ],
+              ),
             ),
           ),
         );
@@ -282,140 +157,47 @@ class State_windowSettings extends State<windowSettings> {
     );
   }
 
-  void _showLanguageDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text('Select Language'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('Portuguese'),
-                onTap: () {
-                  setState(() {
-                    // Define a linguagem como português e armazena nas preferências compartilhadas
-                    widget.selectedLanguage = 'Portuguese';
-                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
-                        "LANGUAGE", 'PT');
-                    Ref_Window.Ref_Management.Load();
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('English'),
-                onTap: () {
-                  setState(() {
-                    // Define a linguagem como inglês e armazena nas preferências compartilhadas
-                    widget.selectedLanguage = 'English';
-                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
-                        "LANGUAGE", 'EN');
-                    Ref_Window.Ref_Management.Load();
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Deutsch'),
-                onTap: () {
-                  setState(() {
-                    // Define a linguagem como inglês e armazena nas preferências compartilhadas
-                    widget.selectedLanguage = 'Deutsch';
-                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
-                        "LANGUAGE", 'DE');
-                    Ref_Window.Ref_Management.Load();
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
-  void _showDeleteCache(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text('Delete cache?'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('Delete'),
-                onTap: () {
-                  setState(() {});
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: Text('Cancel'),
-                onTap: () {
-                  setState(() {
-                    // Define a linguagem como inglês e armazena nas preferências compartilhadas
-                    widget.selectedLanguage = 'English';
-                    Ref_Window.Ref_Management.Save_Shared_Preferences_STRING(
-                        "LANGUAGE", 'EN');
-                    Ref_Window.Ref_Management.Load();
-                  });
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  GestureDetector buildAccountOption(BuildContext context, String title,
-      {List<String>? actions}) {
+  GestureDetector buildAccountOption(BuildContext context, String title) {
     return GestureDetector(
       onTap: () {
-        if (title == 'Change Password') {
+        if (title == 'Change Password' || title == 'Alterar Palavra-passe' || title == 'Passwort ändern') {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WindowChangePassword(Ref_Window.Ref_Management)),
+              builder: (context) =>
+                  WindowChangePassword(widget.Ref_Management),
+            ),
           );
-        } else if (title == 'Delete Account') {
+        } else if (title == 'Appearance' || title == 'Aparência' || title == 'Aussehen') {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WindowDeleteAccount(Ref_Window.Ref_Management)),
+              builder: (context) =>
+                  WindowAppearance(widget.Ref_Management),
+            ),
           );
-        } else if (title == 'Language') {
+        } else if (title == 'Delete Account' || title == 'Apagar Conta' || title == 'Konto löschen') {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WindowLanguage(Ref_Window.Ref_Management)),
+              builder: (context) =>
+                  WindowDeleteAccount(widget.Ref_Management),
+            ),
           );
-        } else if (title == 'Appearance') {
+        } else if (title == 'Language' || title == 'Idioma' || title == 'Sprache') {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    WindowAppearance(Ref_Window.Ref_Management)),
+              builder: (context) =>
+                  WindowLanguage(widget.Ref_Management),
+            ),
           );
-        } else if (title == 'Delete Cache') {
-        } else {
-          // Se houver outras opções de conta
-          showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                  // Restante do seu código para outras opções...
-                  );
-            },
-          );
+        } else if (title == 'Delete Cache' || title == 'Apagar Cache' || title == 'Cache löschen') {
+          _showConfirmationDialog(context);
+        }
+        else if (title == 'Terms & Conditions' || title == 'Termos e Condições' || title == 'Geschäftsbedingungen') {
+          _showTermsAndConditionsDialog(context);
         }
       },
       child: Padding(
@@ -423,21 +205,232 @@ class State_windowSettings extends State<windowSettings> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-                color: Colors.grey[600],
-              ),
+            Row(
+              children: [
+                Icon(
+                  getOptionIcon(title),
+                  size: 24,
+                  color: Colors.grey[600],
+                ),
+                SizedBox(width: 16),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
             ),
-            const Icon(
+            Icon(
               Icons.arrow_forward_ios,
               color: Colors.grey,
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            widget.Ref_Management.GetDefinicao(
+                "WND_SETTINGS_CLEAR_PREF_TITLE",
+                'Clear All Preferences'
+            ),
+          ),
+          content: Text(
+            widget.Ref_Management.GetDefinicao(
+                "WND_SETTINGS_CLEAR_PREF_CONTENT",
+                'Are you sure you want to clear all preferences?'
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                widget.Ref_Management.GetDefinicao(
+                    "WND_SETTINGS_CLEAR_PREF_CANCEL",
+                    'Cancel'
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () async {
+                await widget.Ref_Management.clearAllSharedPreferences();
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                widget.Ref_Management.GetDefinicao(
+                    "WND_SETTINGS_CLEAR_PREF_CLEAR",
+                    'Clear'
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget buildLogoutContainer(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+          side: BorderSide(
+            color: Theme
+                .of(context)
+                .colorScheme
+                .secondaryContainer,
+          ),
+        ),
+        color: Theme
+            .of(context)
+            .colorScheme
+            .secondaryContainer,
+        child: ListTile(
+          title: Align(
+            child: Text(
+              widget.Ref_Management.GetDefinicao("WND_SETTINGS_OPTION_LOGOUT", "Logout"),
+              textAlign: TextAlign.center,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(),
+            ),
+          ),
+          onTap: () async {
+            UserModel? userData = await userFirestore
+                .getUserData(FirebaseAuth.instance.currentUser!.uid);
+            UserModel userUpdated = UserModel(
+              uid: userData!.uid,
+              email: userData!.email,
+              username: userData!.username,
+              fullName: userData!.fullName,
+              registerDate: userData!.registerDate,
+              lastChangedDate: userData!.lastChangedDate,
+              location: userData!.location,
+              image: userData!.image,
+              online: "0",
+              lastLogInDate: userData!.lastLogInDate,
+              lastSignOutDate: Utils.currentTime(),
+            );
+
+            if (userData != null) {
+              await userFirestore.updateUserData(userUpdated);
+            }
+
+            await FirebaseAuth.instance.signOut();
+            Navigator.of(context).pop();
+            widget.navigateToWindowInitial(context);
+          },
+        ),
+      ),
+    );
+  }
+
+  void _showTermsAndConditionsDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Terms and Conditions'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                      "WND_REGISTER_TERMS_CONDITIONS_TITLE_2",
+                      'By using our carpooling service, you agree to the following terms and conditions:'),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                      "WND_REGISTER_TERMS_CONDITIONS_1",
+                      '1. You must be at least 18 years old to use this app.'),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                    "WND_REGISTER_TERMS_CONDITIONS_2",
+                    '2. Users are responsible for their own safety during rides.',
+                  ),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                      "WND_REGISTER_TERMS_CONDITIONS_3",
+                      '3. Respect other users and their personal space.'),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                      "WND_REGISTER_TERMS_CONDITIONS_4",
+                      "4. Follow traffic laws and regulations during carpooling."),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                    "WND_REGISTER_TERMS_CONDITIONS_5",
+                    '5. The app is not responsible for any disputes between users.',
+                  ),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                    "WND_REGISTER_TERMS_CONDITIONS_6",
+                    '6. Users are encouraged to report any inappropriate behavior.',
+                  ),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                    "WND_REGISTER_TERMS_CONDITIONS_7",
+                    '7. The app may use location data for the purpose of carpool matching.',
+                  ),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                    "WND_REGISTER_TERMS_CONDITIONS_8",
+                    '8. Users should verify the identity of their carpooling partners.',
+                  ),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                    "WND_REGISTER_TERMS_CONDITIONS_9",
+                    '9. The app may suspend or terminate users violating these terms.',
+                  ),
+                ),
+                Text(
+                  widget.Ref_Management.SETTINGS.Get(
+                    "WND_REGISTER_TERMS_CONDITIONS_10",
+                    '10. By using the app, you consent to our privacy policy.',
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(widget.Ref_Management.SETTINGS.Get(
+                "WND_REGISTER_TERMS_CONDITIONS_BTN_1",
+                'Close',
+              ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

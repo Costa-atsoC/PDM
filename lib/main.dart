@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
             builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const MaterialApp(
+                  debugShowCheckedModeBanner: false,
                   home: CircularProgressIndicator(),
                 );
               } else {
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
                 );
 
                 return MaterialApp(
+                  debugShowCheckedModeBanner: false,
                   title: 'RideWME',
                   theme: provider.currentTheme,
                   home: MyAppWrapper(
