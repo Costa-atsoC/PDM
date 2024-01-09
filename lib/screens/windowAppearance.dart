@@ -15,48 +15,58 @@ class WindowAppearance extends StatefulWidget {
 class _WindowAppearanceState extends State<WindowAppearance> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Theme Selector'),
-      ),
-      body: Consumer<ThemeProvider>(
-        builder: (context, provider, child) {
-          return ListView(
-            children: [
-              RadioListTile<String>(
-                title: Text('Light Theme'),
-                value: 'light',
-                groupValue: provider.selectedOption,
-                onChanged: (value) {
-                  provider.setSelectedOption(value!);
-                  provider.changeTheme(value);
-                },
-                controlAffinity: ListTileControlAffinity.trailing,
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: provider.currentTheme,
+          home: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary),
+                onPressed: () => Navigator.of(context).pop(),
               ),
-              RadioListTile<String>(
-                title: Text('Dark Theme'),
-                value: 'dark',
-                groupValue: provider.selectedOption,
-                onChanged: (value) {
-                  provider.setSelectedOption(value!);
-                  provider.changeTheme(value);
-                },
-                controlAffinity: ListTileControlAffinity.trailing,
-              ),
-              RadioListTile<String>(
-                title: Text('System Theme'),
-                value: 'system',
-                groupValue: provider.selectedOption,
-                onChanged: (value) {
-                  provider.setSelectedOption(value!);
-                  provider.changeTheme(value);
-                },
-                controlAffinity: ListTileControlAffinity.trailing,
-              ),
-            ],
-          );
-        },
-      ),
-    );
+              title: Text('Theme Selector'),
+            ),
+            body: Consumer<ThemeProvider>(
+              builder: (context, provider, child) {
+                return ListView(
+                  children: [
+                    RadioListTile<String>(
+                      title: Text('Light Theme'),
+                      value: 'light',
+                      groupValue: provider.selectedOption,
+                      onChanged: (value) {
+                        provider.setSelectedOption(value!);
+                        provider.changeTheme(value);
+                      },
+                      controlAffinity: ListTileControlAffinity.trailing,
+                    ),
+                    RadioListTile<String>(
+                      title: Text('Dark Theme'),
+                      value: 'dark',
+                      groupValue: provider.selectedOption,
+                      onChanged: (value) {
+                        provider.setSelectedOption(value!);
+                        provider.changeTheme(value);
+                      },
+                      controlAffinity: ListTileControlAffinity.trailing,
+                    ),
+                    RadioListTile<String>(
+                      title: Text('System Theme'),
+                      value: 'system',
+                      groupValue: provider.selectedOption,
+                      onChanged: (value) {
+                        provider.setSelectedOption(value!);
+                        provider.changeTheme(value);
+                      },
+                      controlAffinity: ListTileControlAffinity.trailing,
+                    ),
+                  ],
+                );
+              },
+            ),
+          ));
+    });
   }
 }

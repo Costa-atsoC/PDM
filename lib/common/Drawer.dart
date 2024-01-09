@@ -261,6 +261,7 @@ class State_CustomDrawer extends State<CustomDrawer> {
             textColor: Theme.of(context).colorScheme.onPrimary,
             onTap: () => {navigateToWindowFeedback(context)},
           ),
+          const SizedBox(height: 10),
           ListTile(
             leading: const Icon(Icons.help),
             title: Text(

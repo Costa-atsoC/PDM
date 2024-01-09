@@ -1,16 +1,18 @@
 class NotificationModel {
+  final String nid;
   final String pid;
   final String fromUid;
-  //final String fromName;
- // final String fromUsername;
+  final String descp;
   final int type;
   final int seen;
   final String toUid;
   final String date;
 
   NotificationModel({
+    required this.nid,
     required this.pid,
     required this.fromUid,
+    required this.descp,
    // required this.fromName,
    // required this.fromUsername,
     required this.type,
@@ -22,24 +24,24 @@ class NotificationModel {
   // JSON serialization
   Map<String, dynamic> toJson() {
     return {
+      'nid': nid,
       'pid': pid,
       'fromUid': fromUid,
-      //'fromName': fromName,
-      //'fromUsername': fromUsername,
       'type': type,
       'seen': seen,
       'toUid': toUid,
       'date': date,
+      'descp': descp,
     };
   }
 
   // JSON deserialization
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
+      nid: json['nid'],
       pid: json['pid'],
       fromUid: json['fromUid'],
-      //fromName: json['fromName'],
-      //fromUsername: json['fromUsername'],
+      descp: json['descp'],
       type: json['type'],
       seen: json['seen'],
       toUid: json['toUid'],

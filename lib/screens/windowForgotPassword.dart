@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/appTheme.dart';
 import '../common/Management.dart';
 import '../common/Utils.dart';
+import '../common/theme_provider.dart';
 
 class windowForgotPassword extends StatefulWidget {
   String windowTitle = "";
@@ -77,58 +79,67 @@ class _windowForgotPasswordState extends State<windowForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        home: Scaffold(
-          appBar: AppBar(),
-          body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Text(
-                Ref_Window.Ref_Management.SETTINGS.Get(
-                    "WND_FORGOT_PASSWORD_TITLE_2",
-                    "WND_FORGOT_PASSWORD_TITLE_2 ??"),
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
+      return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: provider.currentTheme,
+          home: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back,
+                    color: Theme.of(context).colorScheme.onPrimary),
+                onPressed: () => Navigator.of(context).pop(),
               ),
             ),
-
-            SizedBox(height: 10),
-
-            //email textfield
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.deepPurple),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  hintText: 'Email',
-                  fillColor: Colors.grey[200],
-                  filled: true,
+            body:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Text(
+                  Ref_Window.Ref_Management.SETTINGS.Get(
+                      "WND_FORGOT_PASSWORD_TITLE_2",
+                      "WND_FORGOT_PASSWORD_TITLE_2 ??"),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 20),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ElevatedButton(
-                onPressed: passwordReset,
-                child: Text(
-                    Ref_Window.Ref_Management.SETTINGS.Get(
-                        "WND_FORGOT_PASSWORD_BTN_1_TEXT",
-                        "WND_FORGOT_PASSWORD_BTN_1_TEXT ??"),
-                    style: Theme.of(context).textTheme.titleLarge),
+
+              SizedBox(height: 10),
+
+              //email textfield
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.deepPurple),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    hintText: 'Email',
+                    fillColor: Colors.grey[200],
+                    filled: true,
+                  ),
+                ),
               ),
-            ),
-          ]),
-        ));
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ElevatedButton(
+                  onPressed: passwordReset,
+                  child: Text(
+                      Ref_Window.Ref_Management.SETTINGS.Get(
+                          "WND_FORGOT_PASSWORD_BTN_1_TEXT",
+                          "WND_FORGOT_PASSWORD_BTN_1_TEXT ??"),
+                      style: Theme.of(context).textTheme.titleLarge),
+                ),
+              ),
+            ]),
+          ));
+    });
   }
 }

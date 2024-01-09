@@ -1,11 +1,12 @@
-import 'dart:io' as io;
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:ubi/firebase_auth_implementation/models/post_model.dart';
-import 'package:path/path.dart' as path;
 import 'package:ubi/firestore/firebase_storage.dart';
+import 'package:ubi/firestore/post_firestore.dart';
 import 'package:ubi/firestore/user_firestore.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,8 +14,9 @@ import '../common/Management.dart';
 import '../common/Utils.dart';
 import '../common/appTheme.dart';
 import '../firebase_auth_implementation/models/comment_model.dart';
-import '../firestore/post_firestore.dart';
 import '../main.dart';
+import '../common/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 //----------------------------------------------------------------
 //----------------------------------------------------------------
@@ -89,9 +91,11 @@ class State_windowFullPost extends State<windowFullPost> {
     Ref_Window.Ref_Management.saveNumAccess("NUM_ACCESS_WND_PROFILE");
   }
 
+  PostFirestore postFirestore = PostFirestore();
+
   bool isOnline = false;
   bool _isLoading = true;
-  List<commentModel> comments = [];
+  List<CommentModel> comments = [];
   List<String> commentersName = [];
 
   // This function is used to fetch all data from the database
@@ -149,154 +153,234 @@ class State_windowFullPost extends State<windowFullPost> {
   @override
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
+    PostFirestore postFirestore = PostFirestore();
+
     final TextEditingController _commentController = TextEditingController();
     //Utils.MSG_Debug("$className: build");
-    return MaterialApp(
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      home: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back), // Back button icon
-            onPressed: () {
-              // Define the action when the back button is pressed
-              Navigator.of(context).pop(); // Navigator.pop() to go back
-            },
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: provider.currentTheme,
+        home: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back), // Back button icon
+              onPressed: () {
+                // Define the action when the back button is pressed
+                Navigator.of(context).pop(); // Navigator.pop() to go back
+              },
+            ),
+            title: Text(
+              Ref_Window.Ref_Management.SETTINGS
+                  .Get("WND_FULL_POST_1", "Full Post"),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           ),
-          title: Text(
-            Ref_Window.Ref_Management.SETTINGS
-                .Get("WND_FULL_POST_1", "Full Post"),
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : Padding(
-                padding: const EdgeInsets.all(5),
-                child: Column(
-                  children: [
-                    Row(children: [
-                      //Profile Picture
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        child: Expanded(
-                          child: FutureBuilder(
-                            future: Ref_Window.Ref_FirebaseStorage.loadImages(
-                                widget.post.uid),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: Theme.of(context).iconTheme.color,
-                                  ),
-                                );
-                              } else if (snapshot.hasError) {
-                                return const Center(
-                                  child: Text('Something went wrong!'),
-                                );
-                              } else if (snapshot.hasData) {
-                                final List<Map<String, dynamic>> images =
-                                    snapshot.data ?? [];
-                                if (images.isNotEmpty) {
-                                  final Map<String, dynamic> firstImage =
-                                      images.first;
-                                  if (widget.post.uid ==
-                                      Ref_Window.Ref_Management.SETTINGS
-                                          .Get("WND_USER_PROFILE_UID", "-1")) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return Dialog(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
+          body: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: Column(
+                    children: [
+                      Row(children: [
+                        //Profile Picture
+                        Container(
+                          margin: const EdgeInsets.only(top: 20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: Expanded(
+                            child: FutureBuilder(
+                              future: Ref_Window.Ref_FirebaseStorage.loadImages(
+                                  widget.post.uid),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return const Center(
+                                    child: Text('Something went wrong!'),
+                                  );
+                                } else if (snapshot.hasData) {
+                                  final List<Map<String, dynamic>> images =
+                                      snapshot.data ?? [];
+                                  if (images.isNotEmpty) {
+                                    final Map<String, dynamic> firstImage =
+                                        images.first;
+                                    if (widget.post.uid ==
+                                        Ref_Window.Ref_Management.SETTINGS.Get(
+                                            "WND_USER_PROFILE_UID", "-1")) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                                child: ClipOval(
+                                                  child: Container(
+                                                    color: Colors.transparent,
+                                                    width: 90,
+                                                    // You can adjust the width as needed
+                                                    height: 90,
+                                                    // You can adjust the height as needed
+                                                    child: CircleAvatar(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      radius: 50,
+                                                      backgroundImage:
+                                                          NetworkImage(
+                                                              firstImage[
+                                                                  'url']),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              CircleAvatar(
+                                                radius: 50,
+                                                backgroundImage: NetworkImage(
+                                                    firstImage['url']),
                                               ),
-                                              child: ClipOval(
+                                              Align(
+                                                alignment: Alignment.topRight,
                                                 child: Container(
-                                                  color: Colors.transparent,
-                                                  width: 90,
-                                                  // You can adjust the width as needed
-                                                  height: 90,
-                                                  // You can adjust the height as needed
-                                                  child: CircleAvatar(
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    radius: 50,
-                                                    backgroundImage:
-                                                        NetworkImage(
-                                                            firstImage['url']),
+                                                  width: 30,
+                                                  height: 30,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.transparent,
+                                                    shape: BoxShape.circle,
                                                   ),
                                                 ),
                                               ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                      child: SizedBox(
-                                        width: 50,
-                                        height: 50,
-                                        child: Stack(
-                                          children: <Widget>[
-                                            CircleAvatar(
-                                              radius: 50,
-                                              backgroundImage: NetworkImage(
-                                                  firstImage['url']),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Container(
-                                                width: 30,
-                                                height: 30,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.transparent,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                              ),
-                                            ),
-                                            Align(
-                                              alignment: Alignment.bottomLeft,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(15.0),
-                                                // Add padding to move the button to the right
-                                                child: Tooltip(
-                                                  message: isOnline
-                                                      ? 'Online'
-                                                      : 'Last Seen',
-                                                  child: Container(
-                                                    width: 15,
-                                                    height: 15,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: isOnline
-                                                          ? Colors.green
-                                                          : Colors.grey,
+                                              Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      15.0),
+                                                  // Add padding to move the button to the right
+                                                  child: Tooltip(
+                                                    message: isOnline
+                                                        ? 'Online'
+                                                        : 'Last Seen',
+                                                    child: Container(
+                                                      width: 15,
+                                                      height: 15,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: isOnline
+                                                            ? Colors.green
+                                                            : Colors.grey,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
+                                      );
+                                    }
+                                    return SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Stack(
+                                        children: <Widget>[
+                                          CircleAvatar(
+                                            radius: 50,
+                                            backgroundImage:
+                                                NetworkImage(firstImage['url']),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomLeft,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(15.0),
+                                              // Add padding to move the button to the right
+                                              child: Tooltip(
+                                                message: isOnline
+                                                    ? 'Online'
+                                                    : 'Last Seen',
+                                                child: Container(
+                                                  width: 15,
+                                                  height: 15,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: isOnline
+                                                        ? Colors.green
+                                                        : Colors.grey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     );
                                   }
+                                }
+                                if (widget.post.uid ==
+                                    Ref_Window.Ref_Management.SETTINGS
+                                        .Get("WND_USER_PROFILE_UID", "-1")) {
                                   return SizedBox(
-                                    width: 50,
-                                    height: 50,
+                                    width: 150,
+                                    height: 150,
                                     child: Stack(
                                       children: <Widget>[
-                                        CircleAvatar(
-                                          radius: 50,
-                                          backgroundImage:
-                                              NetworkImage(firstImage['url']),
+                                        const CircleAvatar(
+                                          radius: 100,
+                                          backgroundImage: AssetImage(
+                                              "assets/PROFILE_PICTURE_DEMO.jpeg"),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.topRight,
+                                          child: Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.transparent,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: ElevatedButton.icon(
+                                              icon: Icon(
+                                                  Icons.add_a_photo_sharp,
+                                                  size: 40,
+                                                  color: Theme.of(context)
+                                                      .scaffoldBackgroundColor),
+                                              onPressed: () {
+                                                Ref_Window.Ref_FirebaseStorage
+                                                    .upload("gallery",
+                                                        widget.post.uid);
+                                              },
+                                              label: const Text(""),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .colorScheme
+                                                        .inversePrimary,
+                                                shadowColor: Colors.transparent,
+                                                padding: const EdgeInsets.only(
+                                                    left: 2, bottom: 2),
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                         Align(
                                           alignment: Alignment.bottomLeft,
@@ -308,8 +392,8 @@ class State_windowFullPost extends State<windowFullPost> {
                                                   ? 'Online'
                                                   : 'Last Seen',
                                               child: Container(
-                                                width: 15,
-                                                height: 15,
+                                                width: 30,
+                                                height: 30,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   color: isOnline
@@ -324,201 +408,134 @@ class State_windowFullPost extends State<windowFullPost> {
                                     ),
                                   );
                                 }
-                              }
-                              if (widget.post.uid ==
-                                  Ref_Window.Ref_Management.SETTINGS
-                                      .Get("WND_USER_PROFILE_UID", "-1")) {
-                                return SizedBox(
+                                return const SizedBox(
                                   width: 150,
                                   height: 150,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      const CircleAvatar(
-                                        radius: 100,
-                                        backgroundImage: AssetImage(
-                                            "assets/PROFILE_PICTURE_DEMO.jpeg"),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.topRight,
-                                        child: Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.transparent,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: ElevatedButton.icon(
-                                            icon: Icon(Icons.add_a_photo_sharp,
-                                                size: 40,
-                                                color: Theme.of(context)
-                                                    .scaffoldBackgroundColor),
-                                            onPressed: () {
-                                              Ref_Window.Ref_FirebaseStorage
-                                                  .upload("gallery",
-                                                      widget.post.uid);
-                                            },
-                                            label: const Text(""),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .inversePrimary,
-                                              shadowColor: Colors.transparent,
-                                              padding: const EdgeInsets.only(
-                                                  left: 2, bottom: 2),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(15.0),
-                                          // Add padding to move the button to the right
-                                          child: Tooltip(
-                                            message: isOnline
-                                                ? 'Online'
-                                                : 'Last Seen',
-                                            child: Container(
-                                              width: 30,
-                                              height: 30,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: isOnline
-                                                    ? Colors.green
-                                                    : Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                  child: CircleAvatar(
+                                    radius: 100,
+                                    backgroundImage: AssetImage(
+                                        "assets/PROFILE_PICTURE_DEMO.jpeg"),
                                   ),
                                 );
-                              }
-                              return const SizedBox(
-                                width: 150,
-                                height: 150,
-                                child: CircleAvatar(
-                                  radius: 100,
-                                  backgroundImage: AssetImage(
-                                      "assets/PROFILE_PICTURE_DEMO.jpeg"),
-                                ),
-                              );
-                            },
+                              },
+                            ),
                           ),
                         ),
-                      ),
 
-                      //Right side of the Post
-                      Container(
-                        child: Column(children: [
+                        //Right side of the Post
+                        Container(
+                          child: Column(children: [
+                            Text(
+                              widget.post.userFullName,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            Text(
+                              "@${widget.post.username}",
+                              style: Theme.of(context).textTheme.labelLarge,
+                            )
+                          ]),
+                        ),
+                        const Spacer(),
+                        Text(Utils.formatTimeDifference(
+                            widget.post.registerDate))
+                      ]),
+
+                      //Post Information
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            widget.post.userFullName,
-                            style: Theme.of(context).textTheme.titleSmall,
+                            widget.post.title,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
-                            "@${widget.post.username}",
+                            "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DATE_TEXT_LABEL", "Date: ")}${widget.post.date}",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          Text(
+                            "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FROM_TEXT_LABEL", "FROM ")}${widget.post.startLocation}"
+                            "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_TO_TEXT_LABEL", " TO ")}${widget.post.endLocation}",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          Text(
+                            "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FREE_SEATS_TEXT_LABEL", "Free Seats: ")}${widget.post.freeSeats}/${widget.post.totalSeats}",
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          Text(
+                            "${Ref_Window.Ref_Management.SETTINGS.Get("e", "Description: ")}${widget.post.description}",
                             style: Theme.of(context).textTheme.labelLarge,
                           )
-                        ]),
+                        ],
                       ),
-                      const Spacer(),
-                      Text(Utils.formatTimeDifference(widget.post.registerDate))
-                    ]),
 
-                    //Post Information
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.post.title,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Text(
-                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_DATE_TEXT_LABEL", "Date: ")}${widget.post.date}",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        Text(
-                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FROM_TEXT_LABEL", "FROM ")}${widget.post.startLocation}"
-                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_TO_TEXT_LABEL", " TO ")}${widget.post.endLocation}",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        Text(
-                          "${Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_POST_FREE_SEATS_TEXT_LABEL", "Free Seats: ")}${widget.post.freeSeats}/${widget.post.totalSeats}",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                        Text(
-                          "${Ref_Window.Ref_Management.SETTINGS.Get("e", "Description: ")}${widget.post.description}",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        )
-                      ],
-                    ),
+                      Divider(
+                        color: Theme.of(context).dividerColor,
+                      ),
 
-                    Divider(
-                      color: Theme.of(context).dividerColor,
-                    ),
-
-                    //Comments Section
-                    comments.isEmpty
-                        ? const SizedBox()
-                        : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  constraints: BoxConstraints(
-                                    maxHeight:
-                                        MediaQuery.of(context).size.height /
-                                            4, // Adjust height as needed
-                                  ),
-                                  child: _commentsSection()),
-                            ],
-                          ),
-
-                    const Spacer(),
-
-                    //Write Comment Section
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: Ref_Window.Ref_Management.SETTINGS.Get(
-                                  "WND_FULL_POST_COMMENT_TEXT_LABEL",
-                                  "Write a comment..."),
-                              labelStyle:
-                                  Theme.of(context).textTheme.labelLarge,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                      //Comments Section
+                      comments.isEmpty
+                          ? const SizedBox()
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    constraints: BoxConstraints(
+                                      maxHeight:
+                                          MediaQuery.of(context).size.height /
+                                        2, // Adjust height as needed
+                                    ),
+                                    child: _commentsSection()),
+                              ],
                             ),
-                            validator: formValidator,
-                            controller: _commentController,
+
+                      const Spacer(),
+
+                      //Write Comment Section
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                labelText: Ref_Window.Ref_Management.SETTINGS
+                                    .Get("WND_FULL_POST_COMMENT_TEXT_LABEL",
+                                        "Write a comment..."),
+                                labelStyle:
+                                    Theme.of(context).textTheme.labelLarge,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              validator: formValidator,
+                              controller: _commentController,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.send,
-                              color: Color.fromRGBO(124, 23, 87, 1)),
-                          onPressed: () {
-                            if (_commentController.text.isNotEmpty) {
-                              commentModel com = commentModel(
-                                  id: const Uuid().v4(),
-                                  pid: widget.post.pid,
-                                  uid: widget.post.uid,
-                                  cid: FirebaseAuth.instance.currentUser!.uid,
-                                  date: widget.post.date,
-                                  comment: _commentController.text);
-                              postFirestore
-                                  .saveComment(com)
-                                  .then((value) => _refreshData());
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
+                          IconButton(
+                            icon: const Icon(Icons.send,
+                                color: Color.fromRGBO(124, 23, 87, 1)),
+                            onPressed: () {
+                              if (_commentController.text.isNotEmpty) {
+                                DateTime now = DateTime.now();
+                                String formattedTime = DateFormat('yy:MM:dd HH:mm').format(now);
+                                CommentModel com = CommentModel(
+                                    id: const Uuid().v4(),
+                                    pid: widget.post.pid,
+                                    uid: widget.post.uid,
+                                    cid: FirebaseAuth.instance.currentUser!.uid,
+                                    date: formattedTime,
+                                    comment: _commentController.text);
+                                postFirestore
+                                    .saveComment(com)
+                                    .then((value) => _refreshData());
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-      ),
-    );
+        ),
+      );
+    });
   }
 }

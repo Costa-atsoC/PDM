@@ -76,4 +76,24 @@ class PostModel {
       lastChangedDate: json['lastChangedDate'],
     );
   }
+
+  static PostModel demo() {
+    return PostModel(
+      uid: 'demo_uid',
+      userFullName: 'Demo User',
+      username: 'demouser',
+      pid: 'demo_pid',
+      likes: '0',
+      title: 'Demo Title',
+      description: 'This is a demo description.',
+      date: '2024-01-01 00:00:00.000000', // Update with a valid DateTime string
+      totalSeats: '4',
+      freeSeats: '2',
+      location: 'Demo Location',
+      startLocation: 'Demo Start Location',
+      endLocation: 'Demo End Location',
+      registerDate: '2024-01-01 00:00:00.000000', // Update with a valid DateTime string
+      lastChangedDate: '2024-01-01 00:00:00.000000', // Update with a valid DateTime string
+    );
+  }
 }

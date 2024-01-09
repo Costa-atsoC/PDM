@@ -3,12 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:ubi/firebase_auth_implementation/models/user_model.dart';
 import 'package:ubi/firestore/user_firestore.dart';
+import 'package:ubi/screens/windowCarpool.dart';
 import 'package:ubi/screens/windowFeedback.dart';
 import 'package:ubi/screens/windowFullPost.dart';
 import 'package:ubi/screens/windowNotifications.dart';
 import 'common/Drawer.dart';
+import 'common/theme_provider.dart';
 import 'common/widgets/modals/modalNewPost.dart';
 import 'common/widgets/modals/modalUpdatePost.dart';
 
@@ -102,7 +105,9 @@ class State_windowHome extends State<windowHome> {
       List<PostModel> newPosts = await PostFirestore().getAllPosts();
       List<UserModel> newUsers = [];
       Map<int, List<Map<String, dynamic>>> postImagesMap =
-          {}; // Map to store images by post index
+      {};
+
+      newPosts.sort((a, b) => Utils.parseDateString(b.registerDate).compareTo(Utils.parseDateString(a.registerDate)));
 
       for (int i = 0; i < newPosts.length; i++) {
         PostModel post = newPosts[i];
@@ -111,7 +116,7 @@ class State_windowHome extends State<windowHome> {
         newUsers.add(userProfile!);
 
         List<Map<String, dynamic>> images =
-            await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
+        await Ref_Window.Ref_FirebaseStorage.loadImages(userProfile.uid);
         postImagesMap[i] = images;
 
         if (images.isNotEmpty) {
@@ -195,6 +200,12 @@ class State_windowHome extends State<windowHome> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => win));
   }
 
+  Future navigateToWindowCarpools(context) async {
+    windowCarpool win = windowCarpool(Ref_Window.Ref_Management);
+    await win.Load();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => win));
+  }
+
   Future navigateToWindowFulPost(context, post) async {
     windowFullPost win = windowFullPost(Ref_Window.Ref_Management, post);
     await win.Load();
@@ -206,11 +217,12 @@ class State_windowHome extends State<windowHome> {
   Widget build(BuildContext context) {
     Ref_Window.Ref_Management.Load();
     PostFirestore postManager = PostFirestore();
+    return Consumer<ThemeProvider>(builder: (context, provider, child) {
     return PopScope(
         canPop: false,
         child: MaterialApp(
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+          debugShowCheckedModeBanner: false,
+            theme: provider.currentTheme,
             home: Scaffold(
               drawer: CustomDrawer(Ref_Window.Ref_Management),
               appBar: AppBar(
@@ -246,9 +258,7 @@ class State_windowHome extends State<windowHome> {
                     } else if (snapshot.hasError) {
                       Utils.MSG_Debug("Error: ${snapshot.error}");
                       return Center(
-                        child: Text(Ref_Window.Ref_Management.SETTINGS.Get(
-                            "WND_HOME_ERROR_DATA_TEXT",
-                            "WND_HOME_ERROR_DATA_TEXT ??")),
+                        child: Text(Ref_Window.Ref_Management.SETTINGS.Get("WND_HOME_ERROR_DATA_TEXT", "WND_HOME_ERROR_DATA_TEXT ??")),
                       );
                     } else {
                       String? currentUserUID =
@@ -259,10 +269,7 @@ class State_windowHome extends State<windowHome> {
                               ? const Center(child: CircularProgressIndicator())
                               : loadedPosts.isEmpty
                                   ? Center(
-                                      child: Text(Ref_Window
-                                          .Ref_Management.SETTINGS
-                                          .Get("JNL_HOME_NO_POSTS_TEXT",
-                                              "JNL_HOME_NO_POSTS_TEXT ??")))
+                                      child: Text(Ref_Window.Ref_Management.SETTINGS.Get("JNL_HOME_NO_POSTS_TEXT", "JNL_HOME_NO_POSTS_TEXT ??")))
                                   : ListView.builder(
                                       itemCount: loadedPosts.length,
                                       itemBuilder: (context, index) {
@@ -286,8 +293,7 @@ class State_windowHome extends State<windowHome> {
                                               elevation: 0,
                                               // Set elevation to 0 to remove the shadow
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Padding(
                                                     padding:
@@ -301,11 +307,7 @@ class State_windowHome extends State<windowHome> {
                                                             Navigator.push(
                                                               context,
                                                               MaterialPageRoute(
-                                                                builder: (context) => windowUserProfile(
-                                                                    Ref_Window
-                                                                        .Ref_Management,
-                                                                    loadedUserProfiles[
-                                                                        index]),
+                                                                builder: (context) => windowUserProfile(Ref_Window.Ref_Management, loadedUserProfiles[index]),
                                                               ),
                                                             );
                                                           },
@@ -313,11 +315,7 @@ class State_windowHome extends State<windowHome> {
                                                             child: CircleAvatar(
                                                               radius: 20,
                                                               backgroundImage:
-                                                                  NetworkImage(
-                                                                      loadedImages[
-                                                                              index]
-                                                                          [
-                                                                          'url']),
+                                                                  NetworkImage(loadedImages[index]['url']),
                                                             ),
                                                           ),
                                                         ),
@@ -325,19 +323,12 @@ class State_windowHome extends State<windowHome> {
                                                             width: 10),
                                                         Column(children: [
                                                           Text(
-                                                            loadedPosts[index]
-                                                                .userFullName,
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .titleSmall,
+                                                            loadedPosts[index].userFullName,
+                                                            style: Theme.of(context).textTheme.titleSmall,
                                                           ),
                                                           Text(
                                                               "@${loadedPosts[index].username}",
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .labelLarge),
+                                                              style: Theme.of(context).textTheme.labelLarge),
                                                         ]),
                                                         const Spacer(),
                                                         Text(Utils
@@ -636,10 +627,21 @@ class State_windowHome extends State<windowHome> {
                     tooltip: 'Home',
                     icon: Icon(
                       Icons.home,
-                      size: double.parse(Ref_Window.Ref_Management.SETTINGS.Get("BOTTOM_NAV_BAR_ICON_SIZE_2", "40")),
-                      color: Theme.of(context).colorScheme.primary,
+                      size: double.parse(Ref_Window.Ref_Management.SETTINGS.Get("BOTTOM_NAV_BAR_ICON_SIZE_2", "30")),
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                     onPressed: () {},
+                  ),
+                  IconButton(
+                    tooltip: 'Carpools',
+                    icon: Icon(
+                      Icons.car_crash,
+                      size: double.parse(Ref_Window.Ref_Management.SETTINGS.Get("BOTTOM_NAV_BAR_ICON_SIZE_3", "30")),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    onPressed: () {
+                      navigateToWindowCarpools(context);
+                    },
                   ),
                   IconButton(
                     tooltip: 'Notifications',
@@ -655,5 +657,6 @@ class State_windowHome extends State<windowHome> {
                 ],
               ),
             )));
-  }
+  });
+}
 }

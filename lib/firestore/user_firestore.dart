@@ -275,4 +275,76 @@ class UserFirestore {
       Utils.MSG_Debug("Error saving user review: $error");
     }
   }
+
+  Future<void> deleteUserData(String uid) async {
+    try {
+      // Obter todos os posts do usuário
+      QuerySnapshot postsSnapshot = await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('posts')
+          .get();
+
+      // Excluir os posts e seus comentários e notificações associadas
+      for (QueryDocumentSnapshot postDoc in postsSnapshot.docs) {
+        String pid = postDoc.id;
+
+        // Excluir os comentários associados ao post
+        await _firestore
+            .collection('users')
+            .doc(uid)
+            .collection('posts')
+            .doc(pid)
+            .collection('comments')
+            .get()
+            .then((snapshot) {
+          for (DocumentSnapshot ds in snapshot.docs) {
+            ds.reference.delete();
+          }
+        });
+
+        // Excluir as notificações relacionadas ao post
+        await _firestore
+            .collection('notifications')
+            .doc(uid)
+            .collection('user_notifications')
+            .where('pid', isEqualTo: pid)
+            .get()
+            .then((snapshot) {
+          for (DocumentSnapshot ds in snapshot.docs) {
+            ds.reference.delete();
+          }
+        });
+
+        // Excluir o documento de likes associado ao post
+        await _firestore.collection('likes').doc('$pid' + '_' + '$uid').delete();
+
+        // Excluir o documento do post
+        await _firestore
+            .collection('users')
+            .doc(uid)
+            .collection('posts')
+            .doc(pid)
+            .delete();
+      }
+
+      // Excluindo as revisões do usuário
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('reviews')
+          .get()
+          .then((snapshot) {
+        for (DocumentSnapshot ds in snapshot.docs) {
+          ds.reference.delete();
+        }
+      });
+
+      // Excluir o documento do usuário
+      await _firestore.collection('users').doc(uid).delete();
+      Utils.MSG_Debug("User data for UID $uid deleted successfully");
+    } catch (error) {
+      Utils.MSG_Debug("Error deleting user data: $error");
+    }
+  }
 }
